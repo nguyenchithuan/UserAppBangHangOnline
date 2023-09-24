@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#CCC</color>
+    <color name="bg_facebook">#4285f4</color>
+    <color name="btn_edit_text">#F6F6F6</color>
+    <color name="btn_yellow">#FFC300</color>
 </resources>

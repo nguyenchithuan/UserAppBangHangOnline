@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">UserAppBangHangOnline</string>
+    <string name="text_policy_and_privacy">Khi bạn nhấn vào đăng kí là bạn đã chấp thuận chính sách bảo mật của chúng tôi</string>
+    <string name="title_verification_activity">Mã xác minh</string>
+    <string name="title_reset_password_activity">Đặt lại mật khẩu</string>
+    <string name="text_1_reset_password_activity">Nhập mật khẩu mới của bạn</string>
+    <string name="text_1_verification_activity">Mã xác minh đã gửi về thiết bị của ban.</string>
+    <string name="text_2_verification_activity">Vui lòng kiểm tra tin nhắn và nhập mã xác minh tại đây.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
