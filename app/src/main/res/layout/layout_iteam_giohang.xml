@@ -62,14 +62,14 @@
             android:background="@drawable/bg_boder_gray"
             android:layout_marginTop="15dp"
             >
-            <Button
+            <TextView
                 android:id="@+id/btnMinus"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
                 android:text="-"
                 android:gravity="center"
                 android:background="@drawable/bg_custom_number"
-                android:focusable="false"
+
                 />
             <TextView
                 android:id="@+id/tv_soluong_sp"
@@ -82,7 +82,7 @@
                 android:layout_gravity="center"
                 />
 
-            <Button
+            <TextView
                 android:id="@+id/btnPlus"
                 android:layout_width="38dp"
                 android:layout_height="38dp"

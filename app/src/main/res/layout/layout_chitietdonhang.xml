@@ -58,7 +58,7 @@
             android:id="@+id/simpleRatingBar"
             style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
             android:layout_width="wrap_content"
-            android:progressTint="#FFFF00"
+            android:progressTint="#FFC300"
             android:layout_height= "wrap_content"
             android:layout_centerHorizontal="true"
             android:background="@color/white"
@@ -168,6 +168,25 @@
             android:text="3 Mã Giảm Giá"
             android:textSize="16dp"
             android:textColor="@color/black"/>
+        <TextView
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:background="@drawable/giamgia"
+            android:text="Giảm 35k"/>
+        <TextView
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:background="@drawable/giamgia"
+            android:text="Miễn phí vận"/>
+
+
+
 
 
         
@@ -210,7 +229,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text=" nhập địa chỉ "
-            android:textColor="#FFFF00"/>
+            android:textColor="#FFC300"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
