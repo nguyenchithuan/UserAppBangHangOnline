@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chọn Voucher"
-            android:textColor="@color/black"
+            android:textColor="@color/yeloww"
             android:textSize="18dp"
             android:layout_gravity="center"
             android:textStyle="bold"/>
