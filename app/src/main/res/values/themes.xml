@@ -2,14 +2,20 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.UserAppBangHangOnline" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+         <item name="colorPrimary">@color/white</item>
     </style>
 
-    <style name="Theme.UserAppBangHangOnline" parent="Base.Theme.UserAppBangHangOnline" />
     <style name="Base.Theme.Yellow" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/btn_yellow</item>
     </style>
 
+    <style name="Base.Theme.Dark" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/black</item>
+    </style>
+
+    <style name="Theme.UserAppBangHangOnline" parent="Base.Theme.UserAppBangHangOnline" />
     <style name="Theme.Yellow" parent="Base.Theme.Yellow" />
+    <style name="Theme.Dark" parent="Base.Theme.Dark" />
 </resources>

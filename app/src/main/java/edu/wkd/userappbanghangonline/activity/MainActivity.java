@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
+import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.material.navigation.NavigationBarView;
 
 import edu.wkd.userappbanghangonline.R;
@@ -17,6 +18,8 @@ import edu.wkd.userappbanghangonline.fragment.HomeFragment;
 import edu.wkd.userappbanghangonline.fragment.NotificationFragment;
 import edu.wkd.userappbanghangonline.fragment.ProductFragment;
 import edu.wkd.userappbanghangonline.fragment.UserFragment;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,64 +37,33 @@ public class MainActivity extends AppCompatActivity {
     private void setOnClickIconInBottomNav() {
         //Đặt trang home là trang mặc định
         chooseFragment(HomeFragment.newInstance());
-        binding.bottomNavigationView.getMenu().findItem(R.id.menu_home).setChecked(true);
-        binding.bottomNavigationView.getMenu().findItem(R.id.menu_home).setIcon(R.drawable.home_black);
+        binding.bottomNavigationView.add(new MeowBottomNavigation.Model(1, R.drawable.home_black));
+        binding.bottomNavigationView.add(new MeowBottomNavigation.Model(2, R.drawable.list_black));
+        binding.bottomNavigationView.add(new MeowBottomNavigation.Model(3, R.drawable.bell_black));
+        binding.bottomNavigationView.add(new MeowBottomNavigation.Model(4, R.drawable.user_black));
+        binding.bottomNavigationView.show(1, true);
 
-        binding.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            private MenuItem selectedItem;
-
+        binding.bottomNavigationView.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                if (selectedItem != null) {
-                    selectedItem.setIcon(getUnselectedIcon(selectedItem.getItemId()));
+            public Unit invoke(MeowBottomNavigation.Model model) {
+                switch (model.getId()){
+                    case 1:
+                        chooseFragment(HomeFragment.newInstance());
+                        break;
+                    case 2:
+                        chooseFragment(ProductFragment.newInstance());
+                        break;
+                    case 3:
+                        chooseFragment(NotificationFragment.newInstance());
+                        break;
+                    case 4:
+                        chooseFragment(UserFragment.newInstance());
+                        break;
                 }
-
-                selectedItem = item;
-                item.setIcon(getSelectedIcon(item.getItemId()));
-
-                int itemId = item.getItemId();
-                if (itemId == R.id.menu_home){
-                    chooseFragment(HomeFragment.newInstance());
-                } else if (itemId == R.id.menu_product){
-                    chooseFragment(ProductFragment.newInstance());
-                } else if (itemId == R.id.menu_notification){
-                    chooseFragment(NotificationFragment.newInstance());
-                } else if (itemId == R.id.menu_user){
-                    chooseFragment(UserFragment.newInstance());
-                }
-
-                return true;
+                return null;
             }
         });
     }
-
-    private int getSelectedIcon(int itemId) {
-        if (itemId == R.id.menu_home){
-            return R.drawable.home_black;
-        }else if (itemId == R.id.menu_product){
-            return R.drawable.list_black;
-        }else if (itemId == R.id.menu_notification){
-            return R.drawable.bell_black;
-        }else if (itemId == R.id.menu_user){
-            return R.drawable.user_black;
-        }
-        return R.drawable.home_black;
-    }
-
-    private int getUnselectedIcon(int itemId) {
-        if (itemId == R.id.menu_home){
-            return R.drawable.home;
-        }else if (itemId == R.id.menu_product){
-            return R.drawable.list;
-        }else if (itemId == R.id.menu_notification){
-            return R.drawable.bell;
-        }else if (itemId == R.id.menu_user){
-            return R.drawable.user;
-        }
-        return R.drawable.home;
-    }
-
     //Thay thế fragment
     private void chooseFragment(Fragment fragment){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

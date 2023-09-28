@@ -15,14 +15,8 @@
         android:background="@color/btn_yellow"
         android:padding="8dp">
 
-<!--        <ImageView-->
-<!--            android:layout_weight="0.1"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/left_arrow"-->
-<!--            android:id="@+id/arrowBackProductFragment"/>-->
-
-        <EditText
+        <TextView
+            android:id="@+id/tvSearch"
             android:layout_weight="0.8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,16 +31,17 @@
             android:textSize="18dp"/>
 
         <ImageView
-            android:layout_weight="0.1"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/icon_cart"
             android:background="@drawable/custom_bg_shopping_cart"
             android:padding="8dp"
-            android:layout_marginHorizontal="5dp"/>
+            android:layout_marginHorizontal="5dp"
+            app:tint="@color/btn_yellow"
+            />
 
         <ImageView
-            android:layout_weight="0.1"
+
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/icon_chat_yellow"
@@ -59,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,71 +67,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="180dp"
                 app:iss_auto_cycle="true"
-                app:iss_period="1000"
-                app:iss_delay="1000"
-                app:iss_text_align="CENTER"/>
+                app:iss_period="3000"
+                app:iss_delay="3000"
+                app:iss_text_align="CENTER"
+                app:iss_corner_radius="@integer/material_motion_duration_short_1"/>
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_weight="0.33"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/img_auto_slide" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_banner_home"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_auto_slide"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_banner_home"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_auto_slide"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_banner_home"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
-            </LinearLayout>
+                android:id="@+id/rvTypeProduct"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -162,7 +101,8 @@
                     android:layout_weight="0.33"
                     android:src="@drawable/img_auto_slide"
                     android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="fitXY"
+                    android:id="@+id/imgProduct"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

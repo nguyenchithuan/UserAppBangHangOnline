@@ -13,17 +13,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/bottomNavigationView"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_bottom_nav"
-        android:id="@+id/bottomNavigationView"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/custom_selected_bottom_nav"
-        app:itemTextColor="@color/custom_selected_bottom_nav"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        app:itemIconSize="24dp"
-        />
+        app:mbn_circleColor="#ffffff"
+        app:mbn_backgroundBottomColor="#ffffff"
+        app:mbn_countTextColor="#ffffff"
+        app:mbn_defaultIconColor="#90a4ae"
+        app:mbn_rippleColor="#2f424242"
+        app:mbn_selectedIconColor="@color/btn_yellow"
+        app:mbn_shadowColor="#1f212121"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
