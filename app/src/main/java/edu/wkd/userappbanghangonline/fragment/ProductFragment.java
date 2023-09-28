@@ -18,6 +18,7 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.activity.DetailsProductActivity;
 import edu.wkd.userappbanghangonline.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
 import edu.wkd.userappbanghangonline.model.ProductType;
@@ -55,6 +56,16 @@ public class ProductFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         autoImageSlide();//Tạo ảnh chạy tự động
         getListProductType();
+        goToDetails();
+    }
+
+    private void goToDetails() {
+        binding.imgProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), DetailsProductActivity.class));
+            }
+        });
     }
 
 
