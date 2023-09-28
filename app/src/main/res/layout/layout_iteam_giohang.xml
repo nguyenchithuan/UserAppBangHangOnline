@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:padding="5dp"
+    android:background="@color/white"
+    >
+
+    <CheckBox
+        android:id="@+id/chk_mua_hang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
+
+    <LinearLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_boder_gray"
+        >
+        <ImageView
+            android:id="@+id/img_sp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:padding="10dp"
+            android:src="@drawable/img_banner_home"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/tv_name_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="Tên sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_gia_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="#FFC300"
+            android:text="65,000,000đ"
+            android:textStyle="bold"
+            android:layout_marginTop="14dp"
+            />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boder_gray"
+            android:layout_marginTop="15dp"
+            >
+            <TextView
+                android:id="@+id/btnMinus"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:text="-"
+                android:gravity="center"
+                android:background="@drawable/bg_custom_number"
+
+                />
+            <TextView
+                android:id="@+id/tv_soluong_sp"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="14sp"
+                android:textColor="#FFC300"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btnPlus"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:text="+"
+                android:gravity="center"
+                android:background="@drawable/bg_custom_number"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
