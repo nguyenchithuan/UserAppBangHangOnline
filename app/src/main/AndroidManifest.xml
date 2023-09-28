@@ -21,6 +21,12 @@
             android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
+
+            android:name=".activity.CartActivity"
+            android:exported="false" />
+
+        <activity
+
             android:name=".activity.SuccessActivity"
             android:exported="false" />
         <activity
