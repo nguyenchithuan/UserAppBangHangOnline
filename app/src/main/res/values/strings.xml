@@ -6,6 +6,10 @@
     <string name="text_1_reset_password_activity">Nhập mật khẩu mới của bạn</string>
     <string name="text_1_verification_activity">Mã xác minh đã gửi về thiết bị của ban.</string>
     <string name="text_2_verification_activity">Vui lòng kiểm tra tin nhắn và nhập mã xác minh tại đây.</string>
+    <string name="show_more">Hiển thị nhiều hơn</string>
+    <string name="delete_all">Xóa lịch sử tìm kiếm</string>
+    <string name="title_logout">Bạn có muốn đăng xuất không?</string>
+    <string name="input_address">Bạn hãy nhập địa chỉ nhận hàng để được dự báo thời gian &amp; chi phí giao hàng chính xác nhất</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
