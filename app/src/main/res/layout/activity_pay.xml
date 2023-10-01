@@ -30,7 +30,11 @@
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+<<<<<<< HEAD
+<!--        Dịa chi nhan hang-->
+=======
         <!--        Dịa chi nhan hang-->
+>>>>>>> 777d6b43bd025284d05da22e212db50c94cc7a74
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -45,6 +49,52 @@
             android:weightSum="10"
             android:padding="10dp">
 
+<<<<<<< HEAD
+        <ImageView
+            android:padding="12dp"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="2"
+            android:src="@drawable/baseline_location_on_24"
+            android:id="@+id/imgLocation"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:orientation="vertical"
+
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDiachiinhanhang"
+                android:text="Địa chỉ nhận hàng"
+                android:textSize="17sp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:padding="2dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTenSDT"
+                android:text="Lê Hậu | 0345697962"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:padding="2dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDiachi"
+                android:text="Phương Canh Nam Từ Liêm Hà Nội"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:padding="2dp"/>
+        </LinearLayout>
+        </LinearLayout>
+<!--        Danh Sach San Pham-->
+=======
             <ImageView
                 android:padding="12dp"
                 android:layout_width="0dp"
@@ -89,6 +139,7 @@
             </LinearLayout>
         </LinearLayout>
         <!--        Danh Sach San Pham-->
+>>>>>>> 777d6b43bd025284d05da22e212db50c94cc7a74
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -148,7 +199,11 @@
                 android:padding="2dp"/>
         </LinearLayout>
 
+<<<<<<< HEAD
+<!--        Voucher san pham-->
+=======
         <!--        Voucher san pham-->
+>>>>>>> 777d6b43bd025284d05da22e212db50c94cc7a74
 
         <View
             android:layout_width="match_parent"
@@ -199,7 +254,11 @@
                     android:padding="2dp"/>
             </LinearLayout>
         </LinearLayout>
+<<<<<<< HEAD
+<!--        Phuong thuc thanh toan-->
+=======
         <!--        Phuong thuc thanh toan-->
+>>>>>>> 777d6b43bd025284d05da22e212db50c94cc7a74
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -240,7 +299,11 @@
                     android:padding="2dp"/>
             </LinearLayout>
         </LinearLayout>
+<<<<<<< HEAD
+<!--        Chi tietdon hang-->
+=======
         <!--        Chi tietdon hang-->
+>>>>>>> 777d6b43bd025284d05da22e212db50c94cc7a74
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -270,6 +333,17 @@
                 android:layout_weight="8"
                 android:orientation="vertical"
                 android:gravity="center">
+<<<<<<< HEAD
+                    <TextView
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/chiTietThanhToan"
+                        android:text="Chi tiết thanh toán"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:textStyle="bold"/>
+=======
                 <TextView
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
@@ -279,6 +353,7 @@
                     android:textSize="15sp"
                     android:textColor="#000"
                     android:textStyle="bold"/>
+>>>>>>> 777d6b43bd025284d05da22e212db50c94cc7a74
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"

@@ -6,7 +6,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +19,24 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.activity.DetailsProductActivity;
+import edu.wkd.userappbanghangonline.adapter.ProductAdapter;
 import edu.wkd.userappbanghangonline.adapter.ProductTypeAdapter;
+import edu.wkd.userappbanghangonline.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
+import edu.wkd.userappbanghangonline.model.Product;
 import edu.wkd.userappbanghangonline.model.ProductType;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ProductFragment extends Fragment {
+   private RecyclerView recyclerView;
+   private List<Product> list;
     private FragmentProductBinding binding;
     private ProductTypeAdapter productTypeAdapter;
     private ArrayList<ProductType> listProductType;
@@ -54,9 +66,31 @@ public class ProductFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //call api
+        recyclerView = view.findViewById(R.id.rvTypeProduct);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ProductFragment.newInstance().getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(ProductFragment.newInstance().getActivity(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
         autoImageSlide();//Tạo ảnh chạy tự động
+        callApiGetUsers();
         getListProductType();
         goToDetails();
+    }
+    private void callApiGetUsers(){
+        ApiService.apiService.getListCall(1).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                list = new ArrayList<>();
+                ProductAdapter productAdapter = new ProductAdapter(list);
+                recyclerView.setAdapter(productAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
     }
 
     private void goToDetails() {
