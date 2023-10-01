@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/left_arrow"
             android:id="@+id/arrowBackSearch"
-            app:tint="@color/btn_yellow" />
+            app:tint="@color/primaryYellow" />
 
         <EditText
             android:layout_marginLeft="8dp"

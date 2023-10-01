@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment"
-    android:background="@color/btn_yellow"
+    android:background="@color/primaryYellow"
     android:orientation="vertical"
     android:paddingHorizontal="8dp">
 
@@ -56,7 +56,7 @@
             android:background="@drawable/custom_bg_shopping_cart"
             android:padding="8dp"
             android:src="@drawable/icon_cart"
-            app:tint="@color/btn_yellow"
+            app:tint="@color/primaryYellow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imgChat"
             app:layout_constraintTop_toTopOf="parent" />
@@ -144,7 +144,7 @@
                 android:padding="8dp"
                 android:background="@drawable/custom_bg_white_shadow"
                 android:textSize="18dp"
-                android:textColor="@color/btn_yellow"
+                android:textColor="@color/primaryYellow"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -7,7 +7,7 @@
 
     <style name="Base.Theme.Yellow" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/btn_yellow</item>
+        <item name="colorPrimary">@color/primaryYellow</item>
     </style>
 
     <style name="Base.Theme.Dark" parent="Theme.Material3.DayNight.NoActionBar">
