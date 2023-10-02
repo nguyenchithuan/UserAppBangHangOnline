@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:rating="4.5"
-            android:progressTint="@color/btn_yellow"
+            android:progressTint="@color/primaryYellow"
             android:progressBackgroundTint="@color/border_switch"/>
 
         <TextView

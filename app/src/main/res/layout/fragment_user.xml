@@ -127,14 +127,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="18dp"
-                android:padding="2dp">
+                android:padding="2dp"
+                android:id="@+id/layoutOrder">
 
                 <ImageView
                     android:id="@+id/imageView7"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="8dp"
-                    android:src="@drawable/user_black"
+                    android:src="@drawable/user"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -144,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Tất cả sản phẩm"
+                    android:text="Đơn hàng"
                     android:textColor="@color/black"
                     android:textSize="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -172,7 +173,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="18dp"
-                android:padding="2dp">
+                android:padding="2dp"
+                android:id="@+id/layoutHistory">
 
                 <ImageView
                     android:id="@+id/imageView8"
@@ -217,7 +219,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="18dp"
-                android:padding="2dp">
+                android:padding="2dp"
+                android:id="@+id/layoutQA">
 
                 <ImageView
                     android:id="@+id/imageView9"
@@ -262,7 +265,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="18dp"
-                android:padding="2dp">
+                android:padding="2dp"
+                android:id="@+id/layoutLocation">
 
                 <ImageView
                     android:id="@+id/imageView10"
@@ -307,7 +311,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="18dp"
-                android:padding="2dp">
+                android:padding="2dp"
+                android:id="@+id/layoutLinkedBank">
 
                 <ImageView
                     android:id="@+id/imageView5"
