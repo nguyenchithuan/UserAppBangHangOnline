@@ -20,12 +20,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.R;
@@ -34,8 +32,8 @@ import edu.wkd.userappbanghangonline.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.adapter.RecentSearchAdapter;
 import edu.wkd.userappbanghangonline.databinding.FragmentHomeBinding;
 import edu.wkd.userappbanghangonline.databinding.LayoutDialogSearchBinding;
-import edu.wkd.userappbanghangonline.model.ProductType;
-import edu.wkd.userappbanghangonline.model.RecentSearch;
+import edu.wkd.userappbanghangonline.model.obj.ProductType;
+import edu.wkd.userappbanghangonline.model.obj.RecentSearch;
 
 
 public class HomeFragment extends Fragment {

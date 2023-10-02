@@ -1,4 +1,4 @@
-package edu.wkd.userappbanghangonline.model;
+package edu.wkd.userappbanghangonline.model.obj;
 
 public class ProductType {
     private int id;

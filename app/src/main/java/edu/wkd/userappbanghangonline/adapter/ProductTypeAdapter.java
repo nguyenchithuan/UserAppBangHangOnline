@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.databinding.LayoutItemTypeProductBinding;
-import edu.wkd.userappbanghangonline.model.ProductType;
+import edu.wkd.userappbanghangonline.model.obj.ProductType;
 
 
 public class ProductTypeAdapter extends RecyclerView.Adapter<ProductTypeAdapter.ViewHolder>{
