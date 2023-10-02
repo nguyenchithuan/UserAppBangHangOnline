@@ -15,6 +15,8 @@ public class Product implements Serializable {
     private int quantityRating;
     @SerializedName("product_type_id")
     private int productTypeId;
+
+    private int quantity;
     public Product() {
     }
 
@@ -105,5 +107,13 @@ public class Product implements Serializable {
 
     public void setProductTypeId(int productTypeId) {
         this.productTypeId = productTypeId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

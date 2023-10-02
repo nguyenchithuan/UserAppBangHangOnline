@@ -15,9 +15,11 @@
         android:theme="@style/Theme.UserAppBangHangOnline"
         tools:targetApi="31">
         <activity
+            android:name=".activity.OrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.PayActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activity.DetailsProductActivity"
             android:exported="false" />
