@@ -50,7 +50,7 @@
             android:layout_marginHorizontal="5dp"/>
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
@@ -67,10 +67,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="180dp"
                 app:iss_auto_cycle="true"
-                app:iss_period="3000"
+                app:iss_corner_radius="@integer/material_motion_duration_short_1"
                 app:iss_delay="3000"
-                app:iss_text_align="CENTER"
-                app:iss_corner_radius="@integer/material_motion_duration_short_1"/>
+                app:iss_period="3000"
+                app:iss_text_align="CENTER" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -89,37 +89,12 @@
                 android:textColor="@color/btn_yellow"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_auto_slide"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"
-                    android:id="@+id/imgProduct"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_banner_home"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="0.33"
-                    android:src="@drawable/img_auto_slide"
-                    android:layout_marginHorizontal="8dp"
-                    android:scaleType="fitXY"/>
-            </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

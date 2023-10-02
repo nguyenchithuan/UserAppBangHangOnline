@@ -1,4 +1,4 @@
-package edu.wkd.userappbanghangonline.model;
+package edu.wkd.userappbanghangonline.model.obj;
 
 public class RecentSearch {
     private String title;

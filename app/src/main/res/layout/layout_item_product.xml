@@ -2,42 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="10"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_weight="3"
+        android:id="@+id/imgProduct"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:src="@mipmap/ic_launcher"
-        android:id="@+id/imgProduct"/>
+        android:scaleType="centerCrop"
+        />
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên sản phẩm"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:text="200.000đ"
+        android:layout_marginTop="5dp"
+        />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="7"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:paddingLeft="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        >
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:rating="4.5"
+            android:progressTint="@color/btn_yellow"
+            android:progressBackgroundTint="@color/border_switch"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvQuantityRating"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tvnamePro"
-            android:text="Iphone 15 Promax"
-            android:textSize="20sp"
-            android:textColor="#000"
-            android:textStyle="bold"
-            android:padding="2dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvPricePro"
-            android:text="30000000"
-            android:textSize="18sp"
-            android:textColor="#DC0F0F"
-            android:padding="2dp"/>
+            android:text="10k"
+            android:layout_marginLeft="10dp"
+            />
     </LinearLayout>
+
 </LinearLayout>

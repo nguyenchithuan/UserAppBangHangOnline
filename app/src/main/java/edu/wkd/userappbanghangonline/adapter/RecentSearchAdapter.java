@@ -1,7 +1,6 @@
 package edu.wkd.userappbanghangonline.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.databinding.LayoutItemRecentSerachBinding;
-import edu.wkd.userappbanghangonline.model.RecentSearch;
+import edu.wkd.userappbanghangonline.model.obj.RecentSearch;
 
 
 public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapter.ViewHolder> {

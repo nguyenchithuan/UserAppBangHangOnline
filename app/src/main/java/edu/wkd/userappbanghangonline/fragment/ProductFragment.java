@@ -6,11 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +27,9 @@ import edu.wkd.userappbanghangonline.adapter.ProductAdapter;
 import edu.wkd.userappbanghangonline.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
-import edu.wkd.userappbanghangonline.model.Product;
-import edu.wkd.userappbanghangonline.model.ProductType;
+import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.obj.ProductType;
+import edu.wkd.userappbanghangonline.model.response.ProductResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,12 +37,12 @@ import retrofit2.Response;
 
 public class ProductFragment extends Fragment {
    private RecyclerView recyclerView;
-   private List<Product> list;
     private FragmentProductBinding binding;
     private ProductTypeAdapter productTypeAdapter;
     private ArrayList<ProductType> listProductType;
+    private List<Product> listProduct;
+    private ProductAdapter productAdapter;
     public ProductFragment() {
-        // Required empty public constructor
     }
 
     public static ProductFragment newInstance() {
@@ -66,41 +67,33 @@ public class ProductFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //call api
-        recyclerView = view.findViewById(R.id.rvTypeProduct);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ProductFragment.newInstance().getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(ProductFragment.newInstance().getActivity(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(itemDecoration);
         autoImageSlide();//Tạo ảnh chạy tự động
-        callApiGetUsers();
         getListProductType();
-        goToDetails();
+        getListProduct();
+        callApiGetUsers();
     }
+
+
+
     private void callApiGetUsers(){
-        ApiService.apiService.getListCall(1).enqueue(new Callback<List<Product>>() {
+        ApiService.apiService.getListProduct().enqueue(new Callback<ProductResponse>() {
             @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                list = new ArrayList<>();
-                ProductAdapter productAdapter = new ProductAdapter(list);
-                recyclerView.setAdapter(productAdapter);
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                ProductResponse productResponse = response.body();
+                Log.d("zzzz", "onResponse-product-getName: " + productResponse.getResult().get(0).getName());
+                Log.d("zzzz", "onResponse-product-getImage: " + productResponse.getResult().get(0).getImage());
+                Log.d("zzzz", "onResponse-product-getPrice: " + productResponse.getResult().get(0).getPrice());
+                Log.d("zzzz", "onResponse-product-getQuantityRating: " + productResponse.getResult().get(0).getQuantityRating());
+                productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
             }
 
             @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void goToDetails() {
-        binding.imgProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), DetailsProductActivity.class));
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
+                Log.d("zzzz", "onResponse-product-error: " + t.toString());
             }
         });
     }
+
 
 
     private void getListProductType() {
@@ -112,10 +105,19 @@ public class ProductFragment extends Fragment {
         listProductType.add(new ProductType(4, "Tay cầm chơi game", "https://tse2.mm.bing.net/th?id=OIP._3yNHrRW8OJaJiUb4D-jWwHaHo&pid=Api&P=0&h=180"));
         listProductType.add(new ProductType(5, "Giá đỡ điện thoại", "https://salt.tikicdn.com/ts/tmp/0c/b5/05/2a301b541199e2fd06c85608c6bfb9ef.jpg"));
         productTypeAdapter = new ProductTypeAdapter(listProductType);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3, GridLayoutManager.VERTICAL, false);
         binding.rvTypeProduct.setLayoutManager(gridLayoutManager);
         binding.rvTypeProduct.setHasFixedSize(true);
         binding.rvTypeProduct.setAdapter(productTypeAdapter);
+    }
+
+    private void getListProduct() {
+        listProduct = new ArrayList<>();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
+        binding.rcvProduct.setLayoutManager(gridLayoutManager);
+        binding.rcvProduct.setHasFixedSize(true);
+        productAdapter = new ProductAdapter(getActivity(), listProduct);
+        binding.rcvProduct.setAdapter(productAdapter);
     }
 
     private void autoImageSlide() {
