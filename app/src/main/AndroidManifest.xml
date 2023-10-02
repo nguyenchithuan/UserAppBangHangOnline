@@ -15,18 +15,24 @@
         android:theme="@style/Theme.UserAppBangHangOnline"
         tools:targetApi="31">
         <activity
+            android:name=".activity.PayActivity"
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity
             android:name=".activity.DetailsProductActivity"
             android:exported="false" />
         <activity
             android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
-
             android:name=".activity.CartActivity"
             android:exported="false" />
-
         <activity
-
             android:name=".activity.SuccessActivity"
             android:exported="false" />
         <activity
