@@ -5,7 +5,8 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
-import edu.wkd.userappbanghangonline.model.Product;
+import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.response.ProductResponse;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -19,6 +20,7 @@ public interface ApiService {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiService.class);
+
     @GET("get_product.php")
-    Call<List<Product>> getListCall(@Query("id") int id);
+    Call<ProductResponse> getListProduct();
 }

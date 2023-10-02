@@ -1,24 +1,40 @@
 package edu.wkd.userappbanghangonline.adapter;
 
-import android.media.Image;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
-import edu.wkd.userappbanghangonline.model.Product;
+import edu.wkd.userappbanghangonline.activity.DetailsProductActivity;
+import edu.wkd.userappbanghangonline.model.obj.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
-    private final List<Product> listProduct;
+    private Context context;
+    private List<Product> listProduct;
 
-    public ProductAdapter(List<Product> listProduct) {
+
+    public ProductAdapter(Context context, List<Product> listProduct) {
+        this.context = context;
         this.listProduct = listProduct;
+    }
+
+    public void setListProduct(List<Product> listProduct) {
+        this.listProduct = listProduct;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -31,12 +47,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = listProduct.get(position);
-        if(product != null){
+        if(product == null){
             return;
         }
-        holder.imgPro.setTextDirection(Integer.parseInt( product.getName()));
-        holder.namePro.setText(product.getName());
-        holder.pricePro.setText(product.getPrice());
+        Glide.with(context)
+                .load(product.getImage())
+                .error(R.mipmap.ic_launcher)
+                .into(holder.imgProduct);
+        holder.tvName.setText(product.getName());
+        holder.tvPrice.setText(product.getPrice() + "đ");
+        holder.ratingBar.setRating(product.getRating());
+        holder.tvQuantityRating.setText(product.getQuantityRating() + "");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailsProductActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product", product);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
     }
 
 
@@ -49,15 +81,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder{
-        private final View imgPro;
-        private final TextView namePro,pricePro;
-
+        private ImageView imgProduct;
+        private TextView tvName;
+        private TextView tvPrice;
+        private RatingBar ratingBar;
+        private TextView tvQuantityRating;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgPro = itemView.findViewById(R.id.imgProduct);
-            namePro = itemView.findViewById(R.id.tvnamePro);
-            pricePro = itemView.findViewById(R.id.tvPricePro);
+            imgProduct = itemView.findViewById(R.id.imgProduct);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvPrice = itemView.findViewById(R.id.tvPrice);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+            tvQuantityRating = itemView.findViewById(R.id.tvQuantityRating);
         }
     }
 }
