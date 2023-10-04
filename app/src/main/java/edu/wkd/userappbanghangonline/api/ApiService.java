@@ -33,7 +33,6 @@ public interface ApiService {
             .create(ApiService.class);
 
     @GET("get_product.php")
-
     Call<List<Product>> getListCall(@Query("id") int id);
 
     @FormUrlEncoded
@@ -56,6 +55,7 @@ public interface ApiService {
     @POST("upload_avatar.php")// cập nhật avatar theo id
     Call<ServerResponse> uploadFile(@Part MultipartBody.Part file,@Part("user_id") int userId);
 
+    @GET("get_product.php")
     Call<ProductResponse> getListProduct();
 
 }
