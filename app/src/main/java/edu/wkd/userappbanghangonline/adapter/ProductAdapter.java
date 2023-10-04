@@ -19,7 +19,9 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
+
 import edu.wkd.userappbanghangonline.activity.DetailsProductActivity;
+
 import edu.wkd.userappbanghangonline.model.obj.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{

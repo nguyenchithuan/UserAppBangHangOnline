@@ -30,6 +30,7 @@ import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
