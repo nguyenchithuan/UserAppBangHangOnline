@@ -30,6 +30,7 @@
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <!--        Dịa chi nhan hang-->
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -43,51 +44,50 @@
             android:orientation="horizontal"
             android:weightSum="10"
             android:padding="10dp">
+            <ImageView
+                android:padding="12dp"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="2"
+                android:src="@drawable/baseline_location_on_24"
+                android:id="@+id/imgLocation"/>
 
-        <ImageView
-            android:padding="12dp"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="2"
-            android:src="@drawable/baseline_location_on_24"
-            android:id="@+id/imgLocation"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:orientation="vertical"
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="7"
-            android:orientation="vertical"
+                android:gravity="center">
 
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvDiachiinhanhang"
-                android:text="Địa chỉ nhận hàng"
-                android:textSize="17sp"
-                android:textColor="#000"
-                android:textStyle="bold"
-                android:padding="2dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvTenSDT"
-                android:text="Lê Hậu | 0345697962"
-                android:textSize="15sp"
-                android:textColor="#000"
-                android:padding="2dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvDiachi"
-                android:text="Phương Canh Nam Từ Liêm Hà Nội"
-                android:textSize="15sp"
-                android:textColor="#000"
-                android:padding="2dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvDiachiinhanhang"
+                    android:text="Địa chỉ nhận hàng"
+                    android:textSize="17sp"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    android:padding="2dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvTenSDT"
+                    android:text="Lê Hậu | 0345697962"
+                    android:textSize="15sp"
+                    android:textColor="#000"
+                    android:padding="2dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvDiachi"
+                    android:text="Phương Canh Nam Từ Liêm Hà Nội"
+                    android:textSize="15sp"
+                    android:textColor="#000"
+                    android:padding="2dp"/>
+            </LinearLayout>
         </LinearLayout>
-        </LinearLayout>
-<!--        Danh Sach San Pham-->
+
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -146,6 +146,7 @@
                 android:textColor="#000"
                 android:padding="2dp"/>
         </LinearLayout>
+        <!--        Voucher san pham-->
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -195,6 +196,7 @@
                     android:padding="2dp"/>
             </LinearLayout>
         </LinearLayout>
+        <!--        Phuong thuc thanh toan-->
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -235,6 +237,7 @@
                     android:padding="2dp"/>
             </LinearLayout>
         </LinearLayout>
+        <!--        Chi tietdon hang-->
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -264,16 +267,15 @@
                 android:layout_weight="8"
                 android:orientation="vertical"
                 android:gravity="center">
-
-                    <TextView
-                        android:layout_marginBottom="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chiTietThanhToan"
-                        android:text="Chi tiết thanh toán"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:textStyle="bold"/>
+                <TextView
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chiTietThanhToan"
+                    android:text="Chi tiết thanh toán"
+                    android:textSize="15sp"
+                    android:textColor="#000"
+                    android:textStyle="bold"/>
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"

@@ -6,9 +6,13 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.model.obj.Product;
+
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
+
+import edu.wkd.userappbanghangonline.model.response.ProductResponse;
+
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,6 +33,7 @@ public interface ApiService {
             .create(ApiService.class);
 
     @GET("get_product.php")
+
     Call<List<Product>> getListCall(@Query("id") int id);
 
     @FormUrlEncoded
@@ -50,4 +55,7 @@ public interface ApiService {
     @Multipart
     @POST("upload_avatar.php")// cập nhật avatar theo id
     Call<ServerResponse> uploadFile(@Part MultipartBody.Part file,@Part("user_id") int userId);
+
+    Call<ProductResponse> getListProduct();
+
 }
