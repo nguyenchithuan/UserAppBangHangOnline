@@ -1,4 +1,4 @@
-package edu.wkd.userappbanghangonline.model;
+package edu.wkd.userappbanghangonline.model.obj;
 
 public class Product {
     private String name,image,price;

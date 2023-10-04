@@ -1,6 +1,5 @@
 package edu.wkd.userappbanghangonline.adapter;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
-import edu.wkd.userappbanghangonline.model.Product;
+import edu.wkd.userappbanghangonline.model.obj.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
     private final List<Product> listProduct;
