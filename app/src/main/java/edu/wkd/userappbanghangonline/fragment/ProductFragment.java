@@ -74,8 +74,6 @@ public class ProductFragment extends Fragment {
         callApiGetUsers();
     }
 
-
-
     private void callApiGetUsers(){
         ApiService.apiService.getListProduct().enqueue(new Callback<ProductResponse>() {
             @Override
@@ -94,9 +92,6 @@ public class ProductFragment extends Fragment {
             }
         });
     }
-
-
-
     private void getListProductType() {
         listProductType = new ArrayList<>();
         listProductType.add(new ProductType(0, "Ốp lưng", "https://hatocase.com/wp-content/uploads/2022/02/in-op-lung-dien-thoai-thoi-thuong-voi-mau-veri-peri-02.jpg"));
