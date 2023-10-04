@@ -22,25 +22,26 @@
         </activity>
         <activity
             android:name=".activity.DetailsProductActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/Base.Theme.Yellow"/>
         <activity
             android:name=".activity.SettingsActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.CartActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.SuccessActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.ResetPasswordActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.VerificationActivity"
             android:exported="true" />
         <activity
             android:name=".activity.ForgotPasswordActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.SignInActivity"
             android:exported="true" />
@@ -54,7 +55,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
-            android:theme="@style/Base.Theme.Yellow" >
+            android:theme="@style/Base.Theme.Yellow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

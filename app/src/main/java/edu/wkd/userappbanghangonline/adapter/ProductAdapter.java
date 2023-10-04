@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
@@ -55,9 +56,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 .error(R.mipmap.ic_launcher)
                 .into(holder.imgProduct);
         holder.tvName.setText(product.getName());
-        holder.tvPrice.setText(product.getPrice() + "đ");
+        DecimalFormat df = new DecimalFormat("###,###,###");
+        holder.tvPrice.setText(df.format(product.getPrice()) + " đ");
         holder.ratingBar.setRating(product.getRating());
-        holder.tvQuantityRating.setText(product.getQuantityRating() + "");
+        holder.tvQuantityRating.setText("(" + product.getQuantityRating() + ")");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

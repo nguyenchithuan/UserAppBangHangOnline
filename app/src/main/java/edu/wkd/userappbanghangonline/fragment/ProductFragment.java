@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -30,6 +31,7 @@ import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
+import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +44,7 @@ public class ProductFragment extends Fragment {
     private ArrayList<ProductType> listProductType;
     private List<Product> listProduct;
     private ProductAdapter productAdapter;
+    private ProgressDialogLoading dialogLoading;
     public ProductFragment() {
     }
 
@@ -67,34 +70,31 @@ public class ProductFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initProduct();
         autoImageSlide();//Tạo ảnh chạy tự động
         getListProductType();
         getListProduct();
         callApiGetUsers();
     }
 
-
-
     private void callApiGetUsers(){
+        dialogLoading.show();
         ApiService.apiService.getListProduct().enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 ProductResponse productResponse = response.body();
-                Log.d("zzzz", "onResponse-product-getName: " + productResponse.getResult().get(0).getName());
-                Log.d("zzzz", "onResponse-product-getImage: " + productResponse.getResult().get(0).getImage());
-                Log.d("zzzz", "onResponse-product-getPrice: " + productResponse.getResult().get(0).getPrice());
-                Log.d("zzzz", "onResponse-product-getQuantityRating: " + productResponse.getResult().get(0).getQuantityRating());
                 productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
+                dialogLoading.cancel();
             }
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
                 Log.d("zzzz", "onResponse-product-error: " + t.toString());
+                Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                dialogLoading.cancel();
             }
         });
     }
-
-
 
     private void getListProductType() {
         listProductType = new ArrayList<>();
@@ -129,5 +129,10 @@ public class ProductFragment extends Fragment {
         listBanner.add(new SlideModel(R.drawable.banner11, ScaleTypes.FIT));
         listBanner.add(new SlideModel(R.drawable.banner12, ScaleTypes.FIT));
         binding.imageSlider2.setImageList(listBanner);
+    }
+
+
+    private void initProduct() {
+        dialogLoading = new ProgressDialogLoading(getActivity());
     }
 }
