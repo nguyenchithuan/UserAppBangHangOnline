@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         setOnClickIconInBottomNav();//Xử lí sự kiện khi người dùng nhấn vào bottom nav
 
         if (CheckConection.HaveConnection(this)){

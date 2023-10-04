@@ -47,7 +47,7 @@
             <ImageView
                 android:padding="12dp"
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="120dp"
                 android:layout_weight="2"
                 android:src="@drawable/baseline_location_on_24"
                 android:id="@+id/imgLocation"/>
@@ -57,7 +57,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="7"
                 android:orientation="vertical"
-
                 android:gravity="center">
 
                 <TextView
@@ -69,22 +68,21 @@
                     android:textColor="#000"
                     android:textStyle="bold"
                     android:padding="2dp"/>
-                <TextView
+
+                <EditText
+                    android:id="@+id/edAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvTenSDT"
-                    android:text="Lê Hậu | 0345697962"
-                    android:textSize="15sp"
-                    android:textColor="#000"
-                    android:padding="2dp"/>
-                <TextView
+                    android:hint="Nhập địa chỉ"
+                    android:textSize="15sp" />
+                <EditText
+                    android:id="@+id/edPhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvDiachi"
-                    android:text="Phương Canh Nam Từ Liêm Hà Nội"
+                    android:hint="Nhập số điện thoại"
+                    android:inputType="phone"
                     android:textSize="15sp"
-                    android:textColor="#000"
-                    android:padding="2dp"/>
+                    />
             </LinearLayout>
         </LinearLayout>
 
@@ -93,65 +91,26 @@
             android:layout_height="3dp"
             android:background="@color/gray"
             app:layout_constraintTop_toBottomOf="@+id/linear1" />
-        <LinearLayout
-            android:id="@+id/linear2"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvPay"
             app:layout_constraintTop_toBottomOf="@+id/linear1"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:weightSum="10"
             android:padding="8dp">
+        </androidx.recyclerview.widget.RecyclerView>
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="3"
-                android:src="@drawable/cusac"
-                android:id="@+id/imgSanPham"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tvTenSanPham"
-                    android:text="Bộ sản phẩm sạc nhanh Bagi PD20W Type-C"
-                    android:textSize="15sp"
-                    android:textColor="#000"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tvGiaSanPham"
-                    android:textStyle="bold"
-                    android:text="485.000 đ"
-                    android:textSize="15sp"
-                    android:textColor="#EF0606"
-                    android:padding="2dp"/>
-            </LinearLayout>
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvSoLuong"
-                android:text="x 1"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="#000"
-                android:padding="2dp"/>
-        </LinearLayout>
         <!--        Voucher san pham-->
         <View
+            android:id="@+id/linear2"
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="@color/gray"
-            app:layout_constraintTop_toBottomOf="@+id/linear2" />
+            app:layout_constraintTop_toBottomOf="@+id/rcvPay" />
+
         <LinearLayout
             android:id="@+id/linear3"
             app:layout_constraintTop_toBottomOf="@+id/linear2"
@@ -237,7 +196,7 @@
                     android:padding="2dp"/>
             </LinearLayout>
         </LinearLayout>
-        <!--        Chi tietdon hang-->
+
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -289,7 +248,7 @@
                         android:textColor="#000"
                         android:padding="2dp"/>
                     <EditText
-                        android:id="@+id/edttongTienHang"
+                        android:id="@+id/tvTotalPriceProduct"
                         android:text="485.000đ"
                         android:background="@null"
                         android:textSize="15sp"
@@ -349,10 +308,9 @@
                         android:textSize="15sp"
                         android:textColor="#000"
                         android:padding="2dp"/>
-                    <EditText
-                        android:id="@+id/edtTongThanhToan"
+                    <TextView
+                        android:id="@+id/tvTotalPrice"
                         android:text="485.000đ"
-                        android:background="@null"
                         android:textStyle="bold"
                         android:textSize="15sp"
                         android:textColor="@color/red"
@@ -362,7 +320,7 @@
             </LinearLayout>
         </LinearLayout>
         <Button
-            android:id="@+id/btnSignUp"
+            android:id="@+id/btnOrder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_bg_btn_yellow"
@@ -371,7 +329,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear5" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

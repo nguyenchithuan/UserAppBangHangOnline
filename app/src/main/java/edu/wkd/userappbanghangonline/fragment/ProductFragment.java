@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -33,10 +34,12 @@ import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
-
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
 import edu.wkd.userappbanghangonline.ultil.UrlSomething;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+
+import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,7 +53,7 @@ public class ProductFragment extends Fragment {
     private List<Product> listProduct;
     private List<Product> listProductSearch;
     private ProductAdapter productAdapter;
-    private ProgressDialog progressDialog;
+    private ProgressDialogLoading dialogLoading;
     public ProductFragment() {
     }
 
@@ -76,7 +79,7 @@ public class ProductFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        settingPDialog();
+        initProduct();
         autoImageSlide();//Tạo ảnh chạy tự động
         getListProductType();
         getListProduct();
@@ -105,7 +108,7 @@ public class ProductFragment extends Fragment {
     }
 
     private void getDataSearch() {
-        showPDialog();
+        dialogLoading.show();
         String product_name = binding.edSearch.getText().toString().trim();
         if (product_name != null) { //nếu có dữ liệu mới search
             ApiService.apiService.getProductSearch(product_name).enqueue(
@@ -116,13 +119,13 @@ public class ProductFragment extends Fragment {
                                 ProductResponse productResponse = response.body();
                                 if (productResponse.isSuccess()){
                                     productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
-                                    hidePDialog();
+                                    dialogLoading.cancel();
                                 }else {
                                     CheckConection.ShowToast(getContext(), "Không tìm thấy sản phẩm");
-                                    hidePDialog();
+                                    dialogLoading.cancel();
                                 }
                             }else {
-                                hidePDialog();
+                                dialogLoading.cancel();
                             }
                         }
 
@@ -138,7 +141,7 @@ public class ProductFragment extends Fragment {
     }
 
     private void callApiGetUsers(){
-        showPDialog();
+        dialogLoading.show();
         ApiService.apiService.getListProduct().enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
@@ -146,21 +149,23 @@ public class ProductFragment extends Fragment {
                     ProductResponse productResponse = response.body();
                     if (productResponse.isSuccess()){
                         productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
-                        hidePDialog();
+                        dialogLoading.cancel();
                     }else {
                         CheckConection.ShowToast(getContext(), "Load danh sách sản phẩm lỗi!");
                     }
                 }else {
                     CheckConection.ShowToast(getContext(), "Không có dữ liệu trả về");
                 }
-            }
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
                 Log.d("zzzz", "onResponse-product-error: " + t.toString());
+                Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                dialogLoading.cancel();
             }
         });
     }
+
     private void getListProductType() {
         listProductType = new ArrayList<>();
         String []arrTypeName = {"Ốp lưng","Kính cường lực","Sticker","Tai nghe",
@@ -197,20 +202,7 @@ public class ProductFragment extends Fragment {
         binding.imageSlider2.setImageList(listBanner);
     }
 
-    private void hidePDialog(){
-        if (progressDialog.isShowing()){
-            progressDialog.dismiss();
-        }
-    }
-    private void settingPDialog() {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setCancelable(false);
-    }
-
-    private void showPDialog() {
-        if (!progressDialog.isShowing()){
-            progressDialog.show();
-        }
+    private void initProduct() {
+        dialogLoading = new ProgressDialogLoading(getActivity());
     }
 }

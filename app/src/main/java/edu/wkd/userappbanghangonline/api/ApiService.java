@@ -12,15 +12,15 @@ import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
-
+import edu.wkd.userappbanghangonline.model.response.Response;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Multipart;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
@@ -31,6 +31,20 @@ public interface ApiService {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiService.class);
+
+    @GET("get_product.php")
+    Call<ProductResponse> getListProduct();
+
+    @FormUrlEncoded
+    @POST("post_order.php")
+    Call<Response> postOrderUser(@Field("user_id") int user_id,
+                                 @Field("address") String address,
+                                 @Field("phone_number") String phone_number,
+                                 @Field("quantity") int quantity,
+                                 @Field("total_price") int total_price,
+                                 @Field("status") int status,
+                                 @Field("datetime") String datetime,
+                                 @Field("detail") String detail);
 
     @GET("get_product.php")
     Call<List<Product>> getListCall(@Query("id") int id);
@@ -52,13 +66,14 @@ public interface ApiService {
     Call<ResponseBody> updateBirthday(@Field("new_birthday") String birthday, @Field("user_id") int userId);
 
     @Multipart
-    @POST("upload_avatar.php")// cập nhật avatar theo id
+    @POST("upload_avatar.php") // cập nhật avatar theo id
     Call<ServerResponse> uploadFile(@Part MultipartBody.Part file,@Part("user_id") int userId);
-
+  
     @FormUrlEncoded
     @POST("search_product.php")
     Call<ProductResponse> getProductSearch(@Field("product_name") String product_name);
 
     @GET("get_product.php")
     Call<ProductResponse> getListProduct();
+
 }

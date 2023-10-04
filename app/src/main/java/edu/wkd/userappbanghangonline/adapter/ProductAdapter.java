@@ -60,8 +60,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 .into(holder.imgProduct);
         holder.tvName.setText(product.getName());
         holder.tvPrice.setText(decimalFormat.format(product.getPrice()));
+
         holder.ratingBar.setRating(product.getRating());
-        holder.tvQuantityRating.setText(product.getQuantityRating() + "");
+        holder.tvQuantityRating.setText("(" + product.getQuantityRating() + ")");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

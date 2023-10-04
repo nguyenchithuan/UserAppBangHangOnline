@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/red"
         android:text="200.000đ"
+        android:textStyle="bold"
         android:layout_marginTop="5dp"
         />
 
