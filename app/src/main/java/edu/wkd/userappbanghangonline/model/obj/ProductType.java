@@ -1,7 +1,10 @@
 package edu.wkd.userappbanghangonline.model.obj;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ProductType {
     private int id;
+    @SerializedName("name")
     private String typeName;
     private String image;
 
