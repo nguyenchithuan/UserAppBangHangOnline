@@ -2,6 +2,7 @@ package edu.wkd.userappbanghangonline.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,6 +18,10 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         onBack();//Quay trở lại sự kiện trước đó
+
+        binding.tvSettingAccount.setOnClickListener(v -> {
+            startActivity(new Intent(SettingsActivity.this, SettingAccountActivity.class));
+        });
     }
 
     private void onBack() {

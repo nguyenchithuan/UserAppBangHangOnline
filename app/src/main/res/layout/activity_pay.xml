@@ -30,7 +30,6 @@
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <!--        Dịa chi nhan hang-->
         <View
             android:layout_width="match_parent"
@@ -45,7 +44,6 @@
             android:orientation="horizontal"
             android:weightSum="10"
             android:padding="10dp">
-
             <ImageView
                 android:padding="12dp"
                 android:layout_width="0dp"
@@ -198,6 +196,7 @@
                     android:padding="2dp"/>
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
@@ -227,7 +226,6 @@
                 android:layout_weight="8"
                 android:orientation="vertical"
                 android:gravity="center">
-
                 <TextView
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
@@ -237,7 +235,6 @@
                     android:textSize="15sp"
                     android:textColor="#000"
                     android:textStyle="bold"/>
-
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
