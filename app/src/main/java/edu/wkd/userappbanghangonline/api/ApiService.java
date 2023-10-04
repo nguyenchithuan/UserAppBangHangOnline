@@ -57,5 +57,4 @@ public interface ApiService {
     Call<ServerResponse> uploadFile(@Part MultipartBody.Part file,@Part("user_id") int userId);
 
     Call<ProductResponse> getListProduct();
-
 }
