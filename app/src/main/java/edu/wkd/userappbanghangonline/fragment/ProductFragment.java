@@ -145,17 +145,18 @@ public class ProductFragment extends Fragment {
         ApiService.apiService.getListProduct().enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     ProductResponse productResponse = response.body();
-                    if (productResponse.isSuccess()){
+                    if (productResponse.isSuccess()) {
                         productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
                         dialogLoading.cancel();
-                    }else {
+                    } else {
                         CheckConection.ShowToast(getContext(), "Load danh sách sản phẩm lỗi!");
                     }
-                }else {
+                } else {
                     CheckConection.ShowToast(getContext(), "Không có dữ liệu trả về");
                 }
+            }
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {

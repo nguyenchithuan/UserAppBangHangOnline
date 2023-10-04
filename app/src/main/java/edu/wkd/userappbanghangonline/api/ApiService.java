@@ -72,8 +72,4 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("search_product.php")
     Call<ProductResponse> getProductSearch(@Field("product_name") String product_name);
-
-    @GET("get_product.php")
-    Call<ProductResponse> getListProduct();
-
 }
