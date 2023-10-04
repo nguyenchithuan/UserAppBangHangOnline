@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
@@ -35,14 +36,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         if (order == null){
             return;
         }
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.tvNameProductOrder.setText(order.getListProduct().get(0).getName());//Tên sản phẩm đầu tiên
-        holder.binding.tvQuantityProductOrder.setText(order.getListProduct().get(0).getQuantity()+"");//Số lượng sản phẩm đầu tiên
-        holder.binding.tvPriceProductOrder.setText(order.getListProduct().get(0).getPrice()+"");//Giá sản phẩm
+        holder.binding.tvQuantityProductOrder.setText("x"+order.getListProduct().get(0).getQuantity()+"");//Số lượng sản phẩm đầu tiên
+        holder.binding.tvPriceProductOrder.setText(decimalFormat.format(order.getListProduct().get(0).getPrice())+"đ");//Giá sản phẩm
         //Dưới đây là giá cũ
         holder.binding.tvOldPriceProductOrder.setPaintFlags(holder.binding.tvOldPriceProductOrder.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);//Tạo dấu gạch ngang
         int oldPriceProduct = order.getListProduct().get(0).getPrice() + 25000;//Giá cũ đang fix cứng = giá của sản phẩm đầu tiên trong danh sách order + 25k
-        holder.binding.tvOldPriceProductOrder.setText(oldPriceProduct+"");
-        holder.binding.tvAllPriceOrder.setText(order.getListProduct().get(0).getPrice()+"");//Giá sản phẩm sau khi đã qua phí vận chuyển, mã giảm giá
+        holder.binding.tvOldPriceProductOrder.setText(decimalFormat.format(oldPriceProduct)+"đ");
+        holder.binding.tvAllPriceOrder.setText(decimalFormat.format(order.getListProduct().get(0).getPrice())+"đ");//Giá sản phẩm sau khi đã qua phí vận chuyển, mã giảm giá
         //Hiển thị ảnh sản phẩm đầu tiên
         Glide.with(holder.itemView.getContext())
                 .load(order.getListProduct().get(0).getImage())
