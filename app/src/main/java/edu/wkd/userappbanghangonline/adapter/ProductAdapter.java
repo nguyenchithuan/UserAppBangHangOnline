@@ -50,6 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = listProduct.get(position);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###đ");
         if(product == null){
             return;
         }
@@ -58,8 +59,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 .error(R.mipmap.ic_launcher)
                 .into(holder.imgProduct);
         holder.tvName.setText(product.getName());
-        DecimalFormat df = new DecimalFormat("###,###,###");
-        holder.tvPrice.setText(df.format(product.getPrice()) + " đ");
+        holder.tvPrice.setText(decimalFormat.format(product.getPrice()));
+
         holder.ratingBar.setRating(product.getRating());
         holder.tvQuantityRating.setText("(" + product.getQuantityRating() + ")");
 
@@ -74,7 +75,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             }
         });
     }
-
 
     @Override
     public int getItemCount() {

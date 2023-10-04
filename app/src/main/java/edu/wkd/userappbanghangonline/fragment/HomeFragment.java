@@ -34,6 +34,7 @@ import edu.wkd.userappbanghangonline.databinding.FragmentHomeBinding;
 import edu.wkd.userappbanghangonline.databinding.LayoutDialogSearchBinding;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.obj.RecentSearch;
+import edu.wkd.userappbanghangonline.ultil.UrlSomething;
 
 
 public class HomeFragment extends Fragment {
@@ -153,14 +154,14 @@ public class HomeFragment extends Fragment {
 
     private void getListProductType() {
         listProductType = new ArrayList<>();
-        listProductType.add(new ProductType(0, "Ốp lưng", "https://hatocase.com/wp-content/uploads/2022/02/in-op-lung-dien-thoai-thoi-thuong-voi-mau-veri-peri-02.jpg"));
-        listProductType.add(new ProductType(1, "Kính cường lực", "https://tse2.mm.bing.net/th?id=OIP.sjeJse6u86yJmODzoc0J2gHaHa&pid=Api&P=0&h=180"));
-        listProductType.add(new ProductType(2, "Sticker", "https://salt.tikicdn.com/cache/w1200/ts/product/fa/0d/96/e08bd94a1efb1d7170df8e7e109d5ad5.jpg"));
-        listProductType.add(new ProductType(3, "Tai nghe", "https://tse4.mm.bing.net/th?id=OIP.lH8Le3XGQfjQo-RtmibylQHaGj&pid=Api&P=0&h=180"));
-        listProductType.add(new ProductType(4, "Tay cầm chơi game", "https://tse2.mm.bing.net/th?id=OIP._3yNHrRW8OJaJiUb4D-jWwHaHo&pid=Api&P=0&h=180"));
-        listProductType.add(new ProductType(5, "Giá đỡ điện thoại", "https://salt.tikicdn.com/ts/tmp/0c/b5/05/2a301b541199e2fd06c85608c6bfb9ef.jpg"));
+        String []arrTypeName = {"Ốp lưng","Kính cường lực","Sticker","Tai nghe",
+                "Tay cầm chơi game","Giá đỡ điện thoại"};
+        for (int i = 0; i < arrTypeName.length ; i++) {
+            listProductType.add(new ProductType(i, arrTypeName[i], UrlSomething.urlImage[i]));
+        }
         productTypeAdapter = new ProductTypeAdapter(listProductType);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3,
+                GridLayoutManager.VERTICAL, false);
         binding.rvTypeProductHome.setLayoutManager(gridLayoutManager);
         binding.rvTypeProductHome.setHasFixedSize(true);
         binding.rvTypeProductHome.setAdapter(productTypeAdapter);
