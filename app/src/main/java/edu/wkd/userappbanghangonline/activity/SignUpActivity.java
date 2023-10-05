@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                 ds.setUnderlineText(false);// Loại bỏ gạch chân
 
                 // Đặt màu văn bản cho phần từ
-                int customColor = getColor(R.color.primaryYellow);
+                int customColor = getColor(R.color.btn_yellow);
                 ds.setColor(customColor);
             }
         };

@@ -36,7 +36,7 @@
             android:layout_weight="0.5"
             android:background="@drawable/custom_btn_no"
             android:text="Không"
-            android:textColor="@color/primaryYellow"
+            android:textColor="@color/btn_yellow"
             app:backgroundTint="@null" />
 
         <Button

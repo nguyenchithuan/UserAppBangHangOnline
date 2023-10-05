@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         android:id="@+id/ratingBar"
-                        android:progressTint="@color/primaryYellow"
+                        android:progressTint="@color/btn_yellow"
                         android:progressBackgroundTint="@color/border_switch"/>
 
                     <TextView
@@ -121,7 +121,7 @@
                         android:background="@drawable/custom_bg_subtraction"
                         android:gravity="center"
                         android:textSize="20sp"
-                        android:textColor="@color/primaryYellow"/>
+                        android:textColor="@color/btn_yellow"/>
                     <TextView
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                         android:background="@drawable/custom_bg_addition"
                         android:gravity="center"
                         android:textSize="20sp"
-                        android:textColor="@color/primaryYellow"/>
+                        android:textColor="@color/btn_yellow"/>
                 </LinearLayout>
 
                 <View
@@ -271,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         android:text="Xem tất cả"
-                        android:textColor="@color/primaryYellow"
+                        android:textColor="@color/btn_yellow"
                         app:layout_constraintEnd_toStartOf="@+id/imageView13"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -280,7 +280,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/baseline_arrow_forward_ios_24"
-                        app:tint="@color/primaryYellow"
+                        app:tint="@color/btn_yellow"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -335,7 +335,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            app:tint="@color/primaryYellow"
+            app:tint="@color/btn_yellow"
             android:id="@+id/arrowBackDetailProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -355,7 +355,7 @@
             android:elevation="@dimen/cardview_default_elevation"
             android:padding="8dp"
             android:src="@drawable/icon_cart"
-            app:tint="@color/primaryYellow"
+            app:tint="@color/btn_yellow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imgChat"
             app:layout_constraintTop_toTopOf="parent" />
@@ -389,7 +389,7 @@
             android:text="Thêm vào giỏ hàng"
             android:background="@drawable/custom_btn_no"
             app:backgroundTint="@null"
-            android:textColor="@color/primaryYellow"/>
+            android:textColor="@color/btn_yellow"/>
 
         <Button
             android:layout_marginHorizontal="20dp"

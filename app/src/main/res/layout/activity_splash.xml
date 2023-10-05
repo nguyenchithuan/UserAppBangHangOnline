@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đăng ký"
-            android:textColor="@color/primaryYellow"
+            android:textColor="@color/btn_yellow"
             android:textSize="19dp"
             android:textStyle="bold"
             android:id="@+id/tvSignUp"/>
