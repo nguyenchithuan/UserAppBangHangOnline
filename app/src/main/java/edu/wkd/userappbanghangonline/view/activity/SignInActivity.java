@@ -1,0 +1,51 @@
+package edu.wkd.userappbanghangonline.view.activity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import edu.wkd.userappbanghangonline.databinding.ActivitySignInBinding;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+
+public class SignInActivity extends AppCompatActivity {
+    private ActivitySignInBinding binding;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        onBack();//Quay trở lại sự kiện trước đó
+        goToForgotPasswordActivity();//
+        goToMainActivity();
+    }
+
+    private void goToMainActivity() {
+        binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            }
+        });
+    }
+
+    private void goToForgotPasswordActivity() {
+        binding.tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this, ForgotPasswordActivity.class));
+            }
+        });
+    }
+
+    private void onBack() {
+        binding.arrowBackSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+}
