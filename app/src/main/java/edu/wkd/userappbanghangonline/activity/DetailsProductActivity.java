@@ -1,12 +1,18 @@
 package edu.wkd.userappbanghangonline.activity;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -33,6 +39,7 @@ public class DetailsProductActivity extends AppCompatActivity {
         setDataDetailsProduct();
         onclickBtnProductQuantity();
         onclickBtnCart();
+        eventBtnCart();
     }
 
     private void setDataDetailsProduct() {
@@ -72,7 +79,7 @@ public class DetailsProductActivity extends AppCompatActivity {
     private void onclickBtnCart() {
         binding.btnCart.setOnClickListener(view -> {
             Intent intent = new Intent(this, CartActivity.class);
-            startActivity(intent);
+            mActivityResultLauncher.launch(intent);
             addListCart();
         });
     }
@@ -100,12 +107,44 @@ public class DetailsProductActivity extends AppCompatActivity {
         }
     }
 
+    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if(result.getResultCode() == RESULT_OK) {
+                Intent intent = result.getData();
+                int cartSize = intent.getIntExtra("data_cart_size", 0);
+                binding.tvQuantityCart.setText(cartSize + "");
+            }
+        }
+    });
+    private void eventBtnCart() {
+        binding.tvQuantityCart.setText(CartUtil.listCart.size() + "");
+        binding.imgCart.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CartActivity.class);
+            mActivityResultLauncher.launch(intent);
+        });
+    }
+
     private void onBack() {
         binding.arrowBackDetailProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackActivity();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackActivity();
+    }
+
+    private void onBackActivity() {
+        // Truyền số lượng sản phẩm về màn hình trc đó
+        Intent intent = new Intent(DetailsProductActivity.this, MainActivity.class);
+        intent.putExtra("data_cart_size", CartUtil.listCart.size());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
