@@ -14,11 +14,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.SettingAccountActivity"
+            android:name=".activity.OrderActivity"
             android:exported="false" />
         <activity
             android:name=".activity.PayActivity"
-            android:exported="false"/>
+            android:exported="true"/>
+        <activity
+            android:name=".activity.SettingAccountActivity"
+            android:exported="true"/>
         <activity
             android:name=".activity.DetailsProductActivity"
             android:exported="true"

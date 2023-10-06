@@ -6,11 +6,10 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.model.obj.Product;
-
+import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
-
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
 import edu.wkd.userappbanghangonline.model.response.Response;
 import retrofit2.Call;
@@ -36,6 +35,9 @@ public interface ApiService {
     Call<ProductResponse> getListProduct();
 
     @FormUrlEncoded
+    @POST("get_user_orders.php")
+    Call<OrderResponse> getOrderByIdUser(@Field("user_id") int userId);
+
     @POST("post_order.php")
     Call<Response> postOrderUser(@Field("user_id") int user_id,
                                  @Field("address") String address,
@@ -68,8 +70,9 @@ public interface ApiService {
     @Multipart
     @POST("upload_avatar.php") // cập nhật avatar theo id
     Call<ServerResponse> uploadFile(@Part MultipartBody.Part file,@Part("user_id") int userId);
-  
+
     @FormUrlEncoded
     @POST("search_product.php")
     Call<ProductResponse> getProductSearch(@Field("product_name") String product_name);
+
 }
