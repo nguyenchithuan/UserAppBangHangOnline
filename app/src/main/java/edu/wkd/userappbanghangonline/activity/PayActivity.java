@@ -79,8 +79,8 @@ public class PayActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 Response res = response.body();
-                Log.d("zzzzz", "onResponse: " + res.toString());
-                Toast.makeText(PayActivity.this, "Thành công", Toast.LENGTH_SHORT).show();
+                removeListBuyCart();
+                Toast.makeText(PayActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(PayActivity.this, MainActivity.class);
                 startActivity(intent);
                 finishAffinity();
@@ -94,6 +94,10 @@ public class PayActivity extends AppCompatActivity {
                 dialogLoading.cancel();
             }
         });
+    }
+
+    private void removeListBuyCart() {
+        CartUtil.listCart.removeAll(CartUtil.listBuyCart);
     }
 
     private String getDataOrderDetail() { // chuyển thành json của order detail
