@@ -16,10 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
+
 import edu.wkd.userappbanghangonline.activity.DetailsProductActivity;
+
 import edu.wkd.userappbanghangonline.model.obj.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
@@ -47,6 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = listProduct.get(position);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###đ");
         if(product == null){
             return;
         }
@@ -55,9 +59,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 .error(R.mipmap.ic_launcher)
                 .into(holder.imgProduct);
         holder.tvName.setText(product.getName());
-        holder.tvPrice.setText(product.getPrice() + "đ");
+        holder.tvPrice.setText(decimalFormat.format(product.getPrice()));
+
         holder.ratingBar.setRating(product.getRating());
-        holder.tvQuantityRating.setText(product.getQuantityRating() + "");
+        holder.tvQuantityRating.setText("(" + product.getQuantityRating() + ")");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +75,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             }
         });
     }
-
 
     @Override
     public int getItemCount() {

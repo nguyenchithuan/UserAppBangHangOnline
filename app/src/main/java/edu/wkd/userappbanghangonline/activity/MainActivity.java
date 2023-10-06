@@ -18,6 +18,7 @@ import edu.wkd.userappbanghangonline.fragment.HomeFragment;
 import edu.wkd.userappbanghangonline.fragment.NotificationFragment;
 import edu.wkd.userappbanghangonline.fragment.ProductFragment;
 import edu.wkd.userappbanghangonline.fragment.UserFragment;
+import edu.wkd.userappbanghangonline.ultil.CheckConection;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
@@ -30,8 +31,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
         setOnClickIconInBottomNav();//Xử lí sự kiện khi người dùng nhấn vào bottom nav
+
+        if (CheckConection.HaveConnection(this)){
+            CheckConection.ShowToast(this, "Kết nối thành công!");
+        }else
+            CheckConection.ShowToast(this,"Kết nối thất bại!");
     }
 
     private void setOnClickIconInBottomNav() {

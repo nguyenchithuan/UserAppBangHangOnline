@@ -1,5 +1,6 @@
 package edu.wkd.userappbanghangonline.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,10 +11,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -30,6 +34,12 @@ import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
+import edu.wkd.userappbanghangonline.ultil.CheckConection;
+import edu.wkd.userappbanghangonline.ultil.UrlSomething;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+
+import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +51,9 @@ public class ProductFragment extends Fragment {
     private ProductTypeAdapter productTypeAdapter;
     private ArrayList<ProductType> listProductType;
     private List<Product> listProduct;
+    private List<Product> listProductSearch;
     private ProductAdapter productAdapter;
+    private ProgressDialogLoading dialogLoading;
     public ProductFragment() {
     }
 
@@ -67,45 +79,104 @@ public class ProductFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initProduct();
         autoImageSlide();//Tạo ảnh chạy tự động
         getListProductType();
         getListProduct();
         callApiGetUsers();
+        searchProduct();
     }
 
+    private void searchProduct() {
+        binding.edSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //trước khi text thay đổi
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //trong khi text thay đổi
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Sau khi text thay đổi
+                getDataSearch();
+            }
+        });
+    }
+
+    private void getDataSearch() {
+        dialogLoading.show();
+        String product_name = binding.edSearch.getText().toString().trim();
+        if (product_name != null) { //nếu có dữ liệu mới search
+            ApiService.apiService.getProductSearch(product_name).enqueue(
+                    new Callback<ProductResponse>() {
+                        @Override
+                        public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                            if (response.isSuccessful()){
+                                ProductResponse productResponse = response.body();
+                                if (productResponse.isSuccess()){
+                                    productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
+                                    dialogLoading.cancel();
+                                }else {
+                                    CheckConection.ShowToast(getContext(), "Không tìm thấy sản phẩm");
+                                    dialogLoading.cancel();
+                                }
+                            }else {
+                                dialogLoading.cancel();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ProductResponse> call, Throwable t) {
+
+                        }
+                    }
+            );
+        }else { // không thì trả về list sản phẩm ban đầu
+            getListProduct();
+        }
+    }
 
     private void callApiGetUsers(){
+        dialogLoading.show();
         ApiService.apiService.getListProduct().enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
-                ProductResponse productResponse = response.body();
-                Log.d("zzzz", "onResponse-product-getName: " + productResponse.getResult().get(0).getName());
-                Log.d("zzzz", "onResponse-product-getImage: " + productResponse.getResult().get(0).getImage());
-                Log.d("zzzz", "onResponse-product-getPrice: " + productResponse.getResult().get(0).getPrice());
-                Log.d("zzzz", "onResponse-product-getQuantityRating: " + productResponse.getResult().get(0).getQuantityRating());
-                productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
+                if (response.isSuccessful()) {
+                    ProductResponse productResponse = response.body();
+                    if (productResponse.isSuccess()) {
+                        productAdapter.setListProduct(productResponse.getResult()); // set dữ liệu lên rcv
+                        dialogLoading.cancel();
+                    } else {
+                        CheckConection.ShowToast(getContext(), "Load danh sách sản phẩm lỗi!");
+                    }
+                } else {
+                    CheckConection.ShowToast(getContext(), "Không có dữ liệu trả về");
+                }
             }
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
                 Log.d("zzzz", "onResponse-product-error: " + t.toString());
+                Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                dialogLoading.cancel();
             }
         });
     }
 
-
-
     private void getListProductType() {
         listProductType = new ArrayList<>();
-        listProductType.add(new ProductType(0, "Ốp lưng", "https://hatocase.com/wp-content/uploads/2022/02/in-op-lung-dien-thoai-thoi-thuong-voi-mau-veri-peri-02.jpg"));
-        listProductType.add(new ProductType(1, "Kính cường lực", "https://tse2.mm.bing.net/th?id=OIP.sjeJse6u86yJmODzoc0J2gHaHa&pid=Api&P=0&h=180"));
-        listProductType.add(new ProductType(2, "Sticker", "https://salt.tikicdn.com/cache/w1200/ts/product/fa/0d/96/e08bd94a1efb1d7170df8e7e109d5ad5.jpg"));
-        listProductType.add(new ProductType(3, "Tai nghe", "https://tse4.mm.bing.net/th?id=OIP.lH8Le3XGQfjQo-RtmibylQHaGj&pid=Api&P=0&h=180"));
-        listProductType.add(new ProductType(4, "Tay cầm chơi game", "https://tse2.mm.bing.net/th?id=OIP._3yNHrRW8OJaJiUb4D-jWwHaHo&pid=Api&P=0&h=180"));
-        listProductType.add(new ProductType(5, "Giá đỡ điện thoại", "https://salt.tikicdn.com/ts/tmp/0c/b5/05/2a301b541199e2fd06c85608c6bfb9ef.jpg"));
+        String []arrTypeName = {"Ốp lưng","Kính cường lực","Sticker","Tai nghe",
+                "Tay cầm chơi game","Giá đỡ điện thoại"};
+        for (int i = 0; i < arrTypeName.length ; i++) {
+            listProductType.add(new ProductType(i, arrTypeName[i], UrlSomething.urlImage[i]));
+        }
         productTypeAdapter = new ProductTypeAdapter(listProductType);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),
+                3, GridLayoutManager.VERTICAL, false);
         binding.rvTypeProduct.setLayoutManager(gridLayoutManager);
         binding.rvTypeProduct.setHasFixedSize(true);
         binding.rvTypeProduct.setAdapter(productTypeAdapter);
@@ -113,7 +184,8 @@ public class ProductFragment extends Fragment {
 
     private void getListProduct() {
         listProduct = new ArrayList<>();
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),
+                2, GridLayoutManager.VERTICAL, false);
         binding.rcvProduct.setLayoutManager(gridLayoutManager);
         binding.rcvProduct.setHasFixedSize(true);
         productAdapter = new ProductAdapter(getActivity(), listProduct);
@@ -129,5 +201,9 @@ public class ProductFragment extends Fragment {
         listBanner.add(new SlideModel(R.drawable.banner11, ScaleTypes.FIT));
         listBanner.add(new SlideModel(R.drawable.banner12, ScaleTypes.FIT));
         binding.imageSlider2.setImageList(listBanner);
+    }
+
+    private void initProduct() {
+        dialogLoading = new ProgressDialogLoading(getActivity());
     }
 }
