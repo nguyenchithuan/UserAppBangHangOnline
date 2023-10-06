@@ -1,8 +1,13 @@
 package edu.wkd.userappbanghangonline.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.activity.CartActivity;
 import edu.wkd.userappbanghangonline.activity.DetailsProductActivity;
 import edu.wkd.userappbanghangonline.adapter.ProductAdapter;
 import edu.wkd.userappbanghangonline.adapter.ProductTypeAdapter;
@@ -31,13 +37,15 @@ import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
+import edu.wkd.userappbanghangonline.ultil.CartUtil;
+import edu.wkd.userappbanghangonline.ultil.ItemProductInterface;
 import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements ItemProductInterface {
    private RecyclerView recyclerView;
     private FragmentProductBinding binding;
     private ProductTypeAdapter productTypeAdapter;
@@ -75,6 +83,7 @@ public class ProductFragment extends Fragment {
         getListProductType();
         getListProduct();
         callApiGetUsers();
+        eventBtnCart();
     }
 
     private void callApiGetUsers(){
@@ -116,7 +125,7 @@ public class ProductFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
         binding.rcvProduct.setLayoutManager(gridLayoutManager);
         binding.rcvProduct.setHasFixedSize(true);
-        productAdapter = new ProductAdapter(getActivity(), listProduct);
+        productAdapter = new ProductAdapter(getActivity(), listProduct, this::onClickItemProduct);
         binding.rcvProduct.setAdapter(productAdapter);
     }
 
@@ -131,8 +140,38 @@ public class ProductFragment extends Fragment {
         binding.imageSlider2.setImageList(listBanner);
     }
 
-
     private void initProduct() {
         dialogLoading = new ProgressDialogLoading(getActivity());
+    }
+
+    // Hiển thị số lượng sản phẩm trong giỏ hàng khi back lại
+    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == getActivity().RESULT_OK) {
+                        Intent intent = result.getData();
+                        int cartSize = intent.getIntExtra("data_cart_size", 0);
+                        binding.tvQuantityCart.setText(cartSize + "");
+                    }
+                }
+            });
+
+    private void eventBtnCart() {
+        binding.tvQuantityCart.setText(CartUtil.listCart.size() + "");
+
+        binding.imgCart.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), CartActivity.class);
+            mActivityResultLauncher.launch(intent);
+        });
+    }
+
+    @Override
+    public void onClickItemProduct(Product product) {
+        Intent intent = new Intent(getActivity(), DetailsProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", product);
+        intent.putExtras(bundle);
+        mActivityResultLauncher.launch(intent);
     }
 }

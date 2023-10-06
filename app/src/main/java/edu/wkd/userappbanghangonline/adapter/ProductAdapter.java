@@ -24,15 +24,18 @@ import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.activity.DetailsProductActivity;
 
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.ultil.ItemProductInterface;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
     private Context context;
     private List<Product> listProduct;
+    private ItemProductInterface itemProductInterface;
 
 
-    public ProductAdapter(Context context, List<Product> listProduct) {
+    public ProductAdapter(Context context, List<Product> listProduct, ItemProductInterface itemProductInterface) {
         this.context = context;
         this.listProduct = listProduct;
+        this.itemProductInterface = itemProductInterface;
     }
 
     public void setListProduct(List<Product> listProduct) {
@@ -66,11 +69,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, DetailsProductActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("product", product);
-                intent.putExtras(bundle);
-                context.startActivity(intent);
+                itemProductInterface.onClickItemProduct(product);
             }
         });
     }
