@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,6 +24,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -27,6 +32,7 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.activity.CartActivity;
 import edu.wkd.userappbanghangonline.activity.MainActivity;
 import edu.wkd.userappbanghangonline.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.adapter.RecentSearchAdapter;
@@ -35,6 +41,7 @@ import edu.wkd.userappbanghangonline.databinding.LayoutDialogSearchBinding;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.obj.RecentSearch;
 import edu.wkd.userappbanghangonline.ultil.UrlSomething;
+import edu.wkd.userappbanghangonline.ultil.CartUtil;
 
 
 public class HomeFragment extends Fragment {
@@ -75,7 +82,9 @@ public class HomeFragment extends Fragment {
         autoImageSlide();//Tạo ảnh chạy tự động
         getListProductType();//Lấy danh sách loại sản phẩm
         openSearchDialog();//Mở dialog tìm kiếm
+        eventBtnCart();
     }
+
 
     private void openSearchDialog() {
         binding.imgSearch.setOnClickListener(new View.OnClickListener() {
@@ -117,8 +126,6 @@ public class HomeFragment extends Fragment {
                         return false;
                     }
                 });
-
-
 
                 bindingSearch.arrowBackSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -176,5 +183,27 @@ public class HomeFragment extends Fragment {
         listBanner.add(new SlideModel(R.drawable.banner5, ScaleTypes.FIT));
         listBanner.add(new SlideModel(R.drawable.banner6, ScaleTypes.FIT));
         binding.imageSlider.setImageList(listBanner);
+    }
+
+    // Hiển thị số lượng sản phẩm trong giỏ hàng khi back lại
+    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == getActivity().RESULT_OK) {
+                        Intent intent = result.getData();
+                        int cartSize = intent.getIntExtra("data_cart_size", 0);
+                        binding.tvQuantityCart.setText(cartSize + "");
+                    }
+                }
+            });
+
+    private void eventBtnCart() {
+        binding.tvQuantityCart.setText(CartUtil.listCart.size() + "");
+
+        binding.imgCart.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), CartActivity.class);
+            mActivityResultLauncher.launch(intent);
+        });
     }
 }

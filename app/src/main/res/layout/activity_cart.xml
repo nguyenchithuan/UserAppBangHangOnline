@@ -25,9 +25,14 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/left_arrow" />
+                app:tint="@color/btn_yellow"
+                android:id="@+id/arrowBackDetailProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bg_shopping_cart"
+                android:padding="2dp"
+                android:src="@drawable/left_arrow"
+                />
 
             <TextView
                 android:layout_width="wrap_content"

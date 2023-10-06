@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,11 +46,11 @@ public class PayActivity extends AppCompatActivity {
 
         initPay();
         setDataPay();
-
+        onBack();
 
         binding.btnOrder.setOnClickListener(view -> {
-            dialogLoading.show();
             if(validate()) {
+                dialogLoading.show();
                 postOrderUser();
             }
         });
@@ -131,5 +132,14 @@ public class PayActivity extends AppCompatActivity {
 
     private void initPay() {
         dialogLoading = new ProgressDialogLoading(this);
+    }
+
+    private void onBack() {
+        binding.arrowBackDetailProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }

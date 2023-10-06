@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -15,6 +16,7 @@ import edu.wkd.userappbanghangonline.adapter.CartAdapter;
 import edu.wkd.userappbanghangonline.databinding.ActivityCartBinding;
 import edu.wkd.userappbanghangonline.ultil.CartInterface;
 import edu.wkd.userappbanghangonline.ultil.CartUtil;
+import okhttp3.internal.Util;
 
 public class CartActivity extends AppCompatActivity implements CartInterface {
     private ActivityCartBinding binding;
@@ -28,6 +30,7 @@ public class CartActivity extends AppCompatActivity implements CartInterface {
         setContentView(binding.getRoot());
         setDataCart();
         setTotalPrice();
+        onBack();
 
         binding.btnPurchase.setOnClickListener(view -> {
             if(totalPrice == 0) {
@@ -42,6 +45,7 @@ public class CartActivity extends AppCompatActivity implements CartInterface {
             startActivity(intent);
         });
     }
+
 
     private void setDataCart() {
         try {
@@ -65,5 +69,28 @@ public class CartActivity extends AppCompatActivity implements CartInterface {
         }
         DecimalFormat df = new DecimalFormat("###,###,###");
         binding.tvTotalPrice.setText(df.format(totalPrice) + " đ");
+    }
+
+    private void onBack() {
+        binding.arrowBackDetailProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackActivity();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackActivity();
+    }
+
+    private void onBackActivity() {
+        // Đoạn này chưa hiểu lắm nhưng kể cả truyền cho màn hình nào thì tất cả
+        // registerForActivityResult onBack đểu đc chạy
+        Intent intent = new Intent(CartActivity.this, MainActivity.class);
+        intent.putExtra("data_cart_size", CartUtil.listCart.size());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
