@@ -2,9 +2,11 @@ package edu.wkd.userappbanghangonline.view.adapter;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -12,12 +14,16 @@ import com.bumptech.glide.Glide;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import edu.wkd.userappbanghangonline.adapter.ProductInOrderAdapter;
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
+import edu.wkd.userappbanghangonline.model.obj.Product;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     private ArrayList<Order> list;
+    private ArrayList<Product> listProduct;
+    private ProductInOrderAdapter productAdapter;
 
     public OrderAdapter(ArrayList<Order> list) {
         this.list = list;
@@ -36,19 +42,33 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         if (order == null){
             return;
         }
+//        listProduct = new ArrayList<>();
+        listProduct = order.getListProduct();
+        int totalProduct = 0;//Tổng số lượng sản phẩm đặt mua
+        for (Product product : listProduct){
+            totalProduct += product.getQuantity();
+        }
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.binding.tvNameProductOrder.setText(order.getListProduct().get(0).getName());//Tên sản phẩm đầu tiên
-        holder.binding.tvQuantityProductOrder.setText("x"+order.getListProduct().get(0).getQuantity()+"");//Số lượng sản phẩm đầu tiên
-        holder.binding.tvPriceProductOrder.setText(decimalFormat.format(order.getListProduct().get(0).getPrice())+"đ");//Giá sản phẩm
-        //Dưới đây là giá cũ
-        holder.binding.tvOldPriceProductOrder.setPaintFlags(holder.binding.tvOldPriceProductOrder.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);//Tạo dấu gạch ngang
-        int oldPriceProduct = order.getListProduct().get(0).getPrice() + 25000;//Giá cũ đang fix cứng = giá của sản phẩm đầu tiên trong danh sách order + 25k
-        holder.binding.tvOldPriceProductOrder.setText(decimalFormat.format(oldPriceProduct)+"đ");
-        holder.binding.tvAllPriceOrder.setText(decimalFormat.format(order.getListProduct().get(0).getPrice())+"đ");//Giá sản phẩm sau khi đã qua phí vận chuyển, mã giảm giá
-        //Hiển thị ảnh sản phẩm đầu tiên
-        Glide.with(holder.itemView.getContext())
-                .load(order.getListProduct().get(0).getImage())
-                .into(holder.binding.imgProductOrder);
+        holder.binding.tvAllProductInOrder.setText(totalProduct+" sản phẩm");
+        holder.binding.tvAllPriceOrder.setText(decimalFormat.format(order.getTotalPrice())+"đ");
+        productAdapter = new ProductInOrderAdapter(listProduct);
+        LinearLayoutManager manager = new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.VERTICAL, false);
+        holder.binding.rvOrder.setLayoutManager(manager);
+        holder.binding.rvOrder.setAdapter(productAdapter);
+        if (order.getStatus() == 0){
+            holder.binding.tvStateDelivey.setText("Chờ xác nhận");
+            holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
+        }else if (order.getStatus() == 1){
+            holder.binding.tvStateDelivey.setText("Đang giao hàng");
+            holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
+        }else if (order.getStatus() == 2){
+            holder.binding.tvStateDelivey.setText("Giao hàng thành công");
+            holder.binding.layoutRatingAndReOrder.setVisibility(View.VISIBLE);
+        }else{
+            holder.binding.tvStateDelivey.setText("Đơn hàng đã bị hủy");
+            holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
