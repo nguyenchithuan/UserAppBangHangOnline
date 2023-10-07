@@ -7,11 +7,11 @@ import java.util.List;
 
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
-import edu.wkd.userappbanghangonline.model.response.ServerResponse;
+import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
-import edu.wkd.userappbanghangonline.model.response.Response;
+import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,9 +24,10 @@ import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiService {
+    public static final String URL_MAIN = "https://guyinterns2003.000webhostapp.com/";
     Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
     ApiService apiService = new Retrofit.Builder()
-            .baseUrl("https://guyinterns2003.000webhostapp.com/")
+            .baseUrl(URL_MAIN)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiService.class);
@@ -35,19 +36,23 @@ public interface ApiService {
     Call<ProductResponse> getListProduct();
 
     @FormUrlEncoded
+    @POST("get_user.php")
+    Call<UserResponse> getUser(@Field("user_id") int userId);
+
+    @FormUrlEncoded
     @POST("get_user_orders.php")
     Call<OrderResponse> getOrderByIdUser(@Field("user_id") int userId);
 
     @FormUrlEncoded
     @POST("post_order.php")
-    Call<Response> postOrderUser(@Field("user_id") int user_id,
-                                 @Field("address") String address,
-                                 @Field("phone_number") String phone_number,
-                                 @Field("quantity") int quantity,
-                                 @Field("total_price") int total_price,
-                                 @Field("status") int status,
-                                 @Field("datetime") String datetime,
-                                 @Field("detail") String detail);
+    Call<ServerResponse> postOrderUser(@Field("user_id") int user_id,
+                                       @Field("address") String address,
+                                       @Field("phone_number") String phone_number,
+                                       @Field("quantity") int quantity,
+                                       @Field("total_price") int total_price,
+                                       @Field("status") int status,
+                                       @Field("datetime") String datetime,
+                                       @Field("detail") String detail);
 
     @GET("get_product.php")
     Call<List<Product>> getListCall(@Query("id") int id);
@@ -68,12 +73,17 @@ public interface ApiService {
     @POST("update_birthday.php")
     Call<ResponseBody> updateBirthday(@Field("new_birthday") String birthday, @Field("user_id") int userId);
 
+    @FormUrlEncoded
+    @POST("update_password.php")
+    Call<ServerResponse> updatePassword(@Field("new_pass") String pass, @Field("user_id") int userId);
+
     @Multipart
     @POST("upload_avatar.php") // cập nhật avatar theo id
-    Call<ServerResponse> uploadFile(@Part MultipartBody.Part file,@Part("user_id") int userId);
+    Call<ServerResponse> uploadFile(@Part MultipartBody.Part file, @Part("user_id") int userId);
 
     @FormUrlEncoded
     @POST("search_product.php")
     Call<ProductResponse> getProductSearch(@Field("product_name") String product_name);
+
 
 }
