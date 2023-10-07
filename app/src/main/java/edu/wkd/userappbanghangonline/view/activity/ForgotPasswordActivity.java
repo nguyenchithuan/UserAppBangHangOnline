@@ -15,7 +15,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityForgotPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         goToVerificationActivity();
     }
 

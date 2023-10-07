@@ -10,8 +10,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
 import android.widget.DatePicker;
 
+import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import org.json.JSONObject;
@@ -19,10 +24,14 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.Calendar;
 
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivitySettingAccountBinding;
+import edu.wkd.userappbanghangonline.model.obj.User;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
+import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
+import edu.wkd.userappbanghangonline.ultil.Validator;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -45,6 +54,12 @@ public class SettingAccountActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         settingPDialog();
 
+        getInfoUser(); // lấy thông tin của user
+        binding.tvChangeBirthday.setVisibility(View.GONE);
+        binding.tvChangeEmail.setVisibility(View.GONE);
+        binding.tvChangeUsername.setVisibility(View.GONE);
+        binding.tvChangePhone.setVisibility(View.GONE);
+
         binding.arrowBackSettings.setOnClickListener(v -> {
             finish();
         });
@@ -64,12 +79,12 @@ public class SettingAccountActivity extends AppCompatActivity {
             updateProfile(email,"email");
         });
 
-        binding.inputChangeBithday.setOnClickListener(v -> {
+        binding.inputChangeBirthday.setOnClickListener(v -> {
             showDatePickerDialog();
         });
 
         binding.tvChangeBirthday.setOnClickListener(v -> {
-            String birthday = binding.inputChangeBithday.getText().toString().trim();
+            String birthday = binding.inputChangeBirthday.getText().toString().trim();
             updateProfile(birthday,"birthday");
         });
 
@@ -78,6 +93,144 @@ public class SettingAccountActivity extends AppCompatActivity {
         });
 
     }
+
+    private void getInfoUser() {
+        showPDialog();
+        ApiService.apiService.getUser(1).enqueue(
+                new Callback<UserResponse>() {
+                    @Override
+                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                        if (response.isSuccessful()){
+                            UserResponse userResponse = response.body();
+                            if (userResponse.isSuccess()){
+                                Log.d("userResponse", "Lay du lieu thanh cong!");
+                                User user = userResponse.getResult().get(0);
+
+                                setInfoUsertoUi(user.getUsername(),user.getPhone(),
+                                        user.getEmail(),user.getBirthday(),user.getAvatar());
+                                hidePDialog();
+                            }else {
+                                Log.d("userResponse", "Lay du lieu that bai!");
+                            }
+                        }else
+                            CheckConection.ShowToast(SettingAccountActivity.this,
+                                    "Lỗi khi lấy dữ liệu");
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserResponse> call, Throwable t) {
+
+                    }
+                }
+        );
+    }
+
+    private void setInfoUsertoUi(String username, String phone, String email, String birthday, String avatar) {
+        binding.inputChangeUsername.setText(username);
+        binding.inputChangePhone.setText(phone);
+        binding.inputChangeEmail.setText(email);
+        binding.inputChangeBirthday.setText(birthday);
+        Glide.with(SettingAccountActivity.this)
+                .load(ApiService.URL_MAIN + avatar)
+                .error(R.drawable.baseline_person_24)
+                .into(binding.imgChangeAvatar);
+
+        binding.inputChangeUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String in_username = binding.inputChangeUsername.getText().toString().trim();
+                if (in_username.equals(username)){
+                    binding.tvChangeUsername.setVisibility(View.GONE);
+                }else {
+                    binding.tvChangeUsername.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.tvChangePhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String in_phone = binding.inputChangePhone.getText().toString().trim();
+                if (in_phone.equals(phone)){
+                    binding.tvChangePhone.setVisibility(View.GONE);
+                }else {
+                    binding.tvChangePhone.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.inputChangeEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String in_email = binding.inputChangeEmail.getText().toString().trim();
+                if (email.equals(in_email)){
+                    binding.tvChangeEmail.setVisibility(View.GONE);
+                }else {
+                    binding.tvChangeEmail.setVisibility(View.VISIBLE);
+                }
+
+                if (!Validator.isValidEmail(in_email)){
+                    binding.inputChangeEmail.setError("Email không đúng định dạng");
+                    binding.tvChangeEmail.setVisibility(View.INVISIBLE);
+                }else {
+                    binding.tvChangeEmail.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.inputChangeBirthday.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String in_birth = binding.inputChangeBirthday.getText().toString().trim();
+                if (in_birth.equals(birthday)){
+                    binding.tvChangeBirthday.setVisibility(View.GONE);
+                }else {
+                    binding.tvChangeBirthday.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
 
     private void changeAvatar() {
         ImagePicker.with(this)
@@ -120,13 +273,13 @@ public class SettingAccountActivity extends AppCompatActivity {
         // Parsing any Media type file
         RequestBody requestBody1 = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody1);
-        Call <ServerResponse> call = ApiService.apiService.uploadFile(fileToUpload, 21); // số 21 là userID ở đây chuyền tạm là 21 sau khi đăng nhập phân quền thì sửa sau
+        Call <ServerResponse> call = ApiService.apiService.uploadFile(fileToUpload, 1); // số 21 là userID ở đây chuyền tạm là 21 sau khi đăng nhập phân quền thì sửa sau
         call.enqueue(new Callback < ServerResponse > () {
             @Override
             public void onResponse(Call < ServerResponse > call, Response < ServerResponse > response) {
                 ServerResponse serverResponse = response.body();
                 if (serverResponse != null) {
-                    if (serverResponse.isSuccess()) {
+                    if (serverResponse.getSuccess()) {
                         CheckConection.ShowToast(SettingAccountActivity.this, "Cập nhật ảnh thành công!");
                     } else {
                         CheckConection.ShowToast(SettingAccountActivity.this, "Cập nhật ảnh khônh thành công!");
@@ -141,7 +294,6 @@ public class SettingAccountActivity extends AppCompatActivity {
         });
     }
 
-
     private void showDatePickerDialog() {
         // Lấy ngày, tháng và năm hiện tại
         Calendar calendar = Calendar.getInstance();
@@ -155,7 +307,7 @@ public class SettingAccountActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
-                        binding.inputChangeBithday.setText(selectedDate);
+                        binding.inputChangeBirthday.setText(selectedDate);
                     }
 
                 }, currentYear, currentMonth, currentDay);
