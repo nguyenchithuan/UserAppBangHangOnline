@@ -67,29 +67,15 @@ public class DeliveredFragment extends Fragment {
     private void getData() {
         if (OrderActivity.listDelivered.isEmpty() || OrderActivity.listDelivered.size() == 0){
             binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
+//            binding.progressBar.setVisibility(View.INVISIBLE);
         }else{
             orderAdapter = new OrderAdapter(OrderActivity.listDelivered);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.rvOrderDelivered.setLayoutManager(manager);
             binding.rvOrderDelivered.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
+//            binding.progressBar.setVisibility(View.INVISIBLE);
         }
     }
-
-
-    private void showAndHideItem(ArrayList<Order> list) {
-        if (list.size() == 0 || list.isEmpty()){
-            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-            binding.rvOrderDelivered.setVisibility(View.INVISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }else{
-            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-            binding.rvOrderDelivered.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }
-    }
-
 
 }

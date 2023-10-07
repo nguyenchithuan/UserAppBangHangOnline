@@ -3,6 +3,7 @@ package edu.wkd.userappbanghangonline.view.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +15,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
-import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
 
+import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
@@ -30,24 +31,33 @@ public class OrderActivity extends AppCompatActivity {
     private ActivityOrderBinding binding;
     public static final String TAG = OrderActivity.class.toString();
     private ViewPager2Adapter viewPager2Adapter;
-    public static ArrayList<Order> listConfirm = new ArrayList<>();
-    public static ArrayList<Order> listDelivering = new ArrayList<>();
-    public static ArrayList<Order> listDelivered = new ArrayList<>();
-    public static ArrayList<Order> listCancelled = new ArrayList<>();
-    public ArrayList<Order> listAll = new ArrayList<>();
+    public static ArrayList<Order> listConfirm;
+    public static ArrayList<Order> listDelivering;
+    public static ArrayList<Order> listDelivered;
+    public static ArrayList<Order> listCancelled;
+    public ArrayList<Order> listAll;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityOrderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        sharedPreferences = getSharedPreferences("my_shared", MODE_PRIVATE);
         onBack();//Quay trở lại sự kiện trước đó
-        getData();
         setTabLayoutAndViewPager2();
+        getData();
+
     }
 
     private void getData() {
-        ApiService.apiService.getOrderByIdUser(1).enqueue(new Callback<OrderResponse>() {
+        listAll         = new ArrayList<>();
+        listConfirm     = new ArrayList<>();
+        listDelivered   = new ArrayList<>();
+        listDelivering  = new ArrayList<>();
+        listCancelled   = new ArrayList<>();
+        int idUser = sharedPreferences.getInt("idUser", 0);
+        ApiService.apiService.getOrderByIdUser(idUser).enqueue(new Callback<OrderResponse>() {
             @Override
             public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
                 if (response.body() != null){
@@ -66,16 +76,16 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
-    private void checkStatus(ArrayList<Order> listAll) {
-        for (int i = 0; i < listAll.size(); i++) {
-            if (listAll.get(i).getStatus() == 0){
-                listConfirm.add(listAll.get(i));
-            }else if (listAll.get(i).getStatus() == 1){
-                listDelivering.add(listAll.get(i));
-            }else if (listAll.get(i).getStatus() == 2){
-                listDelivered.add(listAll.get(i));
+    private void checkStatus(ArrayList<Order> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getStatus() == 0){
+                listConfirm.add(list.get(i));
+            }else if (list.get(i).getStatus() == 1){
+                listDelivering.add(list.get(i));
+            }else if (list.get(i).getStatus() == 2){
+                listDelivered.add(list.get(i));
             }else{
-                listCancelled.add(listAll.get(i));
+                listCancelled.add(list.get(i));
             }
         }
     }

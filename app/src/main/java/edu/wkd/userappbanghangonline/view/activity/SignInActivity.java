@@ -10,6 +10,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 public class SignInActivity extends AppCompatActivity {
     private ActivitySignInBinding binding;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,8 @@ public class SignInActivity extends AppCompatActivity {
         onBack();//Quay trở lại sự kiện trước đó
         goToForgotPasswordActivity();//
         goToMainActivity();
+
+        sharedPreferences = getSharedPreferences("my_shared", MODE_PRIVATE);
     }
 
     private void goToMainActivity() {
@@ -58,6 +63,11 @@ public class SignInActivity extends AppCompatActivity {
                     UserResponse response1 = response.body();
 
                     if(response1.isSuccess()){
+                        //Lưu id người dùng
+                        editor = sharedPreferences.edit();
+                        editor.putInt("idUser", response1.getResult().get(0).getId());
+                        editor.commit();
+
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         startActivity(intent);
                         Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
