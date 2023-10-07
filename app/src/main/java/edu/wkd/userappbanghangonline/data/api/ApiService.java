@@ -6,8 +6,10 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
+import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
@@ -74,5 +76,11 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("search_product.php")
     Call<ProductResponse> getProductSearch(@Field("product_name") String product_name);
+    @FormUrlEncoded
+    @POST("login.php")
+    Call <UserResponse> loginUser(@Field("email") String email, @Field("password") String password);
+    @FormUrlEncoded
+    @POST("logup.php")
+    Call<LogupUserResponse> logUpUser(@Field("email") String email, @Field("password") String password, @Field("username") String username);
 
 }

@@ -10,11 +10,17 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivitySignUpBinding;
+import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
@@ -33,9 +39,59 @@ public class SignUpActivity extends AppCompatActivity {
         binding.tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+                CheckValidate();
             }
         });
+    }
+    public boolean isValidEmail(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+    public void CheckValidate(){
+        String email = binding.edEmailOrPhoneNumberSignUp.getText().toString().trim();
+        if(isValidEmail(email)){
+            LogUpUser();
+        }else {
+            Toast.makeText(this, "Email invalid", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void LogUpUser(){
+
+        String strEmail = binding.edEmailOrPhoneNumberSignUp.getText().toString().trim();
+        String strPassWord = binding.edPasswordSignUp.getText().toString().trim();
+        String strRePassWord = binding.edRePasswordSignUp.getText().toString().trim();
+        String strUserName = binding.edUserName.getText().toString().trim();
+        if(strRePassWord.equals(strPassWord)){
+            ApiService.apiService.logUpUser(strEmail, strPassWord, strUserName).enqueue(new Callback<LogupUserResponse>() {
+                @Override
+                public void onResponse(Call<LogupUserResponse> call, Response<LogupUserResponse> response) {
+                    if(response.isSuccessful()){
+                        LogupUserResponse response1 = response.body();
+                        if(response1.isSuccess()){
+                            Toast.makeText(SignUpActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        } else if (strEmail.equals(response)) {
+                            Toast.makeText(SignUpActivity.this, "Email already exists ", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Đăng ký không thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LogupUserResponse> call, Throwable t) {
+
+                }
+            });
+
+        }else {
+            Toast.makeText(this, "Mat khau khong dung! ", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+
     }
 
     private void onBack() {
