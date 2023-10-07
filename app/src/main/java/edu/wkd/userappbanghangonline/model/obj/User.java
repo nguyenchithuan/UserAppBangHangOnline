@@ -1,6 +1,9 @@
 package edu.wkd.userappbanghangonline.model.obj;
 
+
+
 public class User  {
+
     private int id, gender, role;
     private String email, password, username, avatar, phone, birthday, message_token;
 
@@ -18,6 +21,7 @@ public class User  {
         this.username = username;
         this.avatar = avatar;
         this.phone = phone;
+
         this.birthday = birthday;
         this.message_token = message_token;
     }
@@ -101,4 +105,5 @@ public class User  {
     public void setMessage_token(String message_token) {
         this.message_token = message_token;
     }
+
 }
