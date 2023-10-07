@@ -11,4 +11,5 @@
     <color name="border_switch">#b9b6b6</color>
     <color name="red">#FF00</color>
     <color name="yeloww">#FFC300</color>
+    <color name="color_delivery_state">#26AA99</color>
 </resources>

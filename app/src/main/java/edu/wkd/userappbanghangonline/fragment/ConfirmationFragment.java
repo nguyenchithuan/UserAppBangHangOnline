@@ -2,13 +2,19 @@ package edu.wkd.userappbanghangonline.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.activity.OrderActivity;
+import edu.wkd.userappbanghangonline.adapter.OrderAdapter;
+import edu.wkd.userappbanghangonline.databinding.FragmentConfirmationBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,7 +22,8 @@ import edu.wkd.userappbanghangonline.R;
  * create an instance of this fragment.
  */
 public class ConfirmationFragment extends Fragment {
-
+    private FragmentConfirmationBinding binding;
+    private OrderAdapter orderAdapter;
     public ConfirmationFragment() {
         // Required empty public constructor
     }
@@ -36,6 +43,25 @@ public class ConfirmationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_confirmation, container, false);
+        binding = FragmentConfirmationBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getData();
+    }
+
+    private void getData() {
+        if (OrderActivity.listConfirm.isEmpty() || OrderActivity.listConfirm.size() == 0){
+            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
+        }else{
+            orderAdapter = new OrderAdapter(OrderActivity.listConfirm);
+            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            binding.rvOrderConfirmation.setLayoutManager(manager);
+            binding.rvOrderConfirmation.setAdapter(orderAdapter);
+            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+        }
     }
 }

@@ -4,19 +4,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+
 import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.adapter.ViewPager2Adapter;
+import edu.wkd.userappbanghangonline.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
 import edu.wkd.userappbanghangonline.databinding.ActivitySettingsBinding;
+import edu.wkd.userappbanghangonline.model.obj.Order;
+import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrderActivity extends AppCompatActivity {
     private ActivityOrderBinding binding;
+    public static final String TAG = OrderActivity.class.toString();
     private ViewPager2Adapter viewPager2Adapter;
+    public static ArrayList<Order> listConfirm = new ArrayList<>();
+    public static ArrayList<Order> listDelivering = new ArrayList<>();
+    public static ArrayList<Order> listDelivered = new ArrayList<>();
+    public static ArrayList<Order> listCancelled = new ArrayList<>();
+    public ArrayList<Order> listAll = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +41,42 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         onBack();//Quay trở lại sự kiện trước đó
+        getData();
         setTabLayoutAndViewPager2();
+    }
+
+    private void getData() {
+        ApiService.apiService.getOrderByIdUser(1).enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (response.body() != null){
+                    listAll = response.body().getListOrder();
+                    checkStatus(listAll);
+                }else{
+                    Toast.makeText(OrderActivity.this, "Data empty", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                Toast.makeText(OrderActivity.this, "Call api error while get data order", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
+            }
+        });
+    }
+
+    private void checkStatus(ArrayList<Order> listAll) {
+        for (int i = 0; i < listAll.size(); i++) {
+            if (listAll.get(i).getStatus() == 0){
+                listConfirm.add(listAll.get(i));
+            }else if (listAll.get(i).getStatus() == 1){
+                listDelivering.add(listAll.get(i));
+            }else if (listAll.get(i).getStatus() == 2){
+                listDelivered.add(listAll.get(i));
+            }else{
+                listCancelled.add(listAll.get(i));
+            }
+        }
     }
 
     private void setTabLayoutAndViewPager2() {

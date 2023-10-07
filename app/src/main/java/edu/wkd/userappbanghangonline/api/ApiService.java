@@ -38,6 +38,7 @@ public interface ApiService {
     @POST("get_user_orders.php")
     Call<OrderResponse> getOrderByIdUser(@Field("user_id") int userId);
 
+    @FormUrlEncoded
     @POST("post_order.php")
     Call<Response> postOrderUser(@Field("user_id") int user_id,
                                  @Field("address") String address,
