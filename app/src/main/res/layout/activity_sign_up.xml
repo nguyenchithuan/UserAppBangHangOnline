@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -55,6 +57,36 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_marginHorizontal="2dp"
+            android:id="@+id/textInputLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/custom_bg_edit_text"
+            app:startIconDrawable="@drawable/baseline_person_24"
+            android:hint="UserName"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bg_transparent"
+                android:id="@+id/edUserName"
+                android:theme="@style/Base.Theme.Dark"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+
             android:id="@+id/textInputLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +101,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.41"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout1"
+
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
+
+
             android:inputType="textPassword"
             android:drawableEnd="@drawable/hide">
 
@@ -173,4 +208,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3"
             android:layout_marginHorizontal="8dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+
+</ScrollView>
+
+

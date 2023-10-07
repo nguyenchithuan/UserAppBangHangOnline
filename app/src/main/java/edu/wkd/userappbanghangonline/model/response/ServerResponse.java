@@ -1,24 +1,30 @@
 package edu.wkd.userappbanghangonline.model.response;
 
-import com.google.gson.annotations.SerializedName;
-
 public class ServerResponse {
-    // variable name should be same as in the json response from php
-    @SerializedName("success")
-    boolean success;
-    @SerializedName("message")
-    String message;
+    private Boolean success;
+    private String message;
 
-    public ServerResponse(boolean success, String message) {
+    public ServerResponse() {
+    }
+
+    public ServerResponse(Boolean success, String message) {
         this.success = success;
         this.message = message;
     }
 
-    public boolean isSuccess() {
+    @Override
+    public String toString() {
+        return "Response{" +
+                "success=" + success +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
+    public Boolean getSuccess() {
         return success;
     }
- 
-    public void setSuccess(boolean success) {
+
+    public void setSuccess(Boolean success) {
         this.success = success;
     }
 

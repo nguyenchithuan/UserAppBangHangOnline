@@ -14,18 +14,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".view.activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.OrderActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.PayActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.activity.SettingAccountActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.activity.DetailsProductActivity"
             android:exported="true"
-            android:theme="@style/Base.Theme.Yellow"/>
+            android:theme="@style/Base.Theme.Yellow" />
         <activity
             android:name=".view.activity.SettingsActivity"
             android:exported="true" />
@@ -52,21 +55,32 @@
             android:exported="true" />
         <activity
             android:name=".view.activity.SplashActivity"
+
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
+
+
+
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true"
             android:theme="@style/Base.Theme.Yellow">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
 </manifest>

@@ -20,6 +20,10 @@ public class SettingsActivity extends AppCompatActivity {
         binding.tvSettingAccount.setOnClickListener(v -> {
             startActivity(new Intent(SettingsActivity.this, SettingAccountActivity.class));
         });
+
+        binding.layoutChangePassword.setOnClickListener(v -> {
+            startActivity(new Intent(SettingsActivity.this, ChangePasswordActivity.class));
+        });
     }
 
     private void onBack() {
