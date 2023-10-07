@@ -1,6 +1,5 @@
 package edu.wkd.userappbanghangonline.view.adapter;
 
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import edu.wkd.userappbanghangonline.adapter.ProductInOrderAdapter;
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
