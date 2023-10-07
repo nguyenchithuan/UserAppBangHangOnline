@@ -21,7 +21,7 @@ import java.util.Calendar;
 import edu.wkd.userappbanghangonline.databinding.ActivityPayBinding;
 import edu.wkd.userappbanghangonline.view.adapter.PayAdapter;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
-import edu.wkd.userappbanghangonline.model.response.Response;
+import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import edu.wkd.userappbanghangonline.ultil.CartUltil;
 import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import retrofit2.Call;
@@ -70,10 +70,10 @@ public class PayActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String datetime = sdf.format(Calendar.getInstance().getTime());
         String detail = getDataOrderDetail();
-        ApiService.apiService.postOrderUser(userId, address, phoneNumber, quantity, totalPrice, status, datetime, detail).enqueue(new Callback<Response>() {
+        ApiService.apiService.postOrderUser(userId, address, phoneNumber, quantity, totalPrice, status, datetime, detail).enqueue(new Callback<ServerResponse>() {
             @Override
-            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                Response res = response.body();
+            public void onResponse(Call<ServerResponse> call, retrofit2.Response<ServerResponse> response) {
+                ServerResponse res = response.body();
                 removeListBuyCart();
                 Toast.makeText(PayActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(PayActivity.this, MainActivity.class);
@@ -83,7 +83,7 @@ public class PayActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Response> call, Throwable t) {
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
                 Log.d("zzzzz", "onResponse-error: " + t.toString());
                 Toast.makeText(PayActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                 dialogLoading.cancel();

@@ -1,7 +1,9 @@
 package edu.wkd.userappbanghangonline.model.obj;
 
 
-public class User {
+
+public class User  {
+
     private int id, gender, role;
     private String email, password, username, avatar, phone, birthday, message_token;
 
@@ -87,7 +89,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 
     public String getBirthday() {
         return birthday;
