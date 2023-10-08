@@ -1,5 +1,6 @@
 package edu.wkd.userappbanghangonline.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,13 +8,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveringBinding;
+import edu.wkd.userappbanghangonline.model.obj.Order;
+import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +34,16 @@ import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 public class DeliveringFragment extends Fragment {
     private FragmentDeliveringBinding binding;
     private OrderAdapter orderAdapter;
+    private ArrayList<Order> list;
+    private OrderActivity activity;
+    public static final String TAG = "Fragment";
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (OrderActivity) context;
+    }
+
     public DeliveringFragment() {
         // Required empty public constructor
     }
@@ -51,16 +72,33 @@ public class DeliveringFragment extends Fragment {
         getData();
     }
     private void getData() {
-        if (OrderActivity.listDelivering.isEmpty() || OrderActivity.listDelivering.size() == 0){
-            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-//            binding.progressBar.setVisibility(View.INVISIBLE);
-        }else{
-            orderAdapter = new OrderAdapter(OrderActivity.listDelivering);
-            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrderDelivering.setLayoutManager(manager);
-            binding.rvOrderDelivering.setAdapter(orderAdapter);
-            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-//            binding.rvOrderDelivering.setVisibility(View.INVISIBLE);
-        }
+        ApiService.apiService.getOrderByIdUserAndStatus(1, 1).enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (response.isSuccessful()){
+                    list = response.body().getListOrder();
+                    if (list != null){
+                        if (list.isEmpty() || list == null){
+                            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
+                            binding.progressBar.setVisibility(View.INVISIBLE);
+                        }else{
+                            orderAdapter = new OrderAdapter(list);
+                            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                            binding.rvOrderDelivering.setLayoutManager(manager);
+                            binding.rvOrderDelivering.setAdapter(orderAdapter);
+                            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+                            binding.progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
+            }
+        });
     }
+
 }

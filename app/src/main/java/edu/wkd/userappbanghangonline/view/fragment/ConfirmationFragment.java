@@ -1,5 +1,6 @@
 package edu.wkd.userappbanghangonline.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,22 +8,36 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.FragmentConfirmationBinding;
+import edu.wkd.userappbanghangonline.model.obj.Order;
+import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ConfirmationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConfirmationFragment extends Fragment {
+public class ConfirmationFragment extends Fragment{
     private FragmentConfirmationBinding binding;
     private OrderAdapter orderAdapter;
+    private ArrayList<Order> list;
+
+    public static final String TAG = "Fragment";
+
     public ConfirmationFragment() {
         // Required empty public constructor
     }
@@ -36,6 +51,7 @@ public class ConfirmationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -53,14 +69,30 @@ public class ConfirmationFragment extends Fragment {
     }
 
     private void getData() {
-        if (OrderActivity.listConfirm.isEmpty() || OrderActivity.listConfirm.size() == 0){
-            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-        }else{
-            orderAdapter = new OrderAdapter(OrderActivity.listConfirm);
-            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrderConfirmation.setLayoutManager(manager);
-            binding.rvOrderConfirmation.setAdapter(orderAdapter);
-            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-        }
+        ApiService.apiService.getOrderByIdUserAndStatus(1, 0).enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (response.isSuccessful()){
+                    list = response.body().getListOrder();
+                    if (list.isEmpty() || list == null){
+                        binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                    }else{
+                        orderAdapter = new OrderAdapter(list);
+                        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                        binding.rvOrderConfirmation.setLayoutManager(manager);
+                        binding.rvOrderConfirmation.setAdapter(orderAdapter);
+                        binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
+            }
+        });
     }
 }

@@ -27,16 +27,13 @@ import retrofit2.Response;
 import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
 
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity{
     private ActivityOrderBinding binding;
     public static final String TAG = OrderActivity.class.toString();
     private ViewPager2Adapter viewPager2Adapter;
-    public static ArrayList<Order> listConfirm;
-    public static ArrayList<Order> listDelivering;
-    public static ArrayList<Order> listDelivered;
-    public static ArrayList<Order> listCancelled;
-    public ArrayList<Order> listAll;
     private SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,48 +43,6 @@ public class OrderActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("my_shared", MODE_PRIVATE);
         onBack();//Quay trở lại sự kiện trước đó
         setTabLayoutAndViewPager2();
-        getData();
-
-    }
-
-    private void getData() {
-        listAll         = new ArrayList<>();
-        listConfirm     = new ArrayList<>();
-        listDelivered   = new ArrayList<>();
-        listDelivering  = new ArrayList<>();
-        listCancelled   = new ArrayList<>();
-        int idUser = sharedPreferences.getInt("idUser", 0);
-        ApiService.apiService.getOrderByIdUser(idUser).enqueue(new Callback<OrderResponse>() {
-            @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
-                if (response.body() != null){
-                    listAll = response.body().getListOrder();
-                    checkStatus(listAll);
-                }else{
-                    Toast.makeText(OrderActivity.this, "Data empty", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
-                Toast.makeText(OrderActivity.this, "Call api error while get data order", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onFailure: " + t);
-            }
-        });
-    }
-
-    private void checkStatus(ArrayList<Order> list) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getStatus() == 0){
-                listConfirm.add(list.get(i));
-            }else if (list.get(i).getStatus() == 1){
-                listDelivering.add(list.get(i));
-            }else if (list.get(i).getStatus() == 2){
-                listDelivered.add(list.get(i));
-            }else{
-                listCancelled.add(list.get(i));
-            }
-        }
     }
 
     private void setTabLayoutAndViewPager2() {

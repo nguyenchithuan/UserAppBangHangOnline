@@ -54,15 +54,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         if (order.getStatus() == 0){
             holder.binding.tvStateDelivey.setText("Chờ xác nhận");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
+            holder.binding.tvCancelOrder.setVisibility(View.VISIBLE);
         }else if (order.getStatus() == 1){
             holder.binding.tvStateDelivey.setText("Đang giao hàng");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
+            holder.binding.tvCancelOrder.setVisibility(View.GONE);
         }else if (order.getStatus() == 2){
             holder.binding.tvStateDelivey.setText("Giao hàng thành công");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.VISIBLE);
+            holder.binding.tvCancelOrder.setVisibility(View.GONE);
         }else{
             holder.binding.tvStateDelivey.setText("Đơn hàng đã bị hủy");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
+            holder.binding.tvCancelOrder.setVisibility(View.GONE);
         }
 
     }
