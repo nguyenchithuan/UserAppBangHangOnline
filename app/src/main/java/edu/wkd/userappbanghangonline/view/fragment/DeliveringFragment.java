@@ -32,16 +32,25 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class DeliveringFragment extends Fragment {
+    private Context context;
     private FragmentDeliveringBinding binding;
     private OrderAdapter orderAdapter;
     private ArrayList<Order> list;
-    private OrderActivity activity;
     public static final String TAG = "Fragment";
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (OrderActivity) context;
+        if (context == null){
+            throw new NullPointerException("Fragment chưa được gắn vào một hoạt động");
+        }
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.context = null;
     }
 
     public DeliveringFragment() {
@@ -95,7 +104,9 @@ public class DeliveringFragment extends Fragment {
 
             @Override
             public void onFailure(Call<OrderResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                if (context != null){
+                    Toast.makeText(context.getApplicationContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                }
                 Log.e(TAG, "onFailure: " + t);
             }
         });

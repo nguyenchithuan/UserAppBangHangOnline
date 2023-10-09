@@ -27,11 +27,10 @@ public class SignInActivity extends AppCompatActivity {
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        sharedPreferences = getSharedPreferences("my_shared", MODE_PRIVATE);
         onBack();//Quay trở lại sự kiện trước đó
         goToForgotPasswordActivity();//
         goToMainActivity();
-
-        sharedPreferences = getSharedPreferences("my_shared", MODE_PRIVATE);
     }
 
     private void goToMainActivity() {
@@ -66,6 +65,7 @@ public class SignInActivity extends AppCompatActivity {
                         //Lưu id người dùng
                         editor = sharedPreferences.edit();
                         editor.putInt("idUser", response1.getResult().get(0).getId());
+                        editor.putString("nameUser", response1.getResult().get(0).getUsername());
                         editor.commit();
 
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);

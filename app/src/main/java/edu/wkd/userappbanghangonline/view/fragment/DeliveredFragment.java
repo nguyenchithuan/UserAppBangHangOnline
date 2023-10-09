@@ -38,11 +38,26 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class DeliveredFragment extends Fragment {
+    private Context context;
     private FragmentDeliveredBinding binding;
     public static final String TAG = "error";
     private OrderAdapter orderAdapter;
     private ArrayList<Order> list;
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context == null){
+            throw new NullPointerException("Fragment chưa được gắn vào một hoạt động");
+        }
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.context = null;
+    }
 
     public DeliveredFragment() {
         // Required empty public constructor
@@ -97,7 +112,9 @@ public class DeliveredFragment extends Fragment {
 
             @Override
             public void onFailure(Call<OrderResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                if (context != null){
+                    Toast.makeText(context.getApplicationContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                }
                 Log.e(TAG, "onFailure: " + t);
             }
         });

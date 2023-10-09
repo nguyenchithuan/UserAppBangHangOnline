@@ -20,6 +20,7 @@ import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,8 +33,6 @@ public class OrderActivity extends AppCompatActivity{
     public static final String TAG = OrderActivity.class.toString();
     private ViewPager2Adapter viewPager2Adapter;
     private SharedPreferences sharedPreferences;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +43,7 @@ public class OrderActivity extends AppCompatActivity{
         onBack();//Quay trở lại sự kiện trước đó
         setTabLayoutAndViewPager2();
     }
+
 
     private void setTabLayoutAndViewPager2() {
         viewPager2Adapter = new ViewPager2Adapter(OrderActivity.this);

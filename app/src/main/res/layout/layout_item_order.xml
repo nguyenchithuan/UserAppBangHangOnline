@@ -7,6 +7,17 @@
     android:background="@color/white"
     android:layout_marginVertical="8dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đơn hàng số: "
+        android:id="@+id/tvIdOrder"
+        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="8dp"
+        android:textSize="16sp"
+        android:textColor="@color/red"
+        android:textStyle="bold"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvOrder"
         android:layout_width="match_parent"

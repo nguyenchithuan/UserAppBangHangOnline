@@ -2,9 +2,10 @@ package edu.wkd.userappbanghangonline.model.obj;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Order {
+public class Order implements Serializable {
     @SerializedName("id")
     private int id;
     @SerializedName("user_id")
