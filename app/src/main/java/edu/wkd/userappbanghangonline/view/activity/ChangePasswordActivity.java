@@ -16,6 +16,7 @@ import edu.wkd.userappbanghangonline.model.obj.User;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,16 +28,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private String old_pass_to_server;
 
     private ProgressDialog progressDialog;
-
+    private int user_id = UserUltil.user.getId();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChangePasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        binding.arrowBackSettings.setOnClickListener(v -> {
+            finish();
+        });
         settingPDialog();
         showPDialog();
-        ApiService.apiService.getUser(1).enqueue(
+        ApiService.apiService.getUser(user_id).enqueue(
                 new Callback<UserResponse>() {
                     @Override
                     public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
@@ -72,7 +75,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         if (!re_pass.isEmpty()){
                             if (re_pass.equals(new_pass)){
                                 showPDialog();
-                                ApiService.apiService.updatePassword(new_pass,1)
+                                ApiService.apiService.updatePassword(new_pass,user_id)
                                         .enqueue(new Callback<ServerResponse>() {
                                             @Override
                                             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
