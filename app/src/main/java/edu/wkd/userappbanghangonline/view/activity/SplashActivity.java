@@ -1,6 +1,8 @@
 package edu.wkd.userappbanghangonline.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.ActivitySplashBinding;
 
 import android.content.Intent;
@@ -25,6 +27,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+                overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
             }
         });
 
@@ -32,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SplashActivity.this, SignUpActivity.class));
+                overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
             }
         });
     }

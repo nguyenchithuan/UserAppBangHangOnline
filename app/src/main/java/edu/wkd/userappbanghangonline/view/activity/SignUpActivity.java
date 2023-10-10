@@ -99,6 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
             }
         });
     }
@@ -130,5 +131,11 @@ public class SignUpActivity extends AppCompatActivity {
         // Đặt SpannableString làm văn bản cho TextView
         binding.tvPolicyAndPrivacy.setText(spannedString);
         binding.tvPolicyAndPrivacy.setMovementMethod(LinkMovementMethod.getInstance());// Đảm bảo TextView có thể nhận sự kiện click
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
     }
 }

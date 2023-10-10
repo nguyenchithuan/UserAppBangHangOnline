@@ -2,6 +2,7 @@ package edu.wkd.userappbanghangonline.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivitySignInBinding;
 import edu.wkd.userappbanghangonline.model.response.UserResponse;
@@ -98,6 +99,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
             }
         });
     }
@@ -106,4 +108,9 @@ public class SignInActivity extends AppCompatActivity {
         loading = new ProgressDialogLoading(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
+    }
 }

@@ -91,6 +91,7 @@ public class UserFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         startActivity(new Intent(getActivity(), SignInActivity.class));
+                        getActivity().finish();
                     }
                 });
                 dialog.show();

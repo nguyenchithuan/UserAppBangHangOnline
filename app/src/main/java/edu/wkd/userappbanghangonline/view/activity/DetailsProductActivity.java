@@ -77,6 +77,7 @@ public class DetailsProductActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CartActivity.class);
             mActivityResultLauncher.launch(intent);
             addListCart();
+            overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
         });
     }
 
@@ -119,6 +120,7 @@ public class DetailsProductActivity extends AppCompatActivity {
         binding.imgCart.setOnClickListener(view -> {
             Intent intent = new Intent(this, CartActivity.class);
             mActivityResultLauncher.launch(intent);
+            overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
         });
     }
 
@@ -134,6 +136,7 @@ public class DetailsProductActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         onBackActivity();
+        overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
     }
 
     private void onBackActivity() {
@@ -142,5 +145,6 @@ public class DetailsProductActivity extends AppCompatActivity {
         intent.putExtra("data_cart_size", CartUltil.listCart.size());
         setResult(RESULT_OK, intent);
         finish();
+        overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
     }
 }

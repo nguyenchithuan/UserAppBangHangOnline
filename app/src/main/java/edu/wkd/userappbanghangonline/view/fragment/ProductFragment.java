@@ -240,5 +240,6 @@ public class ProductFragment extends Fragment implements ItemProductInterface {
         bundle.putSerializable("product", product);
         intent.putExtras(bundle);
         mActivityResultLauncher.launch(intent);
+        getActivity().overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
     }
 }
