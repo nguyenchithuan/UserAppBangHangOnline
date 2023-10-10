@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -31,8 +33,12 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.FragmentHomeBinding;
 import edu.wkd.userappbanghangonline.databinding.LayoutDialogSearchBinding;
+import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
+import edu.wkd.userappbanghangonline.ultil.CheckConection;
+import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import edu.wkd.userappbanghangonline.view.activity.CartActivity;
 import edu.wkd.userappbanghangonline.view.activity.MainActivity;
 import edu.wkd.userappbanghangonline.view.adapter.ProductTypeAdapter;
@@ -41,6 +47,9 @@ import edu.wkd.userappbanghangonline.model.obj.ProductType;
 import edu.wkd.userappbanghangonline.model.obj.RecentSearch;
 import edu.wkd.userappbanghangonline.ultil.UrlSomething;
 import edu.wkd.userappbanghangonline.ultil.CartUltil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -49,6 +58,7 @@ public class HomeFragment extends Fragment {
     private ProductTypeAdapter productTypeAdapter;
     private ArrayList<ProductType> listProductType;
     private ArrayList<RecentSearch> listRecentSearch = new ArrayList<>();
+    private ProgressDialogLoading dialogLoading;
     private RecentSearchAdapter recentSearchAdapter;
     public HomeFragment() {
         // Required empty public constructor
@@ -79,6 +89,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         autoImageSlide();//Tạo ảnh chạy tự động
+//        callApiGetTypeProduct();
         getListProductType();//Lấy danh sách loại sản phẩm
         openSearchDialog();//Mở dialog tìm kiếm
         eventBtnCart();
@@ -157,19 +168,38 @@ public class HomeFragment extends Fragment {
             recentSearchAdapter.setData(listRecentSearch);
         }
     }
+    private void callApiGetTypeProduct(){
+        dialogLoading.show();
+        ApiService.apiService.getListTypeProduct().enqueue(new Callback<ProductTypeResponse>() {
+            @Override
+            public void onResponse(Call<ProductTypeResponse> call, Response<ProductTypeResponse> response) {
+                if (response.isSuccessful()) {
+                    ProductTypeResponse productTypeResponse = response.body();
+                    if (productTypeResponse.isSuccess()) {
+                        productTypeAdapter.setListTypeProduct(productTypeResponse.getResult());
+                        dialogLoading.cancel();
+                    } else {
+                        CheckConection.ShowToast(getContext(), "Load danh sách sản phẩm lỗi!");
+                    }
+                } else {
+                    CheckConection.ShowToast(getContext(), "Không có dữ liệu trả về");
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ProductTypeResponse> call, Throwable t) {
+                Log.d("zzzz", "onResponse-product-error: " + t.toString());
+                Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                dialogLoading.cancel();
+            }
+        });
+    }
     private void getListProductType() {
-        listProductType = new ArrayList<>();
-        String []arrTypeName = {"Ốp lưng","Kính cường lực","Sticker","Tai nghe",
-                "Tay cầm chơi game","Giá đỡ điện thoại"};
-        for (int i = 0; i < arrTypeName.length ; i++) {
-            listProductType.add(new ProductType(i, arrTypeName[i], UrlSomething.urlImage[i]));
-        }
-        productTypeAdapter = new ProductTypeAdapter(listProductType);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3,
                 GridLayoutManager.VERTICAL, false);
         binding.rvTypeProductHome.setLayoutManager(gridLayoutManager);
         binding.rvTypeProductHome.setHasFixedSize(true);
+        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, null);
         binding.rvTypeProductHome.setAdapter(productTypeAdapter);
     }
 

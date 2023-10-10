@@ -9,6 +9,7 @@ import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 
+import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 
 
@@ -38,7 +39,8 @@ public interface ApiService {
 
     @GET("get_product.php")
     Call<ProductResponse> getListProduct();
-
+    @GET("get_product_type.php")
+    Call<ProductTypeResponse> getListTypeProduct();
     @FormUrlEncoded
     @POST("get_user.php")
     Call<UserResponse> getUser(@Field("user_id") int userId);
