@@ -26,6 +26,22 @@ public class User  {
         this.message_token = message_token;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", gender=" + gender +
+                ", role=" + role +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", phone='" + phone + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", message_token='" + message_token + '\'' +
+                '}';
+    }
+
     public int getId() {
         return id;
     }

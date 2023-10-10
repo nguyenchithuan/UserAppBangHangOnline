@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import edu.wkd.userappbanghangonline.databinding.ActivityPayBinding;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.PayAdapter;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
@@ -62,7 +63,7 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void postOrderUser() {
-        int userId = 1;
+        int userId = UserUltil.user.getId();
         String address = binding.edAddress.getText().toString();
         String phoneNumber = binding.edPhoneNumber.getText().toString();
         int quantity = CartUltil.listBuyCart.size();

@@ -16,7 +16,6 @@ import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
-import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
