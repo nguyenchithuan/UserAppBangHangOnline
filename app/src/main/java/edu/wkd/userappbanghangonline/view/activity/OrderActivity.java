@@ -2,7 +2,11 @@ package edu.wkd.userappbanghangonline.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,26 +17,32 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
-
 import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
-import edu.wkd.userappbanghangonline.model.obj.Order;
 
+import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+
+import edu.wkd.userappbanghangonline.ultil.OrderInterface;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
+import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
-
 
 public class OrderActivity extends AppCompatActivity{
-    private ActivityOrderBinding binding;
     public static final String TAG = OrderActivity.class.toString();
+    private ActivityOrderBinding binding;
     private ViewPager2Adapter viewPager2Adapter;
     private SharedPreferences sharedPreferences;
+    public  ArrayList<Order> listOrder;
+    private OrderInterface orderInterface;
+    public void setOrderInterface(OrderInterface orderInterface){
+        this.orderInterface = orderInterface;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +53,7 @@ public class OrderActivity extends AppCompatActivity{
         onBack();//Quay trở lại sự kiện trước đó
         setTabLayoutAndViewPager2();
     }
+
 
 
     private void setTabLayoutAndViewPager2() {
@@ -76,6 +87,27 @@ public class OrderActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+    }
+
+
+    public void getOrderByStatus(int status) {
+        int idUser = sharedPreferences.getInt("idUser", 0);
+        ApiService.apiService.getOrderByIdUserAndStatus(idUser, status).enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (response.isSuccessful()){
+                    listOrder = response.body().getListOrder();
+                    if (orderInterface != null){
+                        orderInterface.dataOrderReceiver(listOrder);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                Toast.makeText(OrderActivity.this, "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
             }
         });
     }

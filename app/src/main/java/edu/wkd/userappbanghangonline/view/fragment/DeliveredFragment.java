@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.ultil.OrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 
@@ -37,12 +39,11 @@ import retrofit2.Response;
  * Use the {@link DeliveredFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeliveredFragment extends Fragment {
+public class DeliveredFragment extends Fragment implements OrderInterface {
     private Context context;
     private FragmentDeliveredBinding binding;
-    public static final String TAG = "error";
     private OrderAdapter orderAdapter;
-    private ArrayList<Order> list;
+    private ArrayList<Order> listOrder;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -79,45 +80,32 @@ public class DeliveredFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentDeliveredBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-//        listOrder = new ArrayList<>();
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.setOrderInterface(this);
+            orderActivity.getOrderByStatus(2);
+        }
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        getListOrder();//Lấy danh sách trên api và hiển thị lên recycleView
-        getData();
     }
 
-    private void getData() {
-        ApiService.apiService.getOrderByIdUserAndStatus(1, 2).enqueue(new Callback<OrderResponse>() {
-            @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
-                if (response.isSuccessful()){
-                    list = response.body().getListOrder();
-                    if (list.isEmpty() || list == null){
-                        binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                    }else{
-                        orderAdapter = new OrderAdapter(list);
-                        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                        binding.rvOrderDelivered.setLayoutManager(manager);
-                        binding.rvOrderDelivered.setAdapter(orderAdapter);
-                        binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
-                if (context != null){
-                    Toast.makeText(context.getApplicationContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
-                }
-                Log.e(TAG, "onFailure: " + t);
-            }
-        });
+    @Override
+    public void dataOrderReceiver(List<Order> list) {
+        listOrder = (ArrayList<Order>) list;
+        if (listOrder.isEmpty() || listOrder == null){
+            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+        }else{
+            orderAdapter = new OrderAdapter(listOrder);
+            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            binding.rvOrderDelivered.setLayoutManager(manager);
+            binding.rvOrderDelivered.setAdapter(orderAdapter);
+            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+        }
     }
-
 }
