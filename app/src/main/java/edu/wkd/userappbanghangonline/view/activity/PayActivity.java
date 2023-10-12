@@ -18,7 +18,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.ActivityPayBinding;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.PayAdapter;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
@@ -62,7 +64,7 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void postOrderUser() {
-        int userId = 1;
+        int userId = UserUltil.user.getId();
         String address = binding.edAddress.getText().toString();
         String phoneNumber = binding.edPhoneNumber.getText().toString();
         int quantity = CartUltil.listBuyCart.size();
@@ -138,7 +140,14 @@ public class PayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
     }
 }

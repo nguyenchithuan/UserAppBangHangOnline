@@ -2,12 +2,6 @@ package edu.wkd.userappbanghangonline.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +20,7 @@ import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 
 import edu.wkd.userappbanghangonline.ultil.OrderInterface;
-import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +31,6 @@ public class OrderActivity extends AppCompatActivity{
     public static final String TAG = OrderActivity.class.toString();
     private ActivityOrderBinding binding;
     private ViewPager2Adapter viewPager2Adapter;
-    private SharedPreferences sharedPreferences;
     public  ArrayList<Order> listOrder;
     private OrderInterface orderInterface;
     public void setOrderInterface(OrderInterface orderInterface){
@@ -49,7 +42,6 @@ public class OrderActivity extends AppCompatActivity{
         binding = ActivityOrderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        sharedPreferences = getSharedPreferences("my_shared", MODE_PRIVATE);
         onBack();//Quay trở lại sự kiện trước đó
         setTabLayoutAndViewPager2();
     }
@@ -93,7 +85,7 @@ public class OrderActivity extends AppCompatActivity{
 
 
     public void getOrderByStatus(int status) {
-        int idUser = sharedPreferences.getInt("idUser", 0);
+        int idUser = UserUltil.user.getId();
         ApiService.apiService.getOrderByIdUserAndStatus(idUser, status).enqueue(new Callback<OrderResponse>() {
             @Override
             public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {

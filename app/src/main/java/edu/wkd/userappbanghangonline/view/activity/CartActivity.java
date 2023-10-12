@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.ActivityCartBinding;
 import edu.wkd.userappbanghangonline.view.adapter.CartAdapter;
 import edu.wkd.userappbanghangonline.ultil.CartInterface;
@@ -42,6 +43,7 @@ public class CartActivity extends AppCompatActivity implements CartInterface {
             bundle.putInt("totalPrice", totalPrice);
             intent.putExtras(bundle);
             startActivity(intent);
+            overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
         });
     }
 
@@ -82,6 +84,7 @@ public class CartActivity extends AppCompatActivity implements CartInterface {
     @Override
     public void onBackPressed() {
         onBackActivity();
+        overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
     }
 
     private void onBackActivity() {
@@ -91,5 +94,6 @@ public class CartActivity extends AppCompatActivity implements CartInterface {
         intent.putExtra("data_cart_size", CartUltil.listCart.size());
         setResult(RESULT_OK, intent);
         finish();
+        overridePendingTransition(R.anim.slidle_in_right, R.anim.slidle_out_right);
     }
 }

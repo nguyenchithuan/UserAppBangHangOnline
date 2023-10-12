@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,20 +16,20 @@ import java.util.ArrayList;
 import edu.wkd.userappbanghangonline.databinding.ActivityDetailsOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.ProductInOrderAdapter;
 
 public class DetailsOrderActivity extends AppCompatActivity {
     private ActivityDetailsOrderBinding binding;
     private ArrayList<Product> listProduct;
     private ProductInOrderAdapter productOrderAdapter;
-    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDetailsOrderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        sharedPreferences = getSharedPreferences("my_shared", MODE_PRIVATE);
+
         onBack();//Quay trở lại sự kiện trước đó
         showData();//Hiển thị dữ liệu lên recycleView
     }
@@ -82,7 +81,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
         //Hiển thị dữ liệu lên recycleView
         setLayoutInRecycleView(listProduct);
         //Set tên người dùng
-        String userName = sharedPreferences.getString("nameUser", "");
+        String userName = UserUltil.user.getUsername();
         if (userName == ""){
             binding.tvUsername.setText("Username");
         }else{

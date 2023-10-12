@@ -9,6 +9,7 @@ import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 
+import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 
 
@@ -16,7 +17,6 @@ import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
-import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -39,7 +39,8 @@ public interface ApiService {
 
     @GET("get_product.php")
     Call<ProductResponse> getListProduct();
-
+    @GET("get_product_type.php")
+    Call<ProductTypeResponse> getListTypeProduct();
     @FormUrlEncoded
     @POST("get_user.php")
     Call<UserResponse> getUser(@Field("user_id") int userId);
