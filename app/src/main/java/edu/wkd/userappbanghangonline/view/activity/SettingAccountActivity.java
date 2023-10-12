@@ -31,6 +31,7 @@ import edu.wkd.userappbanghangonline.model.obj.User;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.ultil.Validator;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -46,6 +47,7 @@ public class SettingAccountActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Call<ResponseBody> call;
     private String mediaPath;
+    private int user_id = UserUltil.user.getId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,6 @@ public class SettingAccountActivity extends AppCompatActivity {
         binding = ActivitySettingAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         settingPDialog();
-
         getInfoUser(); // lấy thông tin của user
         binding.tvChangeBirthday.setVisibility(View.GONE);
         binding.tvChangeEmail.setVisibility(View.GONE);
@@ -96,7 +97,7 @@ public class SettingAccountActivity extends AppCompatActivity {
 
     private void getInfoUser() {
         showPDialog();
-        ApiService.apiService.getUser(1).enqueue(
+        ApiService.apiService.getUser(user_id).enqueue(
                 new Callback<UserResponse>() {
                     @Override
                     public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
@@ -285,6 +286,7 @@ public class SettingAccountActivity extends AppCompatActivity {
                 if (serverResponse != null) {
                     if (serverResponse.getSuccess()) {
                         CheckConection.ShowToast(SettingAccountActivity.this, "Cập nhật ảnh thành công!");
+                        getInfoUser();
                     } else {
                         CheckConection.ShowToast(SettingAccountActivity.this, "Cập nhật ảnh khônh thành công!");
                     }
@@ -304,7 +306,6 @@ public class SettingAccountActivity extends AppCompatActivity {
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-
         // Tạo DatePickerDialog và thiết lập ngày, tháng, năm mặc định
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
@@ -323,13 +324,13 @@ public class SettingAccountActivity extends AppCompatActivity {
     private void updateProfile(String content, String options) {
         showPDialog();
         if (options.equals("phone")){
-            call = ApiService.apiService.updatePhone(content,21);
+            call = ApiService.apiService.updatePhone(content,user_id);
         }else if(options.equals("userName")){
-            call = ApiService.apiService.updateUserName(content,21);
+            call = ApiService.apiService.updateUserName(content,user_id);
         }else if (options.equals("email")){
-            call = ApiService.apiService.updateEmail(content,21);
+            call = ApiService.apiService.updateEmail(content,user_id);
         }else {
-            call = ApiService.apiService.updateBirthday(content,21);
+            call = ApiService.apiService.updateBirthday(content,user_id);
         }
 
         call.enqueue(
@@ -345,7 +346,7 @@ public class SettingAccountActivity extends AppCompatActivity {
                                     CheckConection.ShowToast(SettingAccountActivity.this
                                             ,"Sửa "+ options +" thành công!");
                                     hidePDialog();
-                                    finish();
+                                    getInfoUser();
                                 }else {
                                     CheckConection.ShowToast(SettingAccountActivity.this
                                             ,"Sửa "+ options +" thất bại!");
