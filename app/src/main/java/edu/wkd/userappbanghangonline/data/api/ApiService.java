@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
@@ -52,6 +53,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("get_user_orders_status.php")
     Call<OrderResponse> getOrderByIdUserAndStatus(@Field("user_id") int userId, @Field("status") int status);
+
+    @FormUrlEncoded
+    @POST("delete_order.php")
+    Call<Order> deleteOrderById(@Field("id_order") int orderId);
 
     @FormUrlEncoded
     @POST("post_order.php")

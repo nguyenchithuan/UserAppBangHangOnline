@@ -11,7 +11,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
@@ -103,4 +102,5 @@ public class OrderActivity extends AppCompatActivity{
             }
         });
     }
+
 }

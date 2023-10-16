@@ -102,8 +102,8 @@ public class DeliveredFragment extends Fragment implements OrderInterface {
         }else{
             orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrderDelivered.setLayoutManager(manager);
-            binding.rvOrderDelivered.setAdapter(orderAdapter);
+            binding.rvOrder.setLayoutManager(manager);
+            binding.rvOrder.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }
