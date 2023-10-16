@@ -33,6 +33,7 @@ import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
 import edu.wkd.userappbanghangonline.ultil.ItemProductTypeInterface;
 import edu.wkd.userappbanghangonline.view.activity.CartActivity;
 import edu.wkd.userappbanghangonline.view.activity.DetailsProductActivity;
+import edu.wkd.userappbanghangonline.view.activity.ProductByTypeActivity;
 import edu.wkd.userappbanghangonline.view.adapter.ProductAdapter;
 import edu.wkd.userappbanghangonline.view.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
@@ -51,7 +52,6 @@ import retrofit2.Response;
 
 
 public class ProductFragment extends Fragment implements ItemProductInterface, ItemProductTypeInterface {
-   private RecyclerView recyclerView;
     private FragmentProductBinding binding;
     private ProductTypeAdapter productTypeAdapter;
     private List<ProductType> listProductType;
@@ -205,7 +205,7 @@ public class ProductFragment extends Fragment implements ItemProductInterface, I
                 3, GridLayoutManager.VERTICAL, false);
         binding.rvTypeProduct.setLayoutManager(gridLayoutManager);
         binding.rvTypeProduct.setHasFixedSize(true);
-        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, this);
+        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, this::onClickItemProductType);
         binding.rvTypeProduct.setAdapter(productTypeAdapter);
     }
 
@@ -268,6 +268,10 @@ public class ProductFragment extends Fragment implements ItemProductInterface, I
 
     @Override
     public void onClickItemProductType(ProductType producttype) {
-
+        Intent intent = new Intent(getActivity(), ProductByTypeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", producttype.getId());
+        intent.putExtras(bundle);
+        mActivityResultLauncher.launch(intent);
     }
 }
