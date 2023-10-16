@@ -1,9 +1,8 @@
 package edu.wkd.userappbanghangonline.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -11,7 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveringBinding;
+import edu.wkd.userappbanghangonline.model.obj.Order;
+import edu.wkd.userappbanghangonline.ultil.OrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 
@@ -20,12 +25,15 @@ import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
  * Use the {@link DeliveringFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeliveringFragment extends Fragment {
+public class DeliveringFragment extends Fragment implements OrderInterface {
     private FragmentDeliveringBinding binding;
+    private ArrayList<Order> listOrder;
     private OrderAdapter orderAdapter;
+
     public DeliveringFragment() {
         // Required empty public constructor
     }
+
 
     public static DeliveringFragment newInstance() {
         DeliveringFragment fragment = new DeliveringFragment();
@@ -42,25 +50,36 @@ public class DeliveringFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDeliveringBinding.inflate(getLayoutInflater());
-        return binding.getRoot();
+        View view = binding.getRoot();
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.getOrderByStatus(1);
+            orderActivity.setOrderInterface(this);
+        }
+        return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getData();
-    }
-    private void getData() {
-        if (OrderActivity.listDelivering.isEmpty() || OrderActivity.listDelivering.size() == 0){
+    public void dataOrderReceiver(List<Order> list) {
+        if (list.isEmpty()){
             binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-//            binding.progressBar.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
         }else{
-            orderAdapter = new OrderAdapter(OrderActivity.listDelivering);
+            listOrder = (ArrayList<Order>) list;
+            orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.rvOrderDelivering.setLayoutManager(manager);
             binding.rvOrderDelivering.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-//            binding.rvOrderDelivering.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.getOrderByStatus(1);
         }
     }
 }

@@ -2,6 +2,7 @@ package edu.wkd.userappbanghangonline.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,29 +13,35 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
 
 import edu.wkd.userappbanghangonline.model.obj.Order;
-
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+
+import edu.wkd.userappbanghangonline.ultil.OrderInterface;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
+import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
+import edu.wkd.userappbanghangonline.view.fragment.CancelledFragment;
+import edu.wkd.userappbanghangonline.view.fragment.ConfirmationFragment;
+import edu.wkd.userappbanghangonline.view.fragment.DeliveredFragment;
+import edu.wkd.userappbanghangonline.view.fragment.DeliveringFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
 
-
-public class OrderActivity extends AppCompatActivity {
-    private ActivityOrderBinding binding;
+public class OrderActivity extends AppCompatActivity{
     public static final String TAG = OrderActivity.class.toString();
+    private ActivityOrderBinding binding;
     private ViewPager2Adapter viewPager2Adapter;
-    public static ArrayList<Order> listConfirm = new ArrayList<>();
-    public static ArrayList<Order> listDelivering = new ArrayList<>();
-    public static ArrayList<Order> listDelivered = new ArrayList<>();
-    public static ArrayList<Order> listCancelled = new ArrayList<>();
-    public ArrayList<Order> listAll = new ArrayList<>();
+    public  ArrayList<Order> listOrder;
+    private OrderInterface orderInterface;
+    public void setOrderInterface(OrderInterface orderInterface){
+        this.orderInterface = orderInterface;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,48 +49,20 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         onBack();//Quay trở lại sự kiện trước đó
-        getData();
         setTabLayoutAndViewPager2();
     }
 
-    private void getData() {
-        ApiService.apiService.getOrderByIdUser(1).enqueue(new Callback<OrderResponse>() {
-            @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
-                if (response.body() != null){
-                    listAll = response.body().getListOrder();
-                    checkStatus(listAll);
-                }else{
-                    Toast.makeText(OrderActivity.this, "Data empty", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
-                Toast.makeText(OrderActivity.this, "Call api error while get data order", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onFailure: " + t);
-            }
-        });
-    }
-
-    private void checkStatus(ArrayList<Order> listAll) {
-        for (int i = 0; i < listAll.size(); i++) {
-            if (listAll.get(i).getStatus() == 0){
-                listConfirm.add(listAll.get(i));
-            }else if (listAll.get(i).getStatus() == 1){
-                listDelivering.add(listAll.get(i));
-            }else if (listAll.get(i).getStatus() == 2){
-                listDelivered.add(listAll.get(i));
-            }else{
-                listCancelled.add(listAll.get(i));
-            }
-        }
-    }
 
     private void setTabLayoutAndViewPager2() {
-        viewPager2Adapter = new ViewPager2Adapter(OrderActivity.this);
+        List<Fragment> fragmentList = new ArrayList<>();
+        fragmentList.add(new ConfirmationFragment());
+        fragmentList.add(new DeliveringFragment());
+        fragmentList.add(new DeliveredFragment());
+        fragmentList.add(new CancelledFragment());
+        viewPager2Adapter = new ViewPager2Adapter(OrderActivity.this, fragmentList);
         binding.viewPager2.setAdapter(viewPager2Adapter);
-
+        binding.viewPager2.setCurrentItem(0);
         TabLayoutMediator mediator = new TabLayoutMediator(binding.tabLayout, binding.viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -114,4 +93,26 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public void getOrderByStatus(int status) {
+        int idUser = UserUltil.user.getId();
+        ApiService.apiService.getOrderByIdUserAndStatus(idUser, status).enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (response.isSuccessful()){
+                    listOrder = response.body().getListOrder();
+                    if (orderInterface != null){
+                        orderInterface.dataOrderReceiver(listOrder);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                Toast.makeText(OrderActivity.this, "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
+            }
+        });
+    }
+
 }
