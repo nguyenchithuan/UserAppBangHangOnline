@@ -2,6 +2,8 @@ package edu.wkd.userappbanghangonline.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
@@ -21,6 +24,10 @@ import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 import edu.wkd.userappbanghangonline.ultil.OrderInterface;
 import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
+import edu.wkd.userappbanghangonline.view.fragment.CancelledFragment;
+import edu.wkd.userappbanghangonline.view.fragment.ConfirmationFragment;
+import edu.wkd.userappbanghangonline.view.fragment.DeliveredFragment;
+import edu.wkd.userappbanghangonline.view.fragment.DeliveringFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +55,12 @@ public class OrderActivity extends AppCompatActivity{
 
 
     private void setTabLayoutAndViewPager2() {
-        viewPager2Adapter = new ViewPager2Adapter(OrderActivity.this);
+        List<Fragment> fragmentList = new ArrayList<>();
+        fragmentList.add(new ConfirmationFragment());
+        fragmentList.add(new DeliveringFragment());
+        fragmentList.add(new DeliveredFragment());
+        fragmentList.add(new CancelledFragment());
+        viewPager2Adapter = new ViewPager2Adapter(OrderActivity.this, fragmentList);
         binding.viewPager2.setAdapter(viewPager2Adapter);
 
         TabLayoutMediator mediator = new TabLayoutMediator(binding.tabLayout, binding.viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {

@@ -150,6 +150,9 @@ public class ConfirmationFragment extends Fragment implements OrderInterface{
     @Override
     public void onResume() {
         super.onResume();
-
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.getOrderByStatus(0);
+        }
     }
 }
