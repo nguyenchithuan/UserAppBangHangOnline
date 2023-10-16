@@ -106,5 +106,8 @@ public interface ApiService {
     @POST("logup.php")
     Call<LogupUserResponse> logUpUser(@Field("email") String email, @Field("password") String password, @Field("username") String username);
 
-
+    @FormUrlEncoded
+    @POST("get_product_detail.php")
+    Call<ProductResponse> getProductByType(@Field("product_type") int product_type,
+                                             @Field("page") int page);
 }

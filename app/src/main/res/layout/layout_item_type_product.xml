@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:riv_corner_radius="15dp"
         android:src="@drawable/img_banner_home"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:elevation="@dimen/cardview_default_elevation"/>
 
     <TextView

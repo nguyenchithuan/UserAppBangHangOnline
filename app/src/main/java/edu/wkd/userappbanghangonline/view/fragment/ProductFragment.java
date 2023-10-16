@@ -30,8 +30,10 @@ import java.util.List;
 import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.FragmentProductBinding;
 import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
+import edu.wkd.userappbanghangonline.ultil.ItemProductTypeInterface;
 import edu.wkd.userappbanghangonline.view.activity.CartActivity;
 import edu.wkd.userappbanghangonline.view.activity.DetailsProductActivity;
+import edu.wkd.userappbanghangonline.view.activity.ProductByTypeActivity;
 import edu.wkd.userappbanghangonline.view.adapter.ProductAdapter;
 import edu.wkd.userappbanghangonline.view.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
@@ -49,8 +51,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ProductFragment extends Fragment implements ItemProductInterface {
-   private RecyclerView recyclerView;
+public class ProductFragment extends Fragment implements ItemProductInterface, ItemProductTypeInterface {
     private FragmentProductBinding binding;
     private ProductTypeAdapter productTypeAdapter;
     private List<ProductType> listProductType;
@@ -204,7 +205,7 @@ public class ProductFragment extends Fragment implements ItemProductInterface {
                 3, GridLayoutManager.VERTICAL, false);
         binding.rvTypeProduct.setLayoutManager(gridLayoutManager);
         binding.rvTypeProduct.setHasFixedSize(true);
-        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, null);
+        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, this::onClickItemProductType);
         binding.rvTypeProduct.setAdapter(productTypeAdapter);
     }
 
@@ -263,5 +264,14 @@ public class ProductFragment extends Fragment implements ItemProductInterface {
         intent.putExtras(bundle);
         mActivityResultLauncher.launch(intent);
         getActivity().overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
+    }
+
+    @Override
+    public void onClickItemProductType(ProductType producttype) {
+        Intent intent = new Intent(getActivity(), ProductByTypeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", producttype.getId());
+        intent.putExtras(bundle);
+        mActivityResultLauncher.launch(intent);
     }
 }

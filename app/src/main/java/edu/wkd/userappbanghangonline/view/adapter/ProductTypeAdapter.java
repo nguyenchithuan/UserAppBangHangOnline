@@ -64,7 +64,7 @@ public class ProductTypeAdapter extends RecyclerView.Adapter<ProductTypeAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                itemProductTypeInterface.onClickItemProduct(producttype);
+                itemProductTypeInterface.onClickItemProductType(producttype);
             }
         });
     }

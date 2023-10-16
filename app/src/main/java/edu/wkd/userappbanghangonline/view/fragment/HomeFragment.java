@@ -38,6 +38,7 @@ import edu.wkd.userappbanghangonline.databinding.FragmentHomeBinding;
 import edu.wkd.userappbanghangonline.databinding.LayoutDialogSearchBinding;
 import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
+import edu.wkd.userappbanghangonline.ultil.ItemProductTypeInterface;
 import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import edu.wkd.userappbanghangonline.view.activity.CartActivity;
 import edu.wkd.userappbanghangonline.view.activity.MainActivity;
@@ -52,7 +53,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ItemProductTypeInterface {
 
     private FragmentHomeBinding binding;
     private ProductTypeAdapter productTypeAdapter;
@@ -87,10 +88,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        initUI();
         autoImageSlide();//Tạo ảnh chạy tự động
-//        callApiGetTypeProduct();
         getListProductType();//Lấy danh sách loại sản phẩm
+        callApiGetTypeProduct();
         openSearchDialog();//Mở dialog tìm kiếm
         eventBtnCart();
     }
@@ -194,12 +195,14 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     private void getListProductType() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3,
-                GridLayoutManager.VERTICAL, false);
+        listProductType = new ArrayList<>();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),
+                3, GridLayoutManager.VERTICAL, false);
         binding.rvTypeProductHome.setLayoutManager(gridLayoutManager);
         binding.rvTypeProductHome.setHasFixedSize(true);
-        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, null);
+        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, this);
         binding.rvTypeProductHome.setAdapter(productTypeAdapter);
     }
 
@@ -234,6 +237,15 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getActivity(), CartActivity.class);
             mActivityResultLauncher.launch(intent);
         });
+    }
+
+    private void initUI() {
+        dialogLoading = new ProgressDialogLoading(getActivity());
+    }
+
+    @Override
+    public void onClickItemProductType(ProductType producttype) {
+
     }
 }
 

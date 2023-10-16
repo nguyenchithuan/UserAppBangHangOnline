@@ -23,6 +23,12 @@
             android:name=".view.activity.DetailsOrderActivity"
             android:exported="false" />
         <activity
+            android:name=".view.activity.ProductByTypeActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Yellow"
+            />
+
+        <activity
             android:name=".view.activity.ChangePasswordActivity"
             android:exported="false" />
         <activity

@@ -1,5 +1,4 @@
-package edu.wkd.userappbanghangonline.view.adapter;
-
+package edu.wkd.userappbanghangonline.model.obj.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
