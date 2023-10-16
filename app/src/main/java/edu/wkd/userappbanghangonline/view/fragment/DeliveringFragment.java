@@ -3,30 +3,22 @@ package edu.wkd.userappbanghangonline.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wkd.userappbanghangonline.data.api.ApiService;
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveringBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
-import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 import edu.wkd.userappbanghangonline.ultil.OrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,22 +27,13 @@ import retrofit2.Response;
  */
 public class DeliveringFragment extends Fragment implements OrderInterface {
     private FragmentDeliveringBinding binding;
-    private OrderAdapter orderAdapter;
     private ArrayList<Order> listOrder;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
+    private OrderAdapter orderAdapter;
 
     public DeliveringFragment() {
         // Required empty public constructor
     }
+
 
     public static DeliveringFragment newInstance() {
         DeliveringFragment fragment = new DeliveringFragment();
@@ -67,17 +50,13 @@ public class DeliveringFragment extends Fragment implements OrderInterface {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDeliveringBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         OrderActivity orderActivity = (OrderActivity) getActivity();
         if (orderActivity != null){
-            orderActivity.getOrderByStatus(1);
             orderActivity.setOrderInterface(this);
+            orderActivity.getOrderByStatus(1);
         }
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        return view;
     }
 
     @Override
@@ -89,11 +68,10 @@ public class DeliveringFragment extends Fragment implements OrderInterface {
         }else{
             orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrder.setLayoutManager(manager);
-            binding.rvOrder.setAdapter(orderAdapter);
+            binding.rvOrderDelivering.setLayoutManager(manager);
+            binding.rvOrderDelivering.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }
     }
-
 }

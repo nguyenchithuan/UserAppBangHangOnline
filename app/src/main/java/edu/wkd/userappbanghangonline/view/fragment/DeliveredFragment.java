@@ -29,9 +29,7 @@ import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveredBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 
 /**
@@ -44,6 +42,7 @@ public class DeliveredFragment extends Fragment implements OrderInterface {
     private FragmentDeliveredBinding binding;
     private OrderAdapter orderAdapter;
     private ArrayList<Order> listOrder;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -102,8 +101,8 @@ public class DeliveredFragment extends Fragment implements OrderInterface {
         }else{
             orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrder.setLayoutManager(manager);
-            binding.rvOrder.setAdapter(orderAdapter);
+            binding.rvOrderDelivered.setLayoutManager(manager);
+            binding.rvOrderDelivered.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }

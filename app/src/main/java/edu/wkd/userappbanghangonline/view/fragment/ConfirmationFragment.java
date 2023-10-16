@@ -104,8 +104,8 @@ public class ConfirmationFragment extends Fragment implements OrderInterface{
         }else{
             orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrder.setLayoutManager(manager);
-            binding.rvOrder.setAdapter(orderAdapter);
+            binding.rvOrderConfirm.setLayoutManager(manager);
+            binding.rvOrderConfirm.setAdapter(orderAdapter);
             orderAdapter.setDeleteOrderInterface(new DeleteOrderInterface() {
                 @Override
                 public void deleteOrderById(int id, int position) {

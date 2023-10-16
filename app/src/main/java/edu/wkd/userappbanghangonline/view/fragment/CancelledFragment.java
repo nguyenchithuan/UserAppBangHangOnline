@@ -91,8 +91,8 @@ public class CancelledFragment extends Fragment implements OrderInterface {
         }else{
             orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrder.setLayoutManager(manager);
-            binding.rvOrder.setAdapter(orderAdapter);
+            binding.rvOrderCancelled.setLayoutManager(manager);
+            binding.rvOrderCancelled.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }
