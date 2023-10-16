@@ -81,8 +81,8 @@ public class DeliveredFragment extends Fragment implements OrderInterface {
         View view = binding.getRoot();
         OrderActivity orderActivity = (OrderActivity) getActivity();
         if (orderActivity != null){
-            orderActivity.setOrderInterface(this);
             orderActivity.getOrderByStatus(2);
+            orderActivity.setOrderInterface(this);
         }
         return view;
     }
@@ -94,17 +94,25 @@ public class DeliveredFragment extends Fragment implements OrderInterface {
 
     @Override
     public void dataOrderReceiver(List<Order> list) {
-        listOrder = (ArrayList<Order>) list;
-        if (listOrder.isEmpty() || listOrder == null){
+        if (list.isEmpty()){
             binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }else{
+            listOrder = (ArrayList<Order>) list;
             orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.rvOrderDelivered.setLayoutManager(manager);
             binding.rvOrderDelivered.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.getOrderByStatus(2);
         }
     }
 }

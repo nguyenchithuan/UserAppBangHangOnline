@@ -97,11 +97,11 @@ public class ConfirmationFragment extends Fragment implements OrderInterface{
 
     @Override
     public void dataOrderReceiver(List<Order> list) {
-        listOrder = (ArrayList<Order>) list;
-        if (listOrder.isEmpty() || listOrder == null){
+        if (list.isEmpty()){
             binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }else{
+            listOrder = (ArrayList<Order>) list;
             orderAdapter = new OrderAdapter(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.rvOrderConfirm.setLayoutManager(manager);

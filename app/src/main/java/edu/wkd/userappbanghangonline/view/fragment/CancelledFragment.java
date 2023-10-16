@@ -85,7 +85,7 @@ public class CancelledFragment extends Fragment implements OrderInterface {
     @Override
     public void dataOrderReceiver(List<Order> list) {
         listOrder = (ArrayList<Order>) list;
-        if (listOrder.isEmpty() || listOrder == null){
+        if (listOrder.isEmpty()){
             binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }else{
@@ -95,6 +95,14 @@ public class CancelledFragment extends Fragment implements OrderInterface {
             binding.rvOrderCancelled.setAdapter(orderAdapter);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.getOrderByStatus(3);
         }
     }
 }

@@ -62,7 +62,7 @@ public class OrderActivity extends AppCompatActivity{
         fragmentList.add(new CancelledFragment());
         viewPager2Adapter = new ViewPager2Adapter(OrderActivity.this, fragmentList);
         binding.viewPager2.setAdapter(viewPager2Adapter);
-
+        binding.viewPager2.setCurrentItem(0);
         TabLayoutMediator mediator = new TabLayoutMediator(binding.tabLayout, binding.viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

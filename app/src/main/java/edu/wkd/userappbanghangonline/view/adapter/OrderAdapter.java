@@ -97,6 +97,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(holder.itemView.getContext(), "Id Order: "+order.getId(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(holder.itemView.getContext(), DetailsOrderActivity.class);
                 Bundle bundle = new Bundle();
                 intent.putExtra("position", holder.getAdapterPosition());
