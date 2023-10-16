@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.ultil.DeleteOrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.DetailsOrderActivity;
 
 
@@ -27,6 +28,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     private ArrayList<Order> list;
     private ArrayList<Product> listProduct;
     private ProductInOrderAdapter productAdapter;
+
+    //Tạo interface cho sự kiện delete
+    private DeleteOrderInterface deleteOrderInterface;
+    public void setDeleteOrderInterface(DeleteOrderInterface deleteOrderInterface){
+        this.deleteOrderInterface = deleteOrderInterface;
+    }
 
     public OrderAdapter(ArrayList<Order> list) {
         this.list = list;
@@ -67,6 +74,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             holder.binding.tvCancelOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (deleteOrderInterface != null){
+                        deleteOrderInterface.deleteOrderById(order.getId(), holder.getAdapterPosition());
+                    }
                 }
             });
         }else if (order.getStatus() == 1){
