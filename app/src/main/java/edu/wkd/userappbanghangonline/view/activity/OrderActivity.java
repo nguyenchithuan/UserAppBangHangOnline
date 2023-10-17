@@ -4,10 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -15,33 +14,19 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wkd.userappbanghangonline.data.api.ApiService;
+import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
 
-import edu.wkd.userappbanghangonline.model.obj.Order;
-import edu.wkd.userappbanghangonline.model.response.OrderResponse;
-
-import edu.wkd.userappbanghangonline.ultil.OrderInterface;
-import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
 import edu.wkd.userappbanghangonline.view.fragment.CancelledFragment;
 import edu.wkd.userappbanghangonline.view.fragment.ConfirmationFragment;
 import edu.wkd.userappbanghangonline.view.fragment.DeliveredFragment;
 import edu.wkd.userappbanghangonline.view.fragment.DeliveringFragment;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class OrderActivity extends AppCompatActivity{
-    public static final String TAG = OrderActivity.class.toString();
     private ActivityOrderBinding binding;
     private ViewPager2Adapter viewPager2Adapter;
-    public  ArrayList<Order> listOrder;
-    private OrderInterface orderInterface;
-    public void setOrderInterface(OrderInterface orderInterface){
-        this.orderInterface = orderInterface;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +36,6 @@ public class OrderActivity extends AppCompatActivity{
         onBack();//Quay trở lại sự kiện trước đó
         setTabLayoutAndViewPager2();
     }
-
-
 
     private void setTabLayoutAndViewPager2() {
         List<Fragment> fragmentList = new ArrayList<>();
@@ -89,28 +72,11 @@ public class OrderActivity extends AppCompatActivity{
         binding.arrowBackOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(OrderActivity.this, MainActivity.class);
+                intent.putExtra("onBack", "OrderToMain");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
                 finish();
-            }
-        });
-    }
-
-
-    public void getOrderByStatus(int status) {
-        int idUser = UserUltil.user.getId();
-        ApiService.apiService.getOrderByIdUserAndStatus(idUser, status).enqueue(new Callback<OrderResponse>() {
-            @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
-                if (response.isSuccessful()){
-                    listOrder = response.body().getListOrder();
-                    if (orderInterface != null){
-                        orderInterface.dataOrderReceiver(listOrder);
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
-                Toast.makeText(OrderActivity.this, "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onFailure: " + t);
             }
         });
     }

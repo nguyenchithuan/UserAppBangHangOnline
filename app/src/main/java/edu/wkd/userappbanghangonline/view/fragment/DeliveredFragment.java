@@ -1,6 +1,5 @@
 package edu.wkd.userappbanghangonline.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,19 +16,19 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
-import edu.wkd.userappbanghangonline.ultil.OrderInterface;
-import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 
 
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveredBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
-
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -37,27 +36,11 @@ import edu.wkd.userappbanghangonline.model.obj.Order;
  * Use the {@link DeliveredFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeliveredFragment extends Fragment implements OrderInterface {
-    private Context context;
+public class DeliveredFragment extends Fragment{
+    private static final String TAG = "Error";
     private FragmentDeliveredBinding binding;
     private OrderAdapter orderAdapter;
     private ArrayList<Order> listOrder;
-
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context == null){
-            throw new NullPointerException("Fragment chưa được gắn vào một hoạt động");
-        }
-        this.context = context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.context = null;
-    }
 
     public DeliveredFragment() {
         // Required empty public constructor
@@ -79,40 +62,49 @@ public class DeliveredFragment extends Fragment implements OrderInterface {
         // Inflate the layout for this fragment
         binding = FragmentDeliveredBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        OrderActivity orderActivity = (OrderActivity) getActivity();
-        if (orderActivity != null){
-            orderActivity.getOrderByStatus(2);
-            orderActivity.setOrderInterface(this);
-        }
+        getData();
         return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    public void dataOrderReceiver(List<Order> list) {
-        if (list.isEmpty()){
-            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }else{
-            listOrder = (ArrayList<Order>) list;
-            orderAdapter = new OrderAdapter(listOrder);
-            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            binding.rvOrderDelivered.setLayoutManager(manager);
-            binding.rvOrderDelivered.setAdapter(orderAdapter);
-            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }
+    private void getData() {
+        int idUser = UserUltil.user.getId();
+        ApiService.apiService.getOrderByIdUserAndStatus(idUser, 2).enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (response.isSuccessful()){
+                    listOrder = response.body().getListOrder();
+                    if (listOrder.isEmpty()){
+                        binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                    }else{
+                        binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                        orderAdapter = new OrderAdapter(listOrder);
+                        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                        binding.rvOrderDelivered.setLayoutManager(manager);
+                        binding.rvOrderDelivered.setAdapter(orderAdapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                Toast.makeText(getContext().getApplicationContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
+            }
+        });
+
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        OrderActivity orderActivity = (OrderActivity) getActivity();
-        if (orderActivity != null){
-            orderActivity.getOrderByStatus(2);
-        }
+        getData();
     }
 }

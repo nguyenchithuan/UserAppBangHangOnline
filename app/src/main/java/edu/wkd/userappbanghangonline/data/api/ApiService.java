@@ -55,8 +55,8 @@ public interface ApiService {
     Call<OrderResponse> getOrderByIdUserAndStatus(@Field("user_id") int userId, @Field("status") int status);
 
     @FormUrlEncoded
-    @POST("delete_order.php")
-    Call<Order> deleteOrderById(@Field("id_order") int orderId);
+    @POST("update_order_status.php")
+    Call<Order> updateStatusOrder(@Field("id_order") int idOrder, @Field("status") int status);
 
     @FormUrlEncoded
     @POST("post_order.php")
