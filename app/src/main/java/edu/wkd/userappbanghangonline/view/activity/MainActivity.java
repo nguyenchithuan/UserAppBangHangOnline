@@ -29,10 +29,20 @@ public class MainActivity extends AppCompatActivity {
 
         setOnClickIconInBottomNav();//Xử lí sự kiện khi người dùng nhấn vào bottom nav
 
-        if (CheckConection.HaveConnection(this)){
-            CheckConection.ShowToast(this, "Kết nối thành công!");
-        }else
+        if (!CheckConection.HaveConnection(this)){
             CheckConection.ShowToast(this,"Kết nối thất bại!");
+        }
+        receiverIntentFromOnBackActivity();//Xử lí sự kiện khi người dùng nhấn nút quay trở lại trong các activity hoặc fragment
+    }
+
+    private void receiverIntentFromOnBackActivity() {
+        String key = getIntent().getStringExtra("onBack");
+        if (key != null){
+            if (key.equals("OrderToMain")){
+                binding.bottomNavigationView.show(4, true);
+                chooseFragment(UserFragment.newInstance());
+            }
+        }
     }
 
     private void setOnClickIconInBottomNav() {

@@ -19,7 +19,7 @@ import edu.wkd.userappbanghangonline.model.obj.adapter.ProductInOrderAdapter;
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
-import edu.wkd.userappbanghangonline.ultil.DeleteOrderInterface;
+import edu.wkd.userappbanghangonline.ultil.UpdateStatusOrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.DetailsOrderActivity;
 
 
@@ -29,9 +29,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     private ProductInOrderAdapter productAdapter;
 
     //Tạo interface cho sự kiện delete
-    private DeleteOrderInterface deleteOrderInterface;
-    public void setDeleteOrderInterface(DeleteOrderInterface deleteOrderInterface){
-        this.deleteOrderInterface = deleteOrderInterface;
+    private UpdateStatusOrderInterface updateStatusOrderInterface;
+    public void setUpdateStatusOrderInterface(UpdateStatusOrderInterface updateStatusOrderInterface){
+        this.updateStatusOrderInterface = updateStatusOrderInterface;
     }
 
     public OrderAdapter(ArrayList<Order> list) {
@@ -69,34 +69,41 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         if (order.getStatus() == 0){
             holder.binding.tvStateDelivey.setText("Chờ xác nhận");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
-            holder.binding.tvCancelOrder.setVisibility(View.VISIBLE);
-            holder.binding.tvCancelOrder.setOnClickListener(new View.OnClickListener() {
+            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.VISIBLE);
+            holder.binding.tvCancelOrderOrReOrder.setText("Hủy đơn hàng");
+            holder.binding.tvCancelOrderOrReOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (deleteOrderInterface != null){
-                        deleteOrderInterface.deleteOrderById(order.getId(), holder.getAdapterPosition());
+                    if (updateStatusOrderInterface != null){
+                        updateStatusOrderInterface.updateStatusOrderById(order.getId(), holder.getAdapterPosition());
                     }
                 }
             });
         }else if (order.getStatus() == 1){
             holder.binding.tvStateDelivey.setText("Đang giao hàng");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
-            holder.binding.tvCancelOrder.setVisibility(View.GONE);
+            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.GONE);
         }else if (order.getStatus() == 2){
             holder.binding.tvStateDelivey.setText("Giao hàng thành công");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.VISIBLE);
-            holder.binding.tvCancelOrder.setVisibility(View.GONE);
+            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.GONE);
         }else{
             holder.binding.tvStateDelivey.setText("Đơn hàng đã bị hủy");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
-            holder.binding.tvCancelOrder.setVisibility(View.GONE);
+            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.VISIBLE);
+            holder.binding.tvCancelOrderOrReOrder.setText("Mua lại");
+            holder.binding.tvCancelOrderOrReOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(holder.itemView.getContext(), "Mua lại đơn đã hủy", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         //Dùng interface để hiển thị chi tiết đơn hàng (gọi bên order activity)
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.itemView.getContext(), "Id Order: "+order.getId(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(holder.itemView.getContext(), DetailsOrderActivity.class);
                 Bundle bundle = new Bundle();
                 intent.putExtra("position", holder.getAdapterPosition());

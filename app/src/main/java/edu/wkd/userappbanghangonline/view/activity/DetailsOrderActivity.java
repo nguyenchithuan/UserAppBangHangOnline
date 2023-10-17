@@ -19,8 +19,6 @@ import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityDetailsOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
-import edu.wkd.userappbanghangonline.model.response.OrderResponse;
-import edu.wkd.userappbanghangonline.ultil.DeleteOrderInterface;
 import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.adapter.ProductInOrderAdapter;
 import retrofit2.Call;
@@ -55,7 +53,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
             binding.btnDetailsOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteFromApi(order.getId());
+                    updateFromApi(order.getId());
                 }
             });
         }else if(order.getStatus() == 1){
@@ -89,7 +87,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
 
     }
 
-    private void deleteFromApi(int id) {
+    private void updateFromApi(int id) {
         new AlertDialog.Builder(DetailsOrderActivity.this)
                 .setTitle("Hủy đơn hàng")
                 .setIcon(android.R.drawable.ic_delete)
@@ -97,12 +95,13 @@ public class DetailsOrderActivity extends AppCompatActivity {
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ApiService.apiService.deleteOrderById(id).enqueue(new Callback<Order>() {
+                        ApiService.apiService.updateStatusOrder(id,3).enqueue(new Callback<Order>() {
                             @Override
                             public void onResponse(Call<Order> call, Response<Order> response) {
                                 if (response.isSuccessful()){
                                     Toast.makeText(DetailsOrderActivity.this, "Hủy đơn hàng thành công.", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
+                                    startActivity(new Intent(DetailsOrderActivity.this, OrderActivity.class));
                                     finish();
                                 }
                             }
@@ -139,6 +138,4 @@ public class DetailsOrderActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
