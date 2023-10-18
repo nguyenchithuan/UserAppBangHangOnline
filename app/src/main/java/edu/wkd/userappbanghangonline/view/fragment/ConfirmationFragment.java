@@ -16,13 +16,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.FragmentConfirmationBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.ultil.GetListOrderInterface;
 import edu.wkd.userappbanghangonline.ultil.UpdateStatusOrderInterface;
 import edu.wkd.userappbanghangonline.ultil.UserUltil;
+import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,7 +36,7 @@ import retrofit2.Response;
  * Use the {@link ConfirmationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConfirmationFragment extends Fragment{
+public class ConfirmationFragment extends Fragment implements GetListOrderInterface {
     private static final String TAG = "Error";
     private FragmentConfirmationBinding binding;
     private OrderAdapter orderAdapter;
@@ -60,7 +63,6 @@ public class ConfirmationFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentConfirmationBinding.inflate(getLayoutInflater());
-        getData();
         return binding.getRoot();
     }
 
@@ -70,73 +72,70 @@ public class ConfirmationFragment extends Fragment{
         getData();
     }
 
-    private void getData() {
-        int idUser = UserUltil.user.getId();
-        ApiService.apiService.getOrderByIdUserAndStatus(idUser, 0).enqueue(new Callback<OrderResponse>() {
-            @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
-                if (response.isSuccessful()){
-                    listOrder = response.body().getListOrder();
-                    if (listOrder.isEmpty() || listOrder.size() == 0){
-                        binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                    }else{
-                        binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                        orderAdapter = new OrderAdapter(listOrder);
-                        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                        binding.rvOrderConfirm.setLayoutManager(manager);
-                        binding.rvOrderConfirm.setAdapter(orderAdapter);
-                        orderAdapter.setUpdateStatusOrderInterface(new UpdateStatusOrderInterface() {
-                            @Override
-                            public void updateStatusOrderById(int id, int position) {
-                                new AlertDialog.Builder(getActivity())
-                                        .setTitle("Hủy đơn hàng")
-                                        .setIcon(android.R.drawable.ic_delete)
-                                        .setMessage("Bạn chắc chắn muốn hủy đơn hàng này?")
-                                        .setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                ApiService.apiService.updateStatusOrder(id,3).enqueue(new Callback<Order>() {
-                                                    @Override
-                                                    public void onResponse(Call<Order> call, Response<Order> response) {
-                                                        if (response.isSuccessful()){
-                                                            listOrder.remove(position);
-                                                            orderAdapter.notifyDataSetChanged();
-                                                            Toast.makeText(getContext().getApplicationContext(), "Hủy đơn hàng thành công.", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                    @Override
-                                                    public void onFailure(Call<Order> call, Throwable t) {
-                                                        Toast.makeText(getContext().getApplicationContext(), "Hủy đơn hàng thất bại.", Toast.LENGTH_SHORT).show();
-                                                        Log.e(TAG, "onResponse: " + t);
-                                                    }
-                                                });
-                                            }
-                                        })
-                                        .setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        }).show();
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
-                Toast.makeText(getContext().getApplicationContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onFailure: " + t);
-            }
-        });
+    private void getData(){
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.setGetListOrderInterface(this);
+            orderActivity.getListOrderByStatus(0);
+        }
     }
+
+
 
     @Override
     public void onResume() {
         super.onResume();
         getData();
+    }
+
+    @Override
+    public void getListOrder(List<Order> list) {
+        listOrder = (ArrayList<Order>) list;
+        if (listOrder.isEmpty() || listOrder.size() == 0){
+            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+        }else{
+            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+            orderAdapter = new OrderAdapter(listOrder);
+            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            binding.rvOrderConfirm.setLayoutManager(manager);
+            binding.rvOrderConfirm.setAdapter(orderAdapter);
+            orderAdapter.setUpdateStatusOrderInterface(new UpdateStatusOrderInterface() {
+                @Override
+                public void updateStatusOrderById(int id, int position) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Hủy đơn hàng")
+                            .setIcon(android.R.drawable.ic_delete)
+                            .setMessage("Bạn chắc chắn muốn hủy đơn hàng này?")
+                            .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ApiService.apiService.updateStatusOrder(id,3).enqueue(new Callback<Order>() {
+                                        @Override
+                                        public void onResponse(Call<Order> call, Response<Order> response) {
+                                            if (response.isSuccessful()){
+                                                listOrder.remove(position);
+                                                orderAdapter.notifyDataSetChanged();
+                                                Toast.makeText(getContext().getApplicationContext(), "Hủy đơn hàng thành công.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                        @Override
+                                        public void onFailure(Call<Order> call, Throwable t) {
+                                            Toast.makeText(getContext().getApplicationContext(), "Hủy đơn hàng thất bại.", Toast.LENGTH_SHORT).show();
+                                            Log.e(TAG, "onResponse: " + t);
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }
+            });
+        }
     }
 }

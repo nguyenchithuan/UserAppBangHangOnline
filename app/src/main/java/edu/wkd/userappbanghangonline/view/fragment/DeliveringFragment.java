@@ -14,12 +14,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveringBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.ultil.GetListOrderInterface;
 import edu.wkd.userappbanghangonline.ultil.UserUltil;
+import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,7 +33,7 @@ import retrofit2.Response;
  * Use the {@link DeliveringFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeliveringFragment extends Fragment{
+public class DeliveringFragment extends Fragment implements GetListOrderInterface {
     private static final String TAG = "Error";
     private FragmentDeliveringBinding binding;
     private ArrayList<Order> listOrder;
@@ -57,49 +60,42 @@ public class DeliveringFragment extends Fragment{
         // Inflate the layout for this fragment
         binding = FragmentDeliveringBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        getData();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getData();
     }
 
-    private void getData() {
-        int idUser = UserUltil.user.getId();
-        ApiService.apiService.getOrderByIdUserAndStatus(idUser, 1).enqueue(new Callback<OrderResponse>() {
-            @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
-                if (response.isSuccessful()){
-                    listOrder = response.body().getListOrder();
-                    if (listOrder.isEmpty()){
-                        binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                    }else{
-                        binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                        orderAdapter = new OrderAdapter(listOrder);
-                        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                        binding.rvOrderDelivering.setLayoutManager(manager);
-                        binding.rvOrderDelivering.setAdapter(orderAdapter);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
-                Toast.makeText(getContext().getApplicationContext(), "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onFailure: " + t);
-            }
-        });
+    private void getData(){
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.setGetListOrderInterface(this);
+            orderActivity.getListOrderByStatus(1);
+        }
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
         getData();
+    }
+
+    @Override
+    public void getListOrder(List<Order> list) {
+        listOrder = (ArrayList<Order>) list;
+        if (listOrder.isEmpty()){
+            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+        }else{
+            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+            orderAdapter = new OrderAdapter(listOrder);
+            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            binding.rvOrderDelivering.setLayoutManager(manager);
+            binding.rvOrderDelivering.setAdapter(orderAdapter);
+        }
     }
 }
