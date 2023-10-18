@@ -3,10 +3,13 @@ package edu.wkd.userappbanghangonline.view.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -15,18 +18,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityOrderBinding;
 
+import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.ultil.GetListOrderInterface;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
+import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 import edu.wkd.userappbanghangonline.view.adapter.ViewPager2Adapter;
 import edu.wkd.userappbanghangonline.view.fragment.CancelledFragment;
 import edu.wkd.userappbanghangonline.view.fragment.ConfirmationFragment;
 import edu.wkd.userappbanghangonline.view.fragment.DeliveredFragment;
 import edu.wkd.userappbanghangonline.view.fragment.DeliveringFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class OrderActivity extends AppCompatActivity{
+    private static final String TAG = OrderActivity.class.toString();
     private ActivityOrderBinding binding;
     private ViewPager2Adapter viewPager2Adapter;
+    private GetListOrderInterface getListOrderInterface;
+
+
+    public void setGetListOrderInterface(GetListOrderInterface getListOrderInterface){
+        this.getListOrderInterface = getListOrderInterface;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +84,24 @@ public class OrderActivity extends AppCompatActivity{
             }
         });
         mediator.attach();
+    }
+
+    public void getListOrderByStatus(int status){
+        int idUser = UserUltil.user.getId();
+        ApiService.apiService.getOrderByIdUserAndStatus(idUser, status).enqueue(new Callback<OrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                if (response.isSuccessful()){
+                    getListOrderInterface.getListOrder(response.body().getListOrder());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
+                Toast.makeText(OrderActivity.this, "Lỗi server (chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
+            }
+        });
     }
 
     private void onBack(){
