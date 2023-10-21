@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +67,12 @@ public class DeliveringFragment extends Fragment implements GetListOrderInterfac
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        },1000);
     }
 
     private void getData(){
@@ -74,25 +80,37 @@ public class DeliveringFragment extends Fragment implements GetListOrderInterfac
         if (orderActivity != null){
             orderActivity.setGetListOrderInterface(this);
             orderActivity.getListOrderByStatus(1);
+            if (orderAdapter != null && listOrder != null){
+                orderAdapter.setData(listOrder);
+                binding.rvOrderDelivering.setAdapter(orderAdapter);
+            }
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        },500);
     }
 
     @Override
     public void getListOrder(List<Order> list) {
         listOrder = (ArrayList<Order>) list;
         if (listOrder.isEmpty()){
+            binding.rvOrderDelivering.setVisibility(View.INVISIBLE);
             binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }else{
+            binding.rvOrderDelivering.setVisibility(View.VISIBLE);
             binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
-            orderAdapter = new OrderAdapter(listOrder);
+            orderAdapter = new OrderAdapter(getContext().getApplicationContext());
+            orderAdapter.setData(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.rvOrderDelivering.setLayoutManager(manager);
             binding.rvOrderDelivering.setAdapter(orderAdapter);

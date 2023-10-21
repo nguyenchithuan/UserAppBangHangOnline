@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,13 +64,19 @@ public class OrderActivity extends AppCompatActivity{
         fragmentList.add(new CancelledFragment());
         viewPager2Adapter = new ViewPager2Adapter(OrderActivity.this, fragmentList);
         binding.viewPager2.setAdapter(viewPager2Adapter);
+        binding.viewPager2.setOffscreenPageLimit(3);//Load trước 3 page
         binding.viewPager2.setCurrentItem(0);
+        long itemId = viewPager2Adapter.getItemId(binding.viewPager2.getCurrentItem());
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("f"+itemId);
         TabLayoutMediator mediator = new TabLayoutMediator(binding.tabLayout, binding.viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position){
                     case 0:
                         tab.setText("Chờ xác nhận");
+                        if (fragment instanceof ConfirmationFragment){
+                            ((ConfirmationFragment)fragment).reloadData();
+                        }
                         break;
                     case 1:
                         tab.setText("Đang giao hàng");
@@ -84,6 +91,7 @@ public class OrderActivity extends AppCompatActivity{
             }
         });
         mediator.attach();
+
     }
 
     public void getListOrderByStatus(int status){
@@ -108,10 +116,6 @@ public class OrderActivity extends AppCompatActivity{
         binding.arrowBackOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderActivity.this, MainActivity.class);
-                intent.putExtra("onBack", "OrderToMain");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
                 finish();
             }
         });
