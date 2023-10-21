@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activity.ProductReviewsActivity"
+    android:orientation="vertical"
+    android:paddingBottom="24dp">
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:paddingHorizontal="12dp">
+
+        <ImageView
+            android:id="@+id/arrowBackProductReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/left_arrow"
+            app:tint="@color/btn_yellow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Đánh giá sản phẩm"
+            android:textColor="@color/btn_yellow"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/btn_edit_text"
+        android:layout_marginVertical="4dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/imgProductReviews"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_banner_home" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Samsung galaxy note 15 aaaa"
+                    android:layout_marginLeft="18dp"
+                    android:textSize="22sp"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/btn_edit_text"
+                android:layout_marginVertical="4dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_weight="0.1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chất lượng sản phẩm"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
+                    android:id="@+id/rattingBarProductReviews"
+                    android:layout_marginHorizontal="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tuyệt vời"
+                    android:textSize="16sp"
+                    android:id="@+id/tvTitleByRating"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="18dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:background="@drawable/custom_border_primary_yellow"
+                    android:layout_marginHorizontal="12dp"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:id="@+id/layoutAddImgProductReviews">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/img_add_avatar_reviews"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thêm hình ảnh"
+                        android:textColor="@color/btn_yellow"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:background="@drawable/custom_border_primary_yellow"
+                    android:layout_marginHorizontal="12dp"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:id="@+id/layoutAddVideoProductReviews">
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/img_add_video_reviews"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thêm Video"
+                        android:textColor="@color/btn_yellow"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:layout_margin="12dp"
+                android:background="@color/color_f5">
+
+                <EditText
+                    android:id="@+id/edRatingQualityProductReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/color_f5"
+                    android:inputType="textMultiLine"
+                    android:textSize="18sp"
+                    android:text="Chất lượng sản phẩm: "/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="2dp"
+                    android:id="@+id/edTrueDescriptionProductReviews"
+                    android:background="@color/color_f5"
+                    android:text="Đúng với mô tả: "
+                    android:textSize="18sp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/color_e4"
+                    android:layout_marginVertical="18dp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hãy chia sẻ nhận xét cho sản phẩm này bạn nhé!"
+                    android:background="@color/color_f5"
+                    android:textSize="18sp"
+                    android:inputType="textMultiLine"
+                    android:scrollbars="vertical"
+                    android:lines="8"
+                    android:gravity="top|start"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginHorizontal="12dp">
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hiển thị tên đăng nhập cho đánh giá này"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên tài khoản của bạn sẽ hiển thị như abc"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:track="@drawable/custom_bg_track_switch"
+                    android:thumbTint="@color/custom_thumb_switch"
+                    android:thumb="@drawable/baseline_circle_24"
+                    android:id="@+id/swShowAndHideUsername"
+                    android:layout_marginHorizontal="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

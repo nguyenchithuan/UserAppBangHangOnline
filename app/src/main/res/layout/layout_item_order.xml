@@ -121,17 +121,18 @@
         android:id="@+id/layoutRatingAndReOrder">
 
         <TextView
+            android:id="@+id/tvShowRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="Không nhận được đánh giá"/>
 
         <TextView
-            android:id="@+id/tvReOrder"
+            android:id="@+id/tvReOrderOrRating"
             android:layout_weight="0.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mua lại"
+            android:text="Đánh giá"
             android:background="@drawable/custom_btn_yes"
             android:padding="8dp"
             android:textColor="@color/white"

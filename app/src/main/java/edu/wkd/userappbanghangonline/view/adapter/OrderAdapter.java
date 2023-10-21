@@ -22,6 +22,7 @@ import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.ultil.UpdateStatusOrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.DetailsOrderActivity;
+import edu.wkd.userappbanghangonline.view.activity.ProductReviewsActivity;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
@@ -78,6 +79,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
             holder.binding.tvCancelOrderOrReOrder.setVisibility(View.VISIBLE);
             holder.binding.tvCancelOrderOrReOrder.setText("Hủy đơn hàng");
+            //Sự kiện hủy đơn hàng khi người dùng click
             holder.binding.tvCancelOrderOrReOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -94,6 +96,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             holder.binding.tvStateDelivey.setText("Giao hàng thành công");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.VISIBLE);
             holder.binding.tvCancelOrderOrReOrder.setVisibility(View.GONE);
+            //Chuyển sang màn hình đánh giá sản phẩm
+            holder.binding.tvReOrderOrRating.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ProductReviewsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
         }else{
             holder.binding.tvStateDelivey.setText("Đơn hàng đã bị hủy");
             holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
