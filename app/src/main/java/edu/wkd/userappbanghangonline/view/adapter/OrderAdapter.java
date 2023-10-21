@@ -1,4 +1,5 @@
 package edu.wkd.userappbanghangonline.view.adapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import edu.wkd.userappbanghangonline.view.activity.DetailsOrderActivity;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
+    private Context context;
     private ArrayList<Order> list;
     private ArrayList<Product> listProduct;
     private ProductInOrderAdapter productAdapter;
@@ -34,8 +36,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         this.updateStatusOrderInterface = updateStatusOrderInterface;
     }
 
-    public OrderAdapter(ArrayList<Order> list) {
+    public OrderAdapter(Context context) {
+        this.context = context;
+    }
+
+    public void setData(ArrayList<Order> list){
         this.list = list;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -62,7 +69,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         holder.binding.tvAllProductInOrder.setText(totalProduct+" sản phẩm");
         holder.binding.tvAllPriceOrder.setText(decimalFormat.format(order.getTotalPrice())+"đ");
         productAdapter = new ProductInOrderAdapter(listProduct);
-        LinearLayoutManager manager = new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         holder.binding.rvOrder.setLayoutManager(manager);
         holder.binding.rvOrder.setAdapter(productAdapter);
         //Set layout phù hợp với từng trạng thái
@@ -95,7 +102,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             holder.binding.tvCancelOrderOrReOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(holder.itemView.getContext(), "Mua lại đơn đã hủy", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Mua lại đơn đã hủy", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -104,13 +111,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(holder.itemView.getContext(), DetailsOrderActivity.class);
+                Intent intent = new Intent(context, DetailsOrderActivity.class);
                 Bundle bundle = new Bundle();
                 intent.putExtra("position", holder.getAdapterPosition());
                 bundle.putSerializable("listProduct", getListProduct(holder.getAdapterPosition()));
                 bundle.putSerializable("infoOrder", order);
                 intent.putExtras(bundle);
-                holder.itemView.getContext().startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
     }
