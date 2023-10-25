@@ -25,6 +25,21 @@ public class User  {
         this.birthday = birthday;
         this.message_token = message_token;
     }
+    public User(int gender, int role, String email,
+                String password, String username, String avatar,
+                String phone, String birthday, String message_token) {
+        this.id = id;
+        this.gender = gender;
+        this.role = role;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.avatar = avatar;
+        this.phone = phone;
+
+        this.birthday = birthday;
+        this.message_token = message_token;
+    }
 
     @Override
     public String toString() {

@@ -5,26 +5,41 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import edu.wkd.userappbanghangonline.R;
+import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityDetailsProductActivityBinding;
 import edu.wkd.userappbanghangonline.model.obj.Cart;
+import edu.wkd.userappbanghangonline.model.obj.Comment;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.response.CommentResponse;
 import edu.wkd.userappbanghangonline.ultil.CartUltil;
+import edu.wkd.userappbanghangonline.view.adapter.CommentAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class DetailsProductActivity extends AppCompatActivity {
+    private static final String TAG = DetailsProductActivity.class.toString();
     private ActivityDetailsProductActivityBinding binding;
     private Product product;
     private int productQuantity = 1; // so luong san pham
+    private int idProduct = 0;
+    private ArrayList<Comment> listComment;
+    private CommentAdapter commentAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +51,35 @@ public class DetailsProductActivity extends AppCompatActivity {
         onclickBtnProductQuantity();
         onclickBtnCart();
         eventBtnCart();
+        showComments();
+    }
+
+    private void showComments() {
+        ApiService.apiService.getComment(idProduct).enqueue(new Callback<CommentResponse>() {
+            @Override
+            public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {
+                if (response.isSuccessful()){
+                    listComment = response.body().getListComment();
+                    commentAdapter = new CommentAdapter(listComment);
+                    LinearLayoutManager manager = new LinearLayoutManager(DetailsProductActivity.this,LinearLayoutManager.VERTICAL,false);
+                    binding.rvCommentInDetailsProduct.setLayoutManager(manager);
+                    binding.rvCommentInDetailsProduct.setAdapter(commentAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentResponse> call, Throwable t) {
+                Toast.makeText(DetailsProductActivity.this, "Lỗi server (chi tiết trong logcat).", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onResponse: " + t);
+            }
+        });
     }
 
     private void setDataDetailsProduct() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         product = (Product) bundle.get("product");
-
+        idProduct = product.getId();
         if(product.getImage().contains("uploads")) {
             Glide.with(this)
                     .load("https://guyinterns2003.000webhostapp.com/" + product.getImage())

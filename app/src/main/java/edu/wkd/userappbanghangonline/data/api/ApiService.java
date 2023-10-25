@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.response.CommentResponse;
 import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 
@@ -110,4 +111,8 @@ public interface ApiService {
     @POST("get_product_detail.php")
     Call<ProductResponse> getProductByType(@Field("product_type") int product_type,
                                              @Field("page") int page);
+
+    @FormUrlEncoded
+    @POST("get_comments.php")
+    Call<CommentResponse> getComment(@Field("product_id") int productId);
 }

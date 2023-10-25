@@ -1,10 +1,18 @@
 package edu.wkd.userappbanghangonline.view.activity;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivitySignInBinding;
+import edu.wkd.userappbanghangonline.model.obj.User;
 import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import edu.wkd.userappbanghangonline.ultil.UserUltil;
@@ -13,16 +21,79 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+
 
 public class SignInActivity extends AppCompatActivity {
+    private static final String TAG = SignInActivity.class.toString();
     private ActivitySignInBinding binding;
     private ProgressDialogLoading loading;
+    private SignInClient oneTapClient;
+    private BeginSignInRequest signUpRequest;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth auth;
+    private boolean showOneTapUI = true;
+    private boolean isAccountExists = false;
+    private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK){
+                try {
+                    SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(result.getData());
+                    String idToken = credential.getGoogleIdToken();
+                    if (idToken !=  null) {
+                        mDatabase = FirebaseDatabase.getInstance().getReference();
+                        HashMap<String, Object> map = new HashMap<>();
+                        User user = new User(0,0,credential.getId(),credential.getPassword(), credential.getDisplayName(),"","","","");
+                        map.put("user-sign-in", user);
+                        mDatabase.child("user").push().setValue(map);
+                        Log.d(TAG, "Got ID token.");
+                    }
+                } catch (ApiException e) {
+                    switch (e.getStatusCode()) {
+                        case CommonStatusCodes.CANCELED:
+                            Log.d(TAG, "One-tap dialog was closed.");
+                            // Don't re-prompt the user.
+                            showOneTapUI = false;
+                            break;
+                        case CommonStatusCodes.NETWORK_ERROR:
+                            Log.d(TAG, "One-tap encountered a network error.");
+                            // Try again or just ignore.
+                            break;
+                        default:
+                            Log.d(TAG, "Couldn't get credential from result."
+                                    + e.getLocalizedMessage());
+                            break;
+                    }
+                }
+            }
+        }
+    });
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +104,48 @@ public class SignInActivity extends AppCompatActivity {
         onBack();//Quay trở lại sự kiện trước đó
         goToForgotPasswordActivity();//
         goToMainActivity();
+        configureOnTapClient();//Cấu hình đăng nhập google bằng 1 lần chạm
+        onClickLayoutGoogle();//Xử lí sự kiện khi người dùng đăng nhập bằng google
+    }
+
+
+
+    private void onClickLayoutGoogle() {
+        binding.layoutLoginGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                oneTapClient.beginSignIn(signUpRequest)
+                        .addOnSuccessListener(SignInActivity.this, new OnSuccessListener<BeginSignInResult>() {
+                            @Override
+                            public void onSuccess(BeginSignInResult result) {
+                                IntentSenderRequest senderRequest = new IntentSenderRequest.Builder(result.getPendingIntent().getIntentSender()).build();
+                                activityResultLauncher.launch(senderRequest);
+                            }
+                        })
+                        .addOnFailureListener(SignInActivity.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // No Google Accounts found. Just continue presenting the signed-out UI.
+                                Log.d(TAG, e.getLocalizedMessage());
+                            }
+                        });
+            }
+        });
+    }
+
+
+    private void configureOnTapClient() {
+        auth = FirebaseAuth.getInstance();
+        oneTapClient = Identity.getSignInClient(this);
+        signUpRequest = BeginSignInRequest.builder()
+                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        // Your server's client ID, not your Android client ID.
+                        .setServerClientId(getString(R.string.your_web_client_id))
+                        // Show all accounts on the device.
+                        .setFilterByAuthorizedAccounts(false)
+                        .build())
+                .build();
     }
 
     private void goToMainActivity() {
