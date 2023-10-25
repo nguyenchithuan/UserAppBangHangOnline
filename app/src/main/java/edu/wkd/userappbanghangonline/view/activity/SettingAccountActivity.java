@@ -274,7 +274,7 @@ public class SettingAccountActivity extends AppCompatActivity {
         // Parsing any Media type file
         RequestBody requestBody1 = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody1);
-        Call <ServerResponse> call = ApiService.apiService.uploadFile(fileToUpload, user_id); // số 21 là userID ở đây chuyền tạm là 21 sau khi đăng nhập phân quền thì sửa sau
+        Call <ServerResponse> call = ApiService.apiService.updateAvatar(fileToUpload, user_id); // số 21 là userID ở đây chuyền tạm là 21 sau khi đăng nhập phân quền thì sửa sau
         call.enqueue(new Callback < ServerResponse > () {
             @Override
             public void onResponse(Call < ServerResponse > call, Response < ServerResponse > response) {

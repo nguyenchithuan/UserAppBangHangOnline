@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.databinding.ActivityMainBinding;
+import edu.wkd.userappbanghangonline.ultil.Token;
 import edu.wkd.userappbanghangonline.view.fragment.HomeFragment;
 import edu.wkd.userappbanghangonline.view.fragment.NotificationFragment;
 import edu.wkd.userappbanghangonline.view.fragment.ProductFragment;
@@ -26,13 +29,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        getTokenFcm();
         setOnClickIconInBottomNav();//Xử lí sự kiện khi người dùng nhấn vào bottom nav
 
         if (CheckConection.HaveConnection(this)){
             CheckConection.ShowToast(this, "Kết nối thành công!");
         }else
             CheckConection.ShowToast(this,"Kết nối thất bại!");
+    }
+
+    public void getTokenFcm(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()){
+                return;
+            }
+            String token = task.getResult();
+            Token.TOKEN_DEVICE = token;
+            Toast.makeText(this, ""+Token.TOKEN_DEVICE, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void setOnClickIconInBottomNav() {

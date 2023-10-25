@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.response.CommentResponse;
 import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 
@@ -14,6 +15,7 @@ import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 
 import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import edu.wkd.userappbanghangonline.model.response.ProductResponse;
 import retrofit2.Call;
@@ -83,7 +85,7 @@ public interface ApiService {
 
     @Multipart
     @POST("upload_avatar.php") // cập nhật avatar theo id
-    Call<ServerResponse> uploadFile(@Part MultipartBody.Part file, @Part("user_id") int userId);
+    Call<ServerResponse> updateAvatar(@Part MultipartBody.Part file, @Part("user_id") int userId);
 
     @FormUrlEncoded
     @POST("search_product.php")
@@ -93,7 +95,18 @@ public interface ApiService {
     Call <UserResponse> loginUser(@Field("email") String email, @Field("password") String password);
     @FormUrlEncoded
     @POST("logup.php")
-    Call<LogupUserResponse> logUpUser(@Field("email") String email, @Field("password") String password, @Field("username") String username);
+    Call<LogupUserResponse> logUpUser(@Field("email") String email, @Field("password") String password,
+                                      @Field("username") String username);
+    @Multipart
+    @POST("insert_comment.php")
+    Call<ServerResponse> insert_comment(@Part("product_id") RequestBody product_id,
+                                        @Part("user_id") RequestBody user_id,
+                                        @Part("note") RequestBody note,
+                                        @Part MultipartBody.Part file,
+                                        @Part("date_time") RequestBody date_time);
 
+    @FormUrlEncoded
+    @POST("get_comments.php")
+    Call<CommentResponse> get_comments(@Field("product_id") int product_id);
 
 }
