@@ -8,20 +8,31 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 
+import edu.wkd.userappbanghangonline.data.api.ApiService;
+import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.ultil.GetListOrderInterface;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 
 
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveredBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -29,10 +40,12 @@ import edu.wkd.userappbanghangonline.model.obj.Order;
  * Use the {@link DeliveredFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeliveredFragment extends Fragment {
+public class DeliveredFragment extends Fragment implements GetListOrderInterface {
+    private static final String TAG = "Error";
     private FragmentDeliveredBinding binding;
-    public static final String TAG = "error";
     private OrderAdapter orderAdapter;
+    private ArrayList<Order> listOrder;
+
     public DeliveredFragment() {
         // Required empty public constructor
     }
@@ -53,43 +66,59 @@ public class DeliveredFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentDeliveredBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-//        listOrder = new ArrayList<>();
         return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        getListOrder();//Lấy danh sách trên api và hiển thị lên recycleView
-        getData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        },1000);
     }
 
-    private void getData() {
-        if (OrderActivity.listDelivered.isEmpty() || OrderActivity.listDelivered.size() == 0){
+    private void getData(){
+        OrderActivity orderActivity = (OrderActivity) getActivity();
+        if (orderActivity != null){
+            orderActivity.setGetListOrderInterface(this::getListOrder);
+            orderActivity.getListOrderByStatus(2);
+            if (orderAdapter != null && listOrder != null){
+                orderAdapter.setData(listOrder);
+                binding.rvOrderDelivered.setAdapter(orderAdapter);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        },500);
+    }
+
+    @Override
+    public void getListOrder(List<Order> list) {
+        listOrder = (ArrayList<Order>) list;
+        if (listOrder.isEmpty()){
             binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
         }else{
-            orderAdapter = new OrderAdapter(OrderActivity.listDelivered);
+            binding.rvOrderDelivered.setVisibility(View.VISIBLE);
+            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+            orderAdapter = new OrderAdapter(getContext().getApplicationContext());
+            orderAdapter.setData(listOrder);
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.rvOrderDelivered.setLayoutManager(manager);
             binding.rvOrderDelivered.setAdapter(orderAdapter);
-            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
         }
     }
-
-
-    private void showAndHideItem(ArrayList<Order> list) {
-        if (list.size() == 0 || list.isEmpty()){
-            binding.layoutEmptyOrder.setVisibility(View.VISIBLE);
-            binding.rvOrderDelivered.setVisibility(View.INVISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }else{
-            binding.layoutEmptyOrder.setVisibility(View.INVISIBLE);
-            binding.rvOrderDelivered.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }
-    }
-
-
 }

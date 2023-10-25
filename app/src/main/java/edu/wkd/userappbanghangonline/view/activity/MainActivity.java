@@ -32,10 +32,9 @@ public class MainActivity extends AppCompatActivity {
         getTokenFcm();
         setOnClickIconInBottomNav();//Xử lí sự kiện khi người dùng nhấn vào bottom nav
 
-        if (CheckConection.HaveConnection(this)){
-            CheckConection.ShowToast(this, "Kết nối thành công!");
-        }else
+        if (!CheckConection.HaveConnection(this)){
             CheckConection.ShowToast(this,"Kết nối thất bại!");
+        }
     }
 
     public void getTokenFcm(){

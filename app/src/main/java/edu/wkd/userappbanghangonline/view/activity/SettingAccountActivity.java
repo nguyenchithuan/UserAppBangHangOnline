@@ -270,11 +270,15 @@ public class SettingAccountActivity extends AppCompatActivity {
     private void uploadMultipleFiles() {
         progressDialog.show();
         Uri uri = Uri.parse(mediaPath);
+        Log.d("zzzz", "uploadMultipleFiles: " + uri);
         File file = new File(getPath(uri));
+        Log.d("zzzz", "file: " + file);
         // Parsing any Media type file
         RequestBody requestBody1 = RequestBody.create(MediaType.parse("*/*"), file);
+        Log.d("zzzz", "requestBody1: " + requestBody1);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody1);
-        Call <ServerResponse> call = ApiService.apiService.updateAvatar(fileToUpload, user_id); // số 21 là userID ở đây chuyền tạm là 21 sau khi đăng nhập phân quền thì sửa sau
+
+        Call <ServerResponse> call = ApiService.apiService.updateAvatar(fileToUpload, user_id);
         call.enqueue(new Callback < ServerResponse > () {
             @Override
             public void onResponse(Call < ServerResponse > call, Response < ServerResponse > response) {

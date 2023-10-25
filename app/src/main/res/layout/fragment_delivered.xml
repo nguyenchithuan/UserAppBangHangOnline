@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/layoutEmptyOrder">
+        android:id="@+id/layoutEmptyOrder"
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/imageView17"
@@ -37,11 +38,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rvOrderDelivered"/>
+        android:id="@+id/rvOrderDelivered"
+        android:visibility="invisible"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/progressBar"/>
+        android:id="@+id/progressBar" />
 </FrameLayout>

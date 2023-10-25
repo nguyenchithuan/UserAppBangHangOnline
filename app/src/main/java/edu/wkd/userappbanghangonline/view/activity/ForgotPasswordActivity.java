@@ -1,11 +1,12 @@
 package edu.wkd.userappbanghangonline.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import edu.wkd.userappbanghangonline.databinding.ActivityForgotPasswordBinding;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import edu.wkd.userappbanghangonline.databinding.ActivityForgotPasswordBinding;
 
 
 public class ForgotPasswordActivity extends AppCompatActivity {

@@ -52,10 +52,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         if(product == null){
             return;
         }
-        Glide.with(context)
-                .load(product.getImage())
-                .error(R.mipmap.ic_launcher)
-                .into(holder.imgProduct);
+        if(product.getImage().contains("uploads")) {
+            Glide.with(context)
+                    .load("https://guyinterns2003.000webhostapp.com/" + product.getImage())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(holder.imgProduct);
+        } else {
+            Glide.with(context)
+                    .load(product.getImage())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(holder.imgProduct);
+        }
         holder.tvName.setText(product.getName());
         holder.tvPrice.setText(decimalFormat.format(product.getPrice()));
 

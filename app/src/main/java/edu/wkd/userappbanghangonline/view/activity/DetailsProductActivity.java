@@ -319,10 +319,19 @@ public class DetailsProductActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         product = (Product) bundle.get("product");
 
-        Glide.with(this)
-                .load(product.getImage())
-                .error(R.mipmap.ic_launcher)
-                .into(binding.imgProduct);
+        if(product.getImage().contains("uploads")) {
+            Glide.with(this)
+                    .load("https://guyinterns2003.000webhostapp.com/" + product.getImage())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(binding.imgProduct);
+        } else {
+            Glide.with(this)
+                    .load(product.getImage())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(binding.imgProduct);
+        }
         binding.tvNameProduct.setText(product.getName());
         binding.ratingBar.setRating(product.getRating());
         binding.tvQuantityRating.setText("(" + product.getQuantityRating() +  ")");

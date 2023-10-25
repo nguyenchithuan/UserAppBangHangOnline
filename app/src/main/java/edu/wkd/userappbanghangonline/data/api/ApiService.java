@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.response.CommentResponse;
 import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import edu.wkd.userappbanghangonline.model.response.OrderResponse;
 
+import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 
 
@@ -40,7 +42,8 @@ public interface ApiService {
 
     @GET("get_product.php")
     Call<ProductResponse> getListProduct();
-
+    @GET("get_product_type.php")
+    Call<ProductTypeResponse> getListTypeProduct();
     @FormUrlEncoded
     @POST("get_user.php")
     Call<UserResponse> getUser(@Field("user_id") int userId);
@@ -48,6 +51,14 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("get_user_orders.php")
     Call<OrderResponse> getOrderByIdUser(@Field("user_id") int userId);
+
+    @FormUrlEncoded
+    @POST("get_user_orders_status.php")
+    Call<OrderResponse> getOrderByIdUserAndStatus(@Field("user_id") int userId, @Field("status") int status);
+
+    @FormUrlEncoded
+    @POST("update_order_status.php")
+    Call<Order> updateStatusOrder(@Field("id_order") int idOrder, @Field("status") int status);
 
     @FormUrlEncoded
     @POST("post_order.php")
@@ -109,4 +120,7 @@ public interface ApiService {
     @POST("get_comments.php")
     Call<CommentResponse> get_comments(@Field("product_id") int product_id);
 
+    @POST("get_product_detail.php")
+    Call<ProductResponse> getProductByType(@Field("product_type") int product_type,
+                                             @Field("page") int page);
 }

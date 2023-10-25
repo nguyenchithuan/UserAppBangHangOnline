@@ -6,18 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
-import edu.wkd.userappbanghangonline.databinding.ActivityCartBinding;
 import edu.wkd.userappbanghangonline.databinding.ActivityChangePasswordBinding;
 import edu.wkd.userappbanghangonline.model.obj.User;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
 import edu.wkd.userappbanghangonline.ultil.UserUltil;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
