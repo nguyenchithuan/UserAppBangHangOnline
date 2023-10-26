@@ -1,32 +1,45 @@
 package edu.wkd.userappbanghangonline.model.response;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.wkd.userappbanghangonline.model.obj.Comment;
-
+import edu.wkd.userappbanghangonline.model.obj.Product;
 
 public class CommentResponse {
     private boolean success;
     private String message;
-    @SerializedName("result")
-    private ArrayList<Comment> listComment;
+    private List<Comment> result;
 
-    @Override
-    public String toString() {
-        return "OrderResponse{" +
-                "success=" + success +
-                ", message='" + message + '\'' +
-                ", listOrder=" + listComment +
-                '}';
+    public CommentResponse(boolean success, String message, List<Comment> result) {
+        this.success = success;
+        this.message = message;
+        this.result = result;
     }
 
-    public ArrayList<Comment> getListComment() {
-        return listComment;
+    public CommentResponse() {
     }
 
-    public void setListComment(ArrayList<Comment> listComment) {
-        this.listComment = listComment;
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<Comment> getResult() {
+        return result;
+    }
+
+    public void setResult(List<Comment> result) {
+        this.result = result;
     }
 }

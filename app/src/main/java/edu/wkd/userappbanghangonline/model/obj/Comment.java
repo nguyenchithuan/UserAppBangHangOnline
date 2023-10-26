@@ -1,27 +1,11 @@
 package edu.wkd.userappbanghangonline.model.obj;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Comment {
-    private int id;
-    @SerializedName("product_id")
-    private int productId;
-    @SerializedName("user_id")
-    private int userId;
-    private String note;
-    private String image;
-    @SerializedName("datetime")
-    private String dateTime;
+    private int id, product_id, user_id;
+    private String note, image, datetime;
 
-    private String username;
-    private String avatar;
 
-    public Comment(int productId, int userId, String note, String image, String dateTime) {
-        this.productId = productId;
-        this.userId = userId;
-        this.note = note;
-        this.image = image;
-        this.dateTime = dateTime;
+    public Comment() {
     }
 
     public int getId() {
@@ -32,20 +16,20 @@ public class Comment {
         this.id = id;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getProduct_id() {
+        return product_id;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProduct_id(int product_id) {
+        this.product_id = product_id;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public String getNote() {
@@ -64,27 +48,11 @@ public class Comment {
         this.image = image;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getDatetime() {
+        return datetime;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
 }

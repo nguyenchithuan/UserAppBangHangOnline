@@ -15,15 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-
-import edu.wkd.userappbanghangonline.model.obj.adapter.ProductInOrderAdapter;
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.ultil.ChooseProductToCommentInterface;
 import edu.wkd.userappbanghangonline.ultil.UpdateStatusOrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.DetailsOrderActivity;
-import edu.wkd.userappbanghangonline.view.activity.ProductReviewsActivity;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
