@@ -42,9 +42,11 @@ import edu.wkd.userappbanghangonline.databinding.ActivityDetailsProductActivityB
 import edu.wkd.userappbanghangonline.model.obj.Cart;
 import edu.wkd.userappbanghangonline.model.obj.Comment;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.obj.User;
 import edu.wkd.userappbanghangonline.model.request.FCMRequest;
 import edu.wkd.userappbanghangonline.model.response.CommentResponse;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
+import edu.wkd.userappbanghangonline.model.response.UserResponse;
 import edu.wkd.userappbanghangonline.ultil.CartUltil;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
 import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
@@ -96,8 +98,6 @@ public class DetailsProductActivity extends AppCompatActivity {
             ImageButton btn_send_comment = commentDialog.findViewById(R.id.btn_send_cmt);
             RecyclerView rcv_comments = commentDialog.findViewById(R.id.rcv_comments);
             ImageButton btn_camera_cmt = commentDialog.findViewById(R.id.btn_camera_cmt);
-            ImageButton btn_close_image = commentDialog.findViewById(R.id.btn_close_image);
-            TextView tv_uri_image = commentDialog.findViewById(R.id.tv_uri_image);
 
             LinearLayoutManager linearLayoutManager =
                     new LinearLayoutManager(DetailsProductActivity.this,
@@ -107,23 +107,8 @@ public class DetailsProductActivity extends AppCompatActivity {
             getCommentData();
             setCommentInRecycleView(rcv_comments);
             //on start
-            tv_uri_image.setVisibility(View.INVISIBLE);
-
             btn_camera_cmt.setOnClickListener(v1 -> {
                 showImagePicker();
-                if (mediaPath != null){
-                    tv_uri_image.setText(mediaPath);
-                    tv_uri_image.setVisibility(View.VISIBLE);
-                }else {
-                    tv_uri_image.setText("");
-                    tv_uri_image.setVisibility(View.INVISIBLE);
-                }
-            });
-
-            btn_close_image.setOnClickListener(v1 -> {
-                mediaPath = null;
-                tv_uri_image.setText("");
-                tv_uri_image.setVisibility(View.INVISIBLE);
             });
 
             btn_send_comment.setOnClickListener(v1 -> {
@@ -193,19 +178,39 @@ public class DetailsProductActivity extends AppCompatActivity {
     }
 
     private void pushNotification(String strNote) {
-        Map<String,String> dataMessage = new HashMap<>();
-        dataMessage.put("title", "Thong bao");
-        dataMessage.put("body", strNote);
-        FCMRequest fcmRequest = new FCMRequest(Token.TOKEN_DEVICE,dataMessage);
-        ApiServiceSendMessage.apiServiceSenMessage.sendNotification(fcmRequest)
-                .enqueue(new Callback<ResponseBody>() {
+        ApiService.apiService.getUser(1)
+                .enqueue(new Callback<UserResponse>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                        if (response.isSuccessful()){
+                            UserResponse userResponse = response.body();
+                            if (userResponse.isSuccess()){
+                                List<User> users = userResponse.getResult();
+                                Token.TOKEN_DEVICE = users.get(0).getMessage_token();
+                                Toast.makeText(DetailsProductActivity.this,
+                                        ""+Token.TOKEN_DEVICE, Toast.LENGTH_SHORT).show();
+                                Map<String,String> dataMessage = new HashMap<>();
+                                dataMessage.put("title", "Bình luận mới");
+                                dataMessage.put("body", product.getName() +"-"+UserUltil.user.getUsername() + ": " +strNote);
+                                FCMRequest fcmRequest = new FCMRequest(Token.TOKEN_DEVICE,dataMessage);
+                                ApiServiceSendMessage.apiServiceSenMessage.sendNotification(fcmRequest)
+                                        .enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                            }
+                                        });
+                            }
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<UserResponse> call, Throwable t) {
 
                     }
                 });

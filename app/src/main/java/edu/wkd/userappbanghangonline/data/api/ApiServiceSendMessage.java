@@ -14,7 +14,8 @@ import retrofit2.http.POST;
 
 public interface ApiServiceSendMessage {
     public static final String URL_MAIN_SEND_MESSAGE = "https://fcm.googleapis.com/fcm/";
-    public static final String SERVER_KEY_FCM = "AAAA43nP7HE:APA91bEXkqdVEyYtrE1MVfmgCvvP5_EuqJGtz1La3K6C1-j-4btrAwkeaVpJol_u5YsvOXM8sZSXqq6r_xzaC7lORrJOAYSvoxU6OSJlSSm2DjDnFVpQPHutLXnOqFzefS8lq96lVKk6";
+    public static final String SERVER_KEY_FCM
+            = "AAAA43nP7HE:APA91bEXkqdVEyYtrE1MVfmgCvvP5_EuqJGtz1La3K6C1-j-4btrAwkeaVpJol_u5YsvOXM8sZSXqq6r_xzaC7lORrJOAYSvoxU6OSJlSSm2DjDnFVpQPHutLXnOqFzefS8lq96lVKk6";
 
     Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
     ApiServiceSendMessage apiServiceSenMessage = new Retrofit.Builder()

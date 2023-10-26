@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getTokenFcm();
         setOnClickIconInBottomNav();//Xử lí sự kiện khi người dùng nhấn vào bottom nav
 
         if (!CheckConection.HaveConnection(this)){
@@ -37,16 +36,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getTokenFcm(){
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()){
-                return;
-            }
-            String token = task.getResult();
-            Token.TOKEN_DEVICE = token;
-            Toast.makeText(this, ""+Token.TOKEN_DEVICE, Toast.LENGTH_SHORT).show();
-        });
-    }
 
     private void setOnClickIconInBottomNav() {
         //Đặt trang home là trang mặc định
