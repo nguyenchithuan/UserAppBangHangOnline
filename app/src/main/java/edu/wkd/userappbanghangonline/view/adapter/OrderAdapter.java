@@ -20,6 +20,7 @@ import edu.wkd.userappbanghangonline.model.obj.adapter.ProductInOrderAdapter;
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.ultil.ChooseProductToCommentInterface;
 import edu.wkd.userappbanghangonline.ultil.UpdateStatusOrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.DetailsOrderActivity;
 import edu.wkd.userappbanghangonline.view.activity.ProductReviewsActivity;
@@ -35,6 +36,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     private UpdateStatusOrderInterface updateStatusOrderInterface;
     public void setUpdateStatusOrderInterface(UpdateStatusOrderInterface updateStatusOrderInterface){
         this.updateStatusOrderInterface = updateStatusOrderInterface;
+    }
+
+    //Interface chọn sản phẩm để đánh giá
+    private ChooseProductToCommentInterface chooseProductToCommentInterface;
+    public void setChooseProductToCommentInterface(ChooseProductToCommentInterface chooseProductToCommentInterface){
+        this.chooseProductToCommentInterface = chooseProductToCommentInterface;
     }
 
     public OrderAdapter(Context context) {
@@ -100,9 +107,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             holder.binding.tvReOrderOrRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ProductReviewsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                    if (chooseProductToCommentInterface != null){
+                        chooseProductToCommentInterface.getListProductToComment(listProduct);
+                    }
                 }
             });
         }else{

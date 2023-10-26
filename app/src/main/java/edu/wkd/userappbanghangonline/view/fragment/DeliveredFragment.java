@@ -1,5 +1,6 @@
 package edu.wkd.userappbanghangonline.view.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,30 +10,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.view.Window;
+import android.view.WindowManager;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-import edu.wkd.userappbanghangonline.data.api.ApiService;
-import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.databinding.LayoutChooseProductToCommentBinding;
+import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.ultil.ChooseProductToCommentInterface;
 import edu.wkd.userappbanghangonline.ultil.GetListOrderInterface;
-import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
 import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 
 
 import edu.wkd.userappbanghangonline.databinding.FragmentDeliveredBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import edu.wkd.userappbanghangonline.view.adapter.ProductInCommentAdapter;
 
 
 /**
@@ -80,7 +79,6 @@ public class DeliveredFragment extends Fragment implements GetListOrderInterface
             }
         },1000);
     }
-
     private void getData(){
         OrderActivity orderActivity = (OrderActivity) getActivity();
         if (orderActivity != null){
@@ -119,6 +117,31 @@ public class DeliveredFragment extends Fragment implements GetListOrderInterface
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.rvOrderDelivered.setLayoutManager(manager);
             binding.rvOrderDelivered.setAdapter(orderAdapter);
+            showChooseProductToComment(orderAdapter);
         }
+    }
+    private void showChooseProductToComment(OrderAdapter orderAdapter) {
+        orderAdapter.setChooseProductToCommentInterface(new ChooseProductToCommentInterface() {
+            @Override
+            public void getListProductToComment(List<Product> list) {
+                LayoutChooseProductToCommentBinding bindingProduct = LayoutChooseProductToCommentBinding.inflate(getLayoutInflater());
+                Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_Light);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(bindingProduct.getRoot());
+                Window window = dialog.getWindow();
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
+                ProductInCommentAdapter productAdapter = new ProductInCommentAdapter((ArrayList<Product>) list);
+                LinearLayoutManager manager = new LinearLayoutManager(getContext().getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+                bindingProduct.rvProductToComment.setLayoutManager(manager);
+                bindingProduct.rvProductToComment.setAdapter(productAdapter);
+                bindingProduct.arrowBackChooseProductToComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 }
