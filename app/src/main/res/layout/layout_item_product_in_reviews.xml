@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_gravity="top">
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal">
+       <ImageView
+           android:id="@+id/imgProductReviews"
+           android:layout_width="50dp"
+           android:layout_height="50dp"
+           android:scaleType="fitXY"
+           android:src="@drawable/img_banner_home" />
+
+       <TextView
+           android:id="@+id/tvNameProduct"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Samsung galaxy note 15 aaaa"
+           android:layout_marginLeft="18dp"
+           android:textSize="18sp"
+           android:textColor="@color/black"/>
+   </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/btn_edit_text"
+        android:layout_marginVertical="8dp"/>
+
+</LinearLayout>

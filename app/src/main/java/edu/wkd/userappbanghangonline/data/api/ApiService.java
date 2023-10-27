@@ -125,7 +125,4 @@ public interface ApiService {
     Call<ProductResponse> getProductByType(@Field("product_type") int product_type,
                                              @Field("page") int page);
 
-    @FormUrlEncoded
-    @POST("get_comments.php")
-    Call<CommentResponse> getComment(@Field("product_id") int productId);
 }
