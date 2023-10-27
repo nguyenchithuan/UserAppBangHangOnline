@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.HomeFragment"
     android:background="@color/btn_yellow"
     android:orientation="vertical"
-    android:paddingHorizontal="8dp">
+    android:paddingHorizontal="8dp"
+    tools:context=".view.fragment.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -104,6 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,43 +113,43 @@
             <ImageView
                 android:layout_width="390dp"
                 android:layout_height="272dp"
-                android:src="@drawable/img_banner_home"/>
+                android:src="@drawable/img_banner_home" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="18dp">
+                android:layout_marginVertical="18dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_weight="0.33"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:gravity="center"
                     android:text="Bán chạy"
-                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="18dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:layout_weight="0.33"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:gravity="center"
                     android:text="Đang giảm giá"
-                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="18dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:layout_weight="0.33"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nổi bật"
+                    android:layout_weight="0.33"
                     android:gravity="center"
+                    android:text="Nổi bật"
                     android:textColor="@color/white"
                     android:textSize="18dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <com.denzcoskun.imageslider.ImageSlider
@@ -156,27 +157,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
                 app:iss_auto_cycle="true"
-                app:iss_period="3000"
+                app:iss_corner_radius="@integer/material_motion_duration_short_1"
                 app:iss_delay="3000"
-                app:iss_text_align="CENTER"
-                app:iss_corner_radius="@integer/material_motion_duration_short_1"/>
+                app:iss_period="3000"
+                app:iss_text_align="CENTER" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Danh mục sản phẩm"
                 android:layout_marginVertical="18dp"
-                android:padding="8dp"
                 android:background="@drawable/custom_bg_white_shadow"
-                android:textSize="18dp"
+                android:padding="8dp"
+                android:text="Danh mục sản phẩm"
                 android:textColor="@color/btn_yellow"
+                android:textSize="18dp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTypeProductHome"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/rvTypeProductHome"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

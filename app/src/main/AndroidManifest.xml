@@ -28,14 +28,16 @@
         </service>
 
         <activity
+            android:name=".view.activity.ChatActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".view.activity.DetailsOrderActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.ProductByTypeActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.Yellow"
-            />
-
+            android:theme="@style/Base.Theme.Yellow" />
         <activity
             android:name=".view.activity.ChangePasswordActivity"
             android:exported="false" />
@@ -88,9 +90,7 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true"
-            android:theme="@style/Base.Theme.Yellow">
-
-        </activity>
+            android:theme="@style/Base.Theme.Yellow"></activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

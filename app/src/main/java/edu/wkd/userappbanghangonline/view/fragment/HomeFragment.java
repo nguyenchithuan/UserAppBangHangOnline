@@ -41,6 +41,7 @@ import edu.wkd.userappbanghangonline.ultil.CheckConection;
 import edu.wkd.userappbanghangonline.ultil.ItemProductTypeInterface;
 import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import edu.wkd.userappbanghangonline.view.activity.CartActivity;
+import edu.wkd.userappbanghangonline.view.activity.ChatActivity;
 import edu.wkd.userappbanghangonline.view.activity.MainActivity;
 import edu.wkd.userappbanghangonline.view.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.view.adapter.RecentSearchAdapter;
@@ -94,7 +95,11 @@ public class HomeFragment extends Fragment implements ItemProductTypeInterface {
         callApiGetTypeProduct();
         openSearchDialog();//Mở dialog tìm kiếm
         eventBtnCart();
+        initOnclick();
+
     }
+
+
 
 
     private void openSearchDialog() {
@@ -236,6 +241,13 @@ public class HomeFragment extends Fragment implements ItemProductTypeInterface {
         binding.imgCart.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), CartActivity.class);
             mActivityResultLauncher.launch(intent);
+        });
+    }
+
+    private void initOnclick() {
+        binding.imgChat.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
+            startActivity(intent);
         });
     }
 
