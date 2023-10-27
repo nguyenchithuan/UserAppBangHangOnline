@@ -145,9 +145,6 @@
 
                     </LinearLayout>
                 </LinearLayout>
-
-
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="4dp"
@@ -338,6 +335,16 @@
                     android:paddingHorizontal="16dp"
                     android:textColor="@color/black"
                     />
+                <Button
+                    android:id="@+id/btnComment"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Xem bình luận"
+                    android:background="@drawable/custom_btn_yes"
+                    app:backgroundTint="@null"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="10dp"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

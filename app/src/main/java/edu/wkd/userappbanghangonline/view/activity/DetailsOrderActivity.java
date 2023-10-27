@@ -19,7 +19,10 @@ import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityDetailsOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.model.response.OrderResponse;
+import edu.wkd.userappbanghangonline.ultil.UpdateStatusOrderInterface;
 import edu.wkd.userappbanghangonline.ultil.UserUltil;
+import edu.wkd.userappbanghangonline.view.adapter.OrderAdapter;
 import edu.wkd.userappbanghangonline.view.adapter.ProductInOrderAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +33,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
     private ActivityDetailsOrderBinding binding;
     private ArrayList<Product> listProduct;
     private ProductInOrderAdapter productOrderAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
             binding.btnDetailsOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    updateFromApi(order.getId());
+                    updateFromApi(order.getId(), position);
                 }
             });
         }else if(order.getStatus() == 1){
@@ -64,7 +68,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
             binding.btnDetailsOrder.setText("Mua lại");
         }else{
             binding.layoutExpectedDelivery.setVisibility(View.GONE);
-            binding.btnDetailsOrder.setText("Tiếp tục mua hàng");
+            binding.btnDetailsOrder.setText("Mua lại");
         }
         //Hiển thị dữ liệu lên recycleView
         setLayoutInRecycleView(listProduct);
@@ -87,7 +91,9 @@ public class DetailsOrderActivity extends AppCompatActivity {
 
     }
 
-    private void updateFromApi(int id) {
+    //Lấy danh sách đơn hàng đang chờ xác nhận
+
+    private void updateFromApi(int id, int position) {
         new AlertDialog.Builder(DetailsOrderActivity.this)
                 .setTitle("Hủy đơn hàng")
                 .setIcon(android.R.drawable.ic_delete)
@@ -101,14 +107,14 @@ public class DetailsOrderActivity extends AppCompatActivity {
                                 if (response.isSuccessful()){
                                     Toast.makeText(DetailsOrderActivity.this, "Hủy đơn hàng thành công.", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
-                                    startActivity(new Intent(DetailsOrderActivity.this, OrderActivity.class));
+//                                    startActivity(new Intent(DetailsOrderActivity.this, OrderActivity.class));
                                     finish();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<Order> call, Throwable t) {
-                                Toast.makeText(DetailsOrderActivity.this, "Hủy đơn hàng thất bại.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DetailsOrderActivity.this, "Lỗi server (chi tiết trong logcat).", Toast.LENGTH_SHORT).show();
                                 Log.e(TAG, "onResponse: " + t);
                             }
                         });
@@ -123,6 +129,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
                 .show();
     }
 
+    //Hiển thị dnah sách lên recycleView
     private void setLayoutInRecycleView(ArrayList<Product> listProduct) {
         productOrderAdapter = new ProductInOrderAdapter(listProduct);
         LinearLayoutManager manager = new LinearLayoutManager(DetailsOrderActivity.this, LinearLayoutManager.VERTICAL, false);
