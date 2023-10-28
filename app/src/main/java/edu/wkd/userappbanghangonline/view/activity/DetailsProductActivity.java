@@ -396,15 +396,15 @@ public class DetailsProductActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if(result.getResultCode() == RESULT_OK) {
-                Intent intent = result.getData();
-                int cartSize = intent.getIntExtra("data_cart_size", 0);
-                binding.tvQuantityCart.setText(cartSize + "");
-            }
-        }
-    });
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == RESULT_OK) {
+                        Intent intent = result.getData();
+                        int cartSize = intent.getIntExtra("data_cart_size", 0);
+                        binding.tvQuantityCart.setText(cartSize + "");
+                    }
+                }
+            });
     private void eventBtnCart() {
         binding.tvQuantityCart.setText(CartUltil.listCart.size() + "");
         binding.imgCart.setOnClickListener(view -> {

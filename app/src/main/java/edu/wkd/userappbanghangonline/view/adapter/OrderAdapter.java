@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import edu.wkd.userappbanghangonline.model.obj.adapter.ProductInOrderAdapter;
 import edu.wkd.userappbanghangonline.databinding.LayoutItemOrderBinding;
 import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
+import edu.wkd.userappbanghangonline.ultil.ChooseProductToCommentInterface;
 import edu.wkd.userappbanghangonline.ultil.UpdateStatusOrderInterface;
 import edu.wkd.userappbanghangonline.view.activity.DetailsOrderActivity;
+import edu.wkd.userappbanghangonline.view.activity.ProductReviewsActivity;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
@@ -33,6 +34,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     private UpdateStatusOrderInterface updateStatusOrderInterface;
     public void setUpdateStatusOrderInterface(UpdateStatusOrderInterface updateStatusOrderInterface){
         this.updateStatusOrderInterface = updateStatusOrderInterface;
+    }
+
+    //Interface chọn sản phẩm để đánh giá
+    private ChooseProductToCommentInterface chooseProductToCommentInterface;
+    public void setChooseProductToCommentInterface(ChooseProductToCommentInterface chooseProductToCommentInterface){
+        this.chooseProductToCommentInterface = chooseProductToCommentInterface;
     }
 
     public OrderAdapter(Context context) {
@@ -74,10 +81,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         //Set layout phù hợp với từng trạng thái
         if (order.getStatus() == 0){
             holder.binding.tvStateDelivey.setText("Chờ xác nhận");
-            holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
-            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.VISIBLE);
-            holder.binding.tvCancelOrderOrReOrder.setText("Hủy đơn hàng");
-            holder.binding.tvCancelOrderOrReOrder.setOnClickListener(new View.OnClickListener() {
+            holder.binding.layoutRating.setVisibility(View.GONE);
+            holder.binding.tvCancelledOrder.setVisibility(View.VISIBLE);
+            holder.binding.tvReOrder.setVisibility(View.INVISIBLE);
+            //Sự kiện hủy đơn hàng khi người dùng click
+            holder.binding.tvCancelledOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (updateStatusOrderInterface != null){
@@ -87,18 +95,38 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
             });
         }else if (order.getStatus() == 1){
             holder.binding.tvStateDelivey.setText("Đang giao hàng");
-            holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
-            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.GONE);
+            holder.binding.layoutRating.setVisibility(View.GONE);
+            holder.binding.tvReOrder.setVisibility(View.GONE);
+            holder.binding.tvCancelledOrder.setVisibility(View.GONE);
         }else if (order.getStatus() == 2){
             holder.binding.tvStateDelivey.setText("Giao hàng thành công");
-            holder.binding.layoutRatingAndReOrder.setVisibility(View.VISIBLE);
-            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.GONE);
+            if (order.getIsRating() == 0){
+                holder.binding.tvRating.setVisibility(View.VISIBLE);
+                holder.binding.tvCancelledOrder.setVisibility(View.GONE);
+                holder.binding.tvReOrder.setVisibility(View.GONE);
+                holder.binding.tvShowRating.setText("Không nhận được đánh giá");
+            }else{
+                holder.binding.tvRating.setVisibility(View.GONE);
+                holder.binding.tvCancelledOrder.setVisibility(View.VISIBLE);
+                holder.binding.tvReOrder.setVisibility(View.VISIBLE);
+                holder.binding.tvShowRating.setText("Đã đánh giá");
+            }
+            //Chuyển sang màn hình đánh giá sản phẩm
+            holder.binding.tvRating.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (chooseProductToCommentInterface != null){
+                        chooseProductToCommentInterface.getListProductToComment(getListProduct(holder.getAdapterPosition()), order.getId());
+                    }
+                }
+            });
         }else{
             holder.binding.tvStateDelivey.setText("Đơn hàng đã bị hủy");
-            holder.binding.layoutRatingAndReOrder.setVisibility(View.GONE);
-            holder.binding.tvCancelOrderOrReOrder.setVisibility(View.VISIBLE);
-            holder.binding.tvCancelOrderOrReOrder.setText("Mua lại");
-            holder.binding.tvCancelOrderOrReOrder.setOnClickListener(new View.OnClickListener() {
+            holder.binding.tvReOrder.setVisibility(View.VISIBLE);
+            holder.binding.layoutRating.setVisibility(View.GONE);
+            holder.binding.tvCancelledOrder.setVisibility(View.GONE);
+
+            holder.binding.tvReOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "Mua lại đơn đã hủy", Toast.LENGTH_SHORT).show();

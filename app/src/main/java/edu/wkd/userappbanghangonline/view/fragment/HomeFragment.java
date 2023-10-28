@@ -43,6 +43,7 @@ import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
 import edu.wkd.userappbanghangonline.view.activity.CartActivity;
 import edu.wkd.userappbanghangonline.view.activity.ChatActivity;
 import edu.wkd.userappbanghangonline.view.activity.MainActivity;
+import edu.wkd.userappbanghangonline.view.activity.ProductByTypeActivity;
 import edu.wkd.userappbanghangonline.view.adapter.ProductTypeAdapter;
 import edu.wkd.userappbanghangonline.view.adapter.RecentSearchAdapter;
 import edu.wkd.userappbanghangonline.model.obj.ProductType;
@@ -207,7 +208,7 @@ public class HomeFragment extends Fragment implements ItemProductTypeInterface {
                 3, GridLayoutManager.VERTICAL, false);
         binding.rvTypeProductHome.setLayoutManager(gridLayoutManager);
         binding.rvTypeProductHome.setHasFixedSize(true);
-        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, this);
+        productTypeAdapter = new ProductTypeAdapter(getActivity(), listProductType, this::onClickItemProductType);
         binding.rvTypeProductHome.setAdapter(productTypeAdapter);
     }
 
@@ -257,7 +258,10 @@ public class HomeFragment extends Fragment implements ItemProductTypeInterface {
 
     @Override
     public void onClickItemProductType(ProductType producttype) {
-
+        Intent intent = new Intent(getActivity(), ProductByTypeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", producttype.getId());
+        intent.putExtras(bundle);
+        mActivityResultLauncher.launch(intent);
     }
 }
-
