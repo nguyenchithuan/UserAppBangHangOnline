@@ -61,6 +61,10 @@ public interface ApiService {
     Call<Order> updateStatusOrder(@Field("id_order") int idOrder, @Field("status") int status);
 
     @FormUrlEncoded
+    @POST("update_is_rating_order.php")
+    Call<Order> updateStatusRatingOrder(@Field("id_order") int idOrder, @Field("is_rating") int ratingStatus);
+
+    @FormUrlEncoded
     @POST("post_order.php")
     Call<ServerResponse> postOrderUser(@Field("user_id") int user_id,
                                        @Field("address") String address,
@@ -69,7 +73,9 @@ public interface ApiService {
                                        @Field("total_price") int total_price,
                                        @Field("status") int status,
                                        @Field("datetime") String datetime,
-                                       @Field("detail") String detail);
+                                       @Field("detail") String detail,
+                                       @Field("is_rating") int ratingStatus);
+
 
     @GET("get_product.php")
     Call<List<Product>> getListCall(@Query("id") int id);

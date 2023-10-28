@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.protobuf.Api;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import java.util.Date;
 
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivityProductReviewsActivityBinding;
+import edu.wkd.userappbanghangonline.model.obj.Order;
 import edu.wkd.userappbanghangonline.model.obj.Product;
 import edu.wkd.userappbanghangonline.model.response.ServerResponse;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
@@ -43,8 +45,7 @@ public class ProductReviewsActivity extends AppCompatActivity {
     private String mediaPath;
     private MultipartBody.Part fileToUpload;
     private ArrayList<Product> listProduct;
-    public static int idOrder = 0;
-    public static boolean isRating = false;
+    private int idOrder = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,9 +109,9 @@ public class ProductReviewsActivity extends AppCompatActivity {
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 if (response.isSuccessful()){
                     Toast.makeText(ProductReviewsActivity.this, "Đánh giá thành công!", Toast.LENGTH_SHORT).show();
-                    isRating = true;
+                    updateStatusRating();
                     progressDialog.dismiss();
-                    finish();
+
                 }else{
                     Toast.makeText(ProductReviewsActivity.this, "Đánh giá không thành công!", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
@@ -119,6 +120,24 @@ public class ProductReviewsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
+                Toast.makeText(ProductReviewsActivity.this, "Lỗi server(chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onFailure: " + t);
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void updateStatusRating() {
+        ApiService.apiService.updateStatusRatingOrder(idOrder,1).enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if(!response.isSuccessful()){
+                    Toast.makeText(ProductReviewsActivity.this, "Cập nhật trạng thái đánh giá không thành công", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
                 Toast.makeText(ProductReviewsActivity.this, "Lỗi server(chi tiết trong logcat)", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "onFailure: " + t);
                 progressDialog.dismiss();

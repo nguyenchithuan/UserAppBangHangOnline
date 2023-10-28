@@ -30,8 +30,10 @@ public class ProductInReviewsAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private HashMap<Integer, Boolean> checkedMap = new HashMap<>();
+    private boolean isAllChecked  = false;
 
     public void setAllItemsChecked(boolean isChecked) {
+        isAllChecked  = isChecked;
         for (int i = 0; i < list.size(); i++) {
             checkedMap.put(i, isChecked);
         }
@@ -86,6 +88,11 @@ public class ProductInReviewsAdapter extends RecyclerView.Adapter<RecyclerView.V
                 holderChooseProduct.binding.chkPurchase.setChecked(true);
             } else {
                 holderChooseProduct.binding.chkPurchase.setChecked(false);
+            }
+            if (isAllChecked) {
+                holderChooseProduct.binding.chkPurchase.setEnabled(false);
+            } else {
+                holderChooseProduct.binding.chkPurchase.setEnabled(true);
             }
             holderChooseProduct.binding.chkPurchase.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

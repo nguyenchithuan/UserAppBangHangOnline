@@ -31,6 +31,10 @@
             android:name=".view.activity.ProductReviewsActivity"
             android:exported="false" />
         <activity
+            android:name=".view.activity.ChatActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".view.activity.DetailsOrderActivity"
             android:exported="false" />
         <activity

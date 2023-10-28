@@ -183,15 +183,16 @@ public class DeliveredFragment extends Fragment implements GetListOrderInterface
                             productAdapter.setAllItemsChecked(isChecked);
                         }
                     });
+                    
 
                     //Chuyển đến màn hình đánh giá sản phẩm
                     bindingProduct.btnGoToProductReviews.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (list.size() == 0){
+                            if (listSelectedProduct.size() == 0){
                                 Toast.makeText(getContext().getApplicationContext(), "Vui lòng chọn sản phẩm bạn muốn đánh giá!", Toast.LENGTH_SHORT).show();
                             }else{
-                                goToActivityProductReviews((ArrayList<Product>) listSelectedProduct, orderId);
+                                goToActivityProductReviews(listSelectedProduct, orderId);
                                 dialog.dismiss();
                             }
                         }

@@ -72,7 +72,7 @@ public class PayActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String datetime = sdf.format(Calendar.getInstance().getTime());
         String detail = getDataOrderDetail();
-        ApiService.apiService.postOrderUser(userId, address, phoneNumber, quantity, totalPrice, status, datetime, detail).enqueue(new Callback<ServerResponse>() {
+        ApiService.apiService.postOrderUser(userId, address, phoneNumber, quantity, totalPrice, status, datetime, detail,0).enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, retrofit2.Response<ServerResponse> response) {
                 ServerResponse res = response.body();
