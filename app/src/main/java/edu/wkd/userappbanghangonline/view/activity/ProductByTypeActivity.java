@@ -1,11 +1,16 @@
 package edu.wkd.userappbanghangonline.view.activity;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,6 +47,7 @@ public class ProductByTypeActivity extends AppCompatActivity implements ItemProd
         super.onCreate(savedInstanceState);
         binding = ActivityProductByTypeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        onBack();
         getData();
         initUI();
         initController();
@@ -50,6 +56,14 @@ public class ProductByTypeActivity extends AppCompatActivity implements ItemProd
         addScrollViewRcvProductByType();
     }
 
+    private void onBack() {
+        binding.arrowBackDetailProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
 
 
     private void getData() {
@@ -67,7 +81,7 @@ public class ProductByTypeActivity extends AppCompatActivity implements ItemProd
                 2, GridLayoutManager.VERTICAL, false);
         binding.rcvProduct.setLayoutManager(gridLayoutManager);
         binding.rcvProduct.setHasFixedSize(true);
-        productAdapter = new ProductAdapter(this, listProduct, this);
+        productAdapter = new ProductAdapter(this, listProduct, this::onClickItemProduct);
         binding.rcvProduct.setAdapter(productAdapter);
     }
 
@@ -130,9 +144,26 @@ public class ProductByTypeActivity extends AppCompatActivity implements ItemProd
         callApiListProductByType(currentPage);
     }
 
+    private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == RESULT_OK) {
+                        Intent intent = result.getData();
+                        int cartSize = intent.getIntExtra("data_cart_size", 0);
+                        binding.tvQuantityCart.setText(cartSize + "");
+                    }
+                }
+            });
+
     @Override
     public void onClickItemProduct(Product product) {
-
+        Intent intent = new Intent(ProductByTypeActivity.this, DetailsProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", product);
+        intent.putExtras(bundle);
+        mActivityResultLauncher.launch(intent);
+        overridePendingTransition(R.anim.slidle_in_left, R.anim.slidle_out_left);
     }
 
     private void initController() {
