@@ -6,7 +6,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.wkd.userappbanghangonline.R;
@@ -21,7 +20,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -37,8 +35,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,10 +50,25 @@ public class SignInActivity extends AppCompatActivity {
     private ProgressDialogLoading loading;
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
+    private FirebaseDatabase database;
     private DatabaseReference mDatabase;
-    private FirebaseAuth auth;
-    private boolean showOneTapUI = true;
-    private boolean isAccountExists = false;
+    private ProgressDialogLoading progressDialogLoading;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
+
+        progressDialogLoading = new ProgressDialogLoading(this);
+        onBack();//Quay trở lại sự kiện trước đó
+        goToForgotPasswordActivity();//
+        goToMainActivity();
+        configureOnTapClient();//Cấu hình đăng nhập google bằng 1 lần chạm
+        onClickLayoutGoogle();//Xử lí sự kiện khi người dùng đăng nhập bằng google
+    }
+
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher =  registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -66,19 +77,13 @@ public class SignInActivity extends AppCompatActivity {
                     SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(result.getData());
                     String idToken = credential.getGoogleIdToken();
                     if (idToken !=  null) {
-                        mDatabase = FirebaseDatabase.getInstance().getReference();
-                        HashMap<String, Object> map = new HashMap<>();
-                        User user = new User(0,0,credential.getId(),credential.getPassword(), credential.getDisplayName(),"","","","");
-                        map.put("user-sign-in", user);
-                        mDatabase.child("user").push().setValue(map);
+                        checkAccountExists(credential.getId(), credential);
                         Log.d(TAG, "Got ID token.");
                     }
                 } catch (ApiException e) {
                     switch (e.getStatusCode()) {
                         case CommonStatusCodes.CANCELED:
                             Log.d(TAG, "One-tap dialog was closed.");
-                            // Don't re-prompt the user.
-                            showOneTapUI = false;
                             break;
                         case CommonStatusCodes.NETWORK_ERROR:
                             Log.d(TAG, "One-tap encountered a network error.");
@@ -93,49 +98,81 @@ public class SignInActivity extends AppCompatActivity {
             }
         }
     });
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivitySignInBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        initView();
 
-        onBack();//Quay trở lại sự kiện trước đó
-        goToForgotPasswordActivity();//
-        goToMainActivity();
-        configureOnTapClient();//Cấu hình đăng nhập google bằng 1 lần chạm
-        onClickLayoutGoogle();//Xử lí sự kiện khi người dùng đăng nhập bằng google
+    //Kiểm tra xem đã có tài khoản trên firebase chưa
+    private void checkAccountExists(String id, SignInCredential credential) {
+        progressDialogLoading.show();
+        if (id != null){
+            mDatabase = database.getReference("users");
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean emailExists = false;
+                    User userFromDatabase = null;
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        DataSnapshot userSnapshot = childSnapshot.child("user");
+                        userFromDatabase = userSnapshot.getValue(User.class);
+                        String email = userSnapshot.child("email").getValue(String.class);
+                        if (email != null && email.equals(id)) {
+                            emailExists = true;
+                            break;
+                        }
+                    }
+                    if (emailExists) {
+                        progressDialogLoading.dismiss();
+                        UserUltil.user = userFromDatabase;
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        progressDialogLoading.dismiss();
+                        // Thêm email vào cấu trúc dữ liệu
+                        mDatabase = database.getReference("users");
+                        User user = new User(0,0,0,credential.getId(),credential.getPassword(),credential.getDisplayName(),"","","","");
+                        HashMap<String, Object> mapUser = new HashMap<>();
+                        mapUser.put("user", user);
+                        mDatabase.push().setValue(mapUser);
+                        UserUltil.user = user;
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled: " + error);
+                }
+            });
+        }
     }
 
 
-
     private void onClickLayoutGoogle() {
-        binding.layoutLoginGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                oneTapClient.beginSignIn(signUpRequest)
-                        .addOnSuccessListener(SignInActivity.this, new OnSuccessListener<BeginSignInResult>() {
-                            @Override
-                            public void onSuccess(BeginSignInResult result) {
-                                IntentSenderRequest senderRequest = new IntentSenderRequest.Builder(result.getPendingIntent().getIntentSender()).build();
-                                activityResultLauncher.launch(senderRequest);
-                            }
-                        })
-                        .addOnFailureListener(SignInActivity.this, new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // No Google Accounts found. Just continue presenting the signed-out UI.
-                                Log.d(TAG, e.getLocalizedMessage());
-                            }
-                        });
+        binding.layoutLoginGoogle.setOnClickListener(v ->{
+            progressDialogLoading.show();
+            oneTapClient.beginSignIn(signUpRequest)
+                    .addOnSuccessListener(SignInActivity.this, new OnSuccessListener<BeginSignInResult>() {
+                        @Override
+                        public void onSuccess(BeginSignInResult result) {
+                            progressDialogLoading.dismiss();
+                            IntentSenderRequest senderRequest = new IntentSenderRequest.Builder(result.getPendingIntent().getIntentSender()).build();
+                            activityResultLauncher.launch(senderRequest);
+                        }
+                    })
+                    .addOnFailureListener(SignInActivity.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // No Google Accounts found. Just continue presenting the signed-out UI.
+                            Log.d(TAG, e.getLocalizedMessage());
+                        }
+                    });
             }
-        });
+        );
     }
 
 
     private void configureOnTapClient() {
-        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
         oneTapClient = Identity.getSignInClient(this);
         signUpRequest = BeginSignInRequest.builder()
                 .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
@@ -180,7 +217,7 @@ public class SignInActivity extends AppCompatActivity {
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         startActivity(intent);
                         UserUltil.user = response1.getResult().get(0);
-                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                         Log.d("zzzz", "onResponse: " + UserUltil.user);
                     }else {
                         Toast.makeText(SignInActivity.this, "Email or UserName or PassWord invalid", Toast.LENGTH_SHORT).show();

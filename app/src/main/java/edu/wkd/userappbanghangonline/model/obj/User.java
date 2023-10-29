@@ -1,6 +1,8 @@
 package edu.wkd.userappbanghangonline.model.obj;
 
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class User  {
 
