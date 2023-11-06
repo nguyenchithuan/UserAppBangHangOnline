@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:text="Chi tiết đơn hàng"
-            android:textSize="22sp" />
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView

@@ -25,7 +25,10 @@ public class Order implements Serializable {
     @SerializedName("item")
     private ArrayList<Product> listProduct;
 
-    public Order(int userId, String address, String phoneNumber, int quantity, int totalPrice, int status, String dateTime, ArrayList<Product> listProduct) {
+    @SerializedName("is_rating")
+    private int isRating;
+
+    public Order(int userId, String address, String phoneNumber, int quantity, int totalPrice, int status, String dateTime, ArrayList<Product> listProduct, int isRating) {
         this.userId = userId;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -34,6 +37,7 @@ public class Order implements Serializable {
         this.status = status;
         this.dateTime = dateTime;
         this.listProduct = listProduct;
+        this.isRating = isRating;
     }
 
     public int getId() {
@@ -108,4 +112,11 @@ public class Order implements Serializable {
         this.listProduct = listProduct;
     }
 
+    public int getIsRating() {
+        return isRating;
+    }
+
+    public void setIsRating(int isRating) {
+        this.isRating = isRating;
+    }
 }

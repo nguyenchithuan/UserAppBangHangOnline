@@ -194,7 +194,7 @@ public class ProductFragment extends Fragment implements ItemProductInterface, I
             @Override
             public void onFailure(Call<ProductTypeResponse> call, Throwable t) {
                 Log.d("zzzz", "onResponse-product-error: " + t.toString());
-                Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                 Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
                 dialogLoading.cancel();
             }
         });

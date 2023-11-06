@@ -1,6 +1,5 @@
 package edu.wkd.userappbanghangonline.view.adapter;
 
-
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

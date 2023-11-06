@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="550dp"
+    android:gravity="center"
+    android:background="@drawable/bg_dialog_bottom_comment"
+    >
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_comments"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottom_layout"
+        android:padding="8dp"
+        >
+        <ImageButton
+            android:id="@+id/btn_camera_cmt"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/baseline_camera_alt_24"
+            />
+
+        <EditText
+            android:id="@+id/ed_note_cmt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/btn_send_cmt"
+            android:layout_toRightOf="@id/btn_camera_cmt"
+            android:background="@drawable/rounded_conner"
+            android:hint="Suy nghĩ của bạn"
+            android:padding="16dp" />
+
+        <ImageButton
+            android:id="@+id/btn_send_cmt"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="@drawable/baseline_send_24" />
+    </RelativeLayout>
+
+</RelativeLayout>
