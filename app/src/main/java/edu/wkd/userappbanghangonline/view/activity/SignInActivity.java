@@ -1,5 +1,6 @@
 package edu.wkd.userappbanghangonline.view.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.wkd.userappbanghangonline.R;
@@ -12,6 +13,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,26 +21,55 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class SignInActivity extends AppCompatActivity {
     private ActivitySignInBinding binding;
     private ProgressDialogLoading loading;
+    FirebaseAuth firebaseAuth;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initView();
+        dialog = new ProgressDialog(this);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         onBack();//Quay trở lại sự kiện trước đó
         goToForgotPasswordActivity();//
         goToMainActivity();
+
+
     }
 
     private void goToMainActivity() {
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String strUsername = binding.edEmailOrPhoneNumberSignIn.getText().toString().trim();
+                String strPassword = binding.edPasswordSignIn.getText().toString().trim();
+                firebaseAuth.signInWithEmailAndPassword(strUsername, strPassword)
+                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                    @Override
+                                    public void onSuccess(AuthResult authResult) {
+                                        dialog.cancel();
+                                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                dialog.cancel();
+                                                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
                 CheckValidate();
             }
         });

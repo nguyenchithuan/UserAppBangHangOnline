@@ -7,7 +7,7 @@ public class User  {
     private int id, gender, role;
     private String email, password, username, avatar, phone, birthday, message_token;
 
-    public User() {
+    public User(String strEmail, String strPassWord, String strUserName) {
     }
 
     public User(int id, int gender, int role, String email,
