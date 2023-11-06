@@ -1,10 +1,12 @@
 package edu.wkd.userappbanghangonline.view.activity;
 
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,12 +21,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
+
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
@@ -44,22 +53,26 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 
+
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = SignInActivity.class.toString();
     private ActivitySignInBinding binding;
     private ProgressDialogLoading loading;
+    FirebaseAuth firebaseAuth;
+    ProgressDialog dialog;
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
     private FirebaseDatabase database;
     private DatabaseReference mDatabase;
     private ProgressDialogLoading progressDialogLoading;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initView();
+        dialog = new ProgressDialog(this);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         progressDialogLoading = new ProgressDialogLoading(this);
         onBack();//Quay trở lại sự kiện trước đó
@@ -189,6 +202,24 @@ public class SignInActivity extends AppCompatActivity {
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String strUsername = binding.edEmailOrPhoneNumberSignIn.getText().toString().trim();
+                String strPassword = binding.edPasswordSignIn.getText().toString().trim();
+                firebaseAuth.signInWithEmailAndPassword(strUsername, strPassword)
+                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                    @Override
+                                    public void onSuccess(AuthResult authResult) {
+                                        dialog.cancel();
+                                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                dialog.cancel();
+                                                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
                 CheckValidate();
             }
         });
