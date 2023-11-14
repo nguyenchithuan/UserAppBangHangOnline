@@ -1,10 +1,12 @@
 package edu.wkd.userappbanghangonline.view.activity;
 
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,17 +37,19 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -60,10 +65,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 
+
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = SignInActivity.class.toString();
     private ActivitySignInBinding binding;
     private ProgressDialogLoading loading;
+    FirebaseAuth firebaseAuth;
+    ProgressDialog dialog;
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
     private FirebaseDatabase database;
@@ -78,6 +86,8 @@ public class SignInActivity extends AppCompatActivity {
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initView();
+        dialog = new ProgressDialog(this);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         progressDialogLoading = new ProgressDialogLoading(this);
         onBack();//Quay trở lại sự kiện trước đó
@@ -88,29 +98,29 @@ public class SignInActivity extends AppCompatActivity {
 //        configureFacebook();
     }
 
-    private void configureFacebook() {
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this.getApplication());
-        mCallbackManager = CallbackManager.Factory.create();
-        binding.loginButton.setReadPermissions("email", "public_profile");
-        binding.loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-            }
-        });
-    }
+//    private void configureFacebook() {
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        AppEventsLogger.activateApp(this.getApplication());
+//        mCallbackManager = CallbackManager.Factory.create();
+//        binding.loginButton.setReadPermissions("email", "public_profile");
+//        binding.loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+//                handleFacebookAccessToken(loginResult.getAccessToken());
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Log.d(TAG, "facebook:onCancel");
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                Log.d(TAG, "facebook:onError", error);
+//            }
+//        });
+//    }
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
@@ -183,7 +193,6 @@ public class SignInActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    progressDialogLoading.dismiss();
                     if (emailExists) {
                         UserUltil.user = userFromDatabase;
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -191,20 +200,24 @@ public class SignInActivity extends AppCompatActivity {
                     } else {
                         // Thêm email vào cấu trúc dữ liệu
                         mDatabase = database.getReference("users");
-                        User user = new User(0,0,credential.getId(),credential.getPassword(),credential.getDisplayName(),"","","","");
+                        User user = new User(0,0,0,credential.getId(),credential.getPassword(),credential.getDisplayName(),"","","","");
                         HashMap<String, Object> mapUser = new HashMap<>();
+                        //Thêm tài khoản lên 000webhost
                         ApiService.apiService.logUpUser(credential.getId(),credential.getPassword(),credential.getDisplayName()).enqueue(new Callback<LogupUserResponse>() {
                             @Override
                             public void onResponse(Call<LogupUserResponse> call, Response<LogupUserResponse> response) {
                                 if (!response.isSuccessful()){
                                     Toast.makeText(SignInActivity.this, "Thêm user firebase lên webhost thất bại!", Toast.LENGTH_SHORT).show();
                                 }else{
+                                    //Lấy id của người dùng trên 000webhost
                                     ApiService.apiService.getUserByEmail(user.getEmail()).enqueue(new Callback<UserResponse>() {
                                         @Override
                                         public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                                             if (response.isSuccessful()){
+                                                //Set id khi lấy được dữ liệu
                                                 user.setId(response.body().getResult().get(0).getId());
                                                 mapUser.put("user", user);
+                                                //Đẩy dữ liệu lên firebase
                                                 mDatabase.push().setValue(mapUser);
                                                 UserUltil.user = user;
                                                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -228,6 +241,7 @@ public class SignInActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    progressDialogLoading.dismiss();
 
                 }
 
@@ -281,6 +295,24 @@ public class SignInActivity extends AppCompatActivity {
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String strUsername = binding.edEmailOrPhoneNumberSignIn.getText().toString().trim();
+                String strPassword = binding.edPasswordSignIn.getText().toString().trim();
+                firebaseAuth.signInWithEmailAndPassword(strUsername, strPassword)
+                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                    @Override
+                                    public void onSuccess(AuthResult authResult) {
+                                        dialog.cancel();
+                                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                dialog.cancel();
+                                                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
                 CheckValidate();
             }
         });

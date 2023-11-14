@@ -3,6 +3,8 @@ package edu.wkd.userappbanghangonline.view.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -13,9 +15,16 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import edu.wkd.userappbanghangonline.R;
 import edu.wkd.userappbanghangonline.data.api.ApiService;
 import edu.wkd.userappbanghangonline.databinding.ActivitySignUpBinding;
+import edu.wkd.userappbanghangonline.model.obj.User;
 import edu.wkd.userappbanghangonline.model.response.LogupUserResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,22 +32,64 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
+    FirebaseAuth firebaseAuth;
+    ProgressDialog dialog;
+    FirebaseFirestore firebaseFirestore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        dialog = new ProgressDialog(this);
 
         goToPolicyAndPrivacyActivity();//Chuyển tới trang điều khoản và dịch vụ
         onBack();//Quay trở lại sự kiện trước đó
         goToSignInActivity();//Chuyển đến màn hình đăng nhập
+        binding.btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String strEmail = binding.edEmailOrPhoneNumberSignUp.getText().toString().trim();
+                String strPassWord = binding.edPasswordSignUp.getText().toString().trim();
+                String strRePassWord = binding.edRePasswordSignUp.getText().toString().trim();
+                String strUserName = binding.edUserName.getText().toString().trim();
+                dialog.show();
+                firebaseAuth.createUserWithEmailAndPassword(strEmail, strPassWord)
+                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                    @Override
+                                    public void onSuccess(AuthResult authResult) {
+                                        startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+                                        dialog.cancel();
+
+                                        firebaseFirestore.collection("User")
+                                                .document(FirebaseAuth.getInstance().getUid())
+                                                .set(new User(strEmail, strPassWord, strUserName));
+                                    }
+                                })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                dialog.cancel();
+
+                                            }
+                                        });
+
+
+
+
+                CheckValidate();
+            }
+        });
     }
 
     private void goToSignInActivity() {
         binding.tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckValidate();
+                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
             }
         });
     }
@@ -53,6 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Email invalid", Toast.LENGTH_SHORT).show();
         }
     }
+
     public void LogUpUser(){
 
         String strEmail = binding.edEmailOrPhoneNumberSignUp.getText().toString().trim();
@@ -76,7 +128,6 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 }
-
                 @Override
                 public void onFailure(Call<LogupUserResponse> call, Throwable t) {
 
@@ -86,11 +137,6 @@ public class SignUpActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "Mat khau khong dung! ", Toast.LENGTH_SHORT).show();
         }
-
-
-
-
-
     }
 
     private void onBack() {
