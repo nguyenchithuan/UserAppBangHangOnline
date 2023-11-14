@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import edu.wkd.userappbanghangonline.databinding.FragmentUserBinding;
 import edu.wkd.userappbanghangonline.databinding.LayoutDialogLogoutBinding;
 import edu.wkd.userappbanghangonline.view.activity.OrderActivity;
@@ -90,6 +93,10 @@ public class UserFragment extends Fragment {
                 bindingLogout.btnLogout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null){
+                            FirebaseAuth.getInstance().signOut();
+                        }
                         startActivity(new Intent(getActivity(), SignInActivity.class));
                         getActivity().finish();
                     }

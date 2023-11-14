@@ -30,7 +30,6 @@ public class User  {
     public User(int gender, int role, String email,
                 String password, String username, String avatar,
                 String phone, String birthday, String message_token) {
-        this.id = id;
         this.gender = gender;
         this.role = role;
         this.email = email;

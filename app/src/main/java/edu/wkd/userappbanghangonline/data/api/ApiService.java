@@ -48,6 +48,11 @@ public interface ApiService {
     @POST("get_user.php")
     Call<UserResponse> getUser(@Field("user_id") int userId);
 
+    //Lấy thông tin người dùng theo email
+    @FormUrlEncoded
+    @POST("get_user_by_email.php")
+    Call<UserResponse> getUserByEmail(@Field("email") String email);
+
     @FormUrlEncoded
     @POST("get_user_orders.php")
     Call<OrderResponse> getOrderByIdUser(@Field("user_id") int userId);

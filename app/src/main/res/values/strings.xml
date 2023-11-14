@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">UserAppBangHangOnline</string>
     <string name="your_web_client_id">812486807994-jdken7gjhpclj25uk3ecl6j1aqm5kat6.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">6720307808064812</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">56789</string>
     <string name="text_policy_and_privacy">Khi bạn nhấn vào đăng kí là bạn đã chấp thuận chính sách bảo mật của chúng tôi</string>
     <string name="title_verification_activity">Mã xác minh</string>
     <string name="title_reset_password_activity">Đặt lại mật khẩu</string>
