@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -20,6 +21,10 @@
         android:theme="@style/Theme.UserAppBangHangOnline"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+
         <service
             android:name=".ultil.FirebaseService.MyFirebaseMessagingService"
             android:exported="false">
@@ -83,6 +88,11 @@
             android:name=".view.activity.SignUpActivity"
             android:exported="true" />
         <activity
+            android:name=".view.activity.MainActivity"
+            android:exported="true"
+            android:theme="@style/Base.Theme.Yellow"/>
+
+        <activity
             android:name=".view.activity.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -92,18 +102,20 @@
             </intent-filter>
 
         </activity>
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:exported="true"
-            android:theme="@style/Base.Theme.Yellow">
 
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
         </activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 </manifest>

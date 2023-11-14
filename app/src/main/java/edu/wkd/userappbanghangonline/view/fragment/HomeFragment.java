@@ -40,6 +40,7 @@ import edu.wkd.userappbanghangonline.model.response.ProductTypeResponse;
 import edu.wkd.userappbanghangonline.ultil.CheckConection;
 import edu.wkd.userappbanghangonline.ultil.ItemProductTypeInterface;
 import edu.wkd.userappbanghangonline.ultil.ProgressDialogLoading;
+import edu.wkd.userappbanghangonline.ultil.UserUltil;
 import edu.wkd.userappbanghangonline.view.activity.CartActivity;
 import edu.wkd.userappbanghangonline.view.activity.ChatActivity;
 import edu.wkd.userappbanghangonline.view.activity.MainActivity;
@@ -97,7 +98,7 @@ public class HomeFragment extends Fragment implements ItemProductTypeInterface {
         openSearchDialog();//Mở dialog tìm kiếm
         eventBtnCart();
         initOnclick();
-
+//        Toast.makeText(getContext().getApplicationContext(), "Id: "+ UserUltil.user.getId(), Toast.LENGTH_SHORT).show();
     }
 
 
